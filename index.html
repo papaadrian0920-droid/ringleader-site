@@ -4,84 +4,87 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ringleader: missed-call text-back for the trades</title>
-<meta name="description" content="When you can't pick up, Ringleader texts the caller back in seconds in your company's name. Built for plumbers, HVAC, roofers and electricians.">
+<meta name="description" content="When you can't pick up, Ringleader texts the caller back within seconds in your shop's name. For plumbers, HVAC, roofers and electricians in Canada.">
+<meta property="og:title" content="Ringleader: missed-call text-back for the trades">
+<meta property="og:description" content="When you can't pick up, Ringleader texts the caller back within seconds in your shop's name.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23F2C230'/%3E%3Cpath d='M10 8h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 17l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 8 10a2 2 0 0 1 2-2' fill='none' stroke='%231C1A17' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main id="top">
-  <header class="top">
-    <div class="wrap">
-      <a class="logo" href="#top" aria-label="Ringleader home">
-        <span class="logo-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="color: var(--on-canary)"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
-        </span>
-        Ringleader
-      </a>
-      <nav class="links" aria-label="Main">
-        <a href="#how">How it works</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#texting">How texting works</a>
-        <a class="btn btn-primary" href="#contact">Get set up</a>
-      </nav>
-    </div>
-  </header>
+<a class="skip" href="#main">Skip to content</a>
 
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#main" aria-label="Ringleader home">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+      </span>
+      Ringleader
+    </a>
+    <nav aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#texting">Texting rules</a>
+      <a class="btn" href="#contact">Get set up</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
   <section class="hero">
     <div class="wrap">
       <div class="hero-copy">
-        <p class="eyebrow">Missed-call text-back for plumbers, HVAC, roofers and electricians</p>
-        <h1>Every missed call is a job you <em>already paid</em> to get.</h1>
-        <p class="lede">When you can't pick up, Ringleader texts the caller back within seconds, in your company's name. They tell you what they need by text, and you answer when you're off the ladder. You keep your phone number.</p>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="#contact">Get set up</a>
-          <a class="btn btn-ghost" href="#how">See how it works</a>
+        <h1 class="rise">Every missed call is a job you <em>already paid</em> to get.</h1>
+        <p class="lede rise">You're under a sink and the phone rings. Ringleader texts that caller back within seconds, in your shop's name, so they don't call the next plumber on Google.</p>
+        <div class="actions rise">
+          <a class="btn" href="#contact">Get set up <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="text-link" href="#how">See how it works</a>
         </div>
-        <ul class="proof">
-          <li>Texts back in seconds</li>
-          <li>Keeps your phone number</li>
-          <li>You get a text when they reply</li>
-          <li>Month to month</li>
+        <ul class="facts rise">
+          <li>Keep your phone number</li>
+          <li>Reply from your phone</li>
+          <li>No contract</li>
         </ul>
       </div>
 
       <!-- What the caller sees. These are the real default texts the server sends. -->
-      <aside class="device hero-device" aria-label="Example of the text a caller gets">
-        <div class="device-top">
-          <span class="avatar" aria-hidden="true">M</span>
-          <span class="who"><b>Mike's Plumbing</b><span>Example</span></span>
-        </div>
-        <div class="chat">
-          <p class="sys"><span class="missed">Missed call</span><span>2:14 PM</span></p>
-          <p class="bubble them">Hi! This is Mike's Plumbing. Sorry we missed your call, we're probably on a job. What can we help you with? Reply here and we'll get right back to you. Reply STOP to opt out.</p>
-          <p class="bubble me">Water heater is leaking in the garage. Can someone come today?</p>
-          <p class="bubble them">Hi Linda, this is Mike. I can be there at 4 today. Does that work?</p>
-          <p class="bubble me">Yes, thank you!</p>
-        </div>
-      </aside>
+      <div class="thread" aria-label="Example: the texts a caller gets">
+        <div class="thread-head"><b>Mike's Plumbing</b><span>Example</span></div>
+        <p class="stamp missed">Missed call · 2:14 PM</p>
+        <p class="msg them">Hi! This is Mike's Plumbing. Sorry we missed your call, we're probably on a job. What can we help you with? Reply here and we'll get right back to you. Reply STOP to opt out.</p>
+        <p class="msg me">Water heater is leaking in the garage. Can someone come today?</p>
+        <p class="msg them">Hi Linda, this is Mike. I can be there at 4 today. Does that work?</p>
+        <p class="msg me">Yes, thank you!</p>
+      </div>
     </div>
   </section>
 
   <section class="section band" id="how">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">How it works</p>
-        <h2>Set up in one afternoon. Your number stays the same.</h2>
-      </div>
-      <ol class="steps">
+    <div class="wrap split">
+      <header>
+        <h2>One missed call, start to finish.</h2>
+        <p class="lede">Set up takes an afternoon. Customers keep calling the number on your truck.</p>
+      </header>
+      <ol class="timeline">
         <li>
-          <h3>Calls you miss come to us</h3>
-          <p>You turn on call forwarding with your phone company, so calls you don't answer go to your Ringleader line. Customers still dial the number on your truck.</p>
+          <time>2:14 PM</time>
+          <div><h3>A customer calls. You can't pick up.</h3><p>Your phone forwards the calls you don't answer to your Ringleader line. Calls you do answer work like always.</p></div>
         </li>
         <li>
-          <h3>The caller gets a text</h3>
-          <p>Within seconds they get one text that names your business and asks what they need. When you're closed, they get your after-hours message instead.</p>
+          <time>2:14 PM</time>
+          <div><h3>They get a text in your shop's name.</h3><p>Within seconds, asking what they need. After hours, they get your "we're closed" message instead.</p></div>
         </li>
         <li>
-          <h3>You reply and book</h3>
-          <p>When they answer, you get a text alert. Reply from your dashboard, mark the job booked, and see how much work Ringleader brought in.</p>
+          <time>2:16 PM</time>
+          <div><h3>They text back. You get an alert.</h3><p>Their message lands on your phone, with a number so you know who it is.</p></div>
+        </li>
+        <li>
+          <time>3:05 PM</time>
+          <div><h3>You reply when you're off the ladder.</h3><p>Just answer the alert from your phone, or use your dashboard. Every morning you get a summary of yesterday's calls.</p></div>
         </li>
       </ol>
     </div>
@@ -89,57 +92,37 @@
 
   <section class="section" id="pricing">
     <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Pricing</p>
-        <h2>Less than one service call a month.</h2>
-        <p class="lede">No contracts. Cancel anytime.</p>
-      </div>
-      <div class="tiers">
-        <div class="tier featured">
+      <h2>One price. Less than a service call.</h2>
+      <div class="plan">
+        <div class="plan-name">
           <span class="flag">Available now</span>
-          <div><h3>Text-Back</h3><p class="for">For shops that miss calls while they're on a job.</p></div>
-          <div class="price">$99<small> /month</small></div>
+          <h3>Text-Back</h3>
           <ul>
             <li>Texts every missed caller within seconds</li>
-            <li>Separate message when you're closed</li>
-            <li>Text alert when a customer replies</li>
-            <li>Dashboard to reply and track booked jobs</li>
+            <li>A separate text when you're closed</li>
+            <li>An alert when a customer replies</li>
+            <li>Reply from your phone or dashboard</li>
+            <li>A morning summary text</li>
             <li>STOP and opt-outs handled for you</li>
           </ul>
-          <a class="btn btn-primary" href="#contact">Get set up</a>
         </div>
-        <div class="tier later">
-          <span class="soon">Coming soon</span>
-          <div><h3>Front Desk</h3><p class="for">For shops with nobody on the phones.</p></div>
-          <div class="price">$349<small> /month</small></div>
-          <ul>
-            <li>Everything in Text-Back</li>
-            <li>Answers calls day and night</li>
-            <li>Books into your calendar</li>
-          </ul>
-        </div>
-        <div class="tier later">
-          <span class="soon">Coming soon</span>
-          <div><h3>Crew</h3><p class="for">For bigger shops with several lines.</p></div>
-          <div class="price">$599<small> /month</small></div>
-          <ul>
-            <li>Everything in Front Desk</li>
-            <li>Up to 3 phone lines</li>
-            <li>English and Spanish</li>
-          </ul>
+        <div class="price">
+          <b>$99<small>/month CAD</small></b>
+          <p class="small">First two weeks free. Cancel anytime.</p>
+          <a class="btn" href="#contact">Get set up <span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
+      <p class="later"><b>Coming later:</b> Front Desk ($349/month), which answers your calls out loud day and night, and Crew ($599/month) for shops with several phone lines.</p>
     </div>
   </section>
 
   <section class="section band" id="texting">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">How texting works</p>
+    <div class="wrap split">
+      <header>
         <h2>We only text people who called first.</h2>
-        <p class="lede">These are the rules for the Ringleader missed-call text-back program. They apply to every business that uses Ringleader.</p>
-      </div>
-      <div class="terms">
+        <p class="lede">The rules for the Ringleader missed-call text-back program. They apply to every business that uses Ringleader.</p>
+      </header>
+      <div class="rules">
         <div>
           <h3>Who gets a text</h3>
           <p>Only people who call a business that uses Ringleader, when that call isn't answered. Calling the business is how you agree to get the text. We never text bought lists, and we never send ads.</p>
@@ -161,42 +144,39 @@
   </section>
 
   <section class="section" id="faq">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Questions owners ask</p>
+    <div class="wrap split">
+      <header>
         <h2>Straight answers.</h2>
-      </div>
+      </header>
       <div class="faq">
-        <details><summary>Do I need a new phone number?</summary><p>No. You keep your number. Only calls you don't answer forward to Ringleader, so customers never notice a change.</p></details>
-        <details><summary>Will customers know the first text is automatic?</summary><p>The first text is automatic and says it's from your business. Every reply after that comes from you.</p></details>
-        <details><summary>What about calls late at night?</summary><p>Callers get your after-hours message, saying you'll text them first thing in the morning. Ringleader never sends follow-up texts on its own.</p></details>
-        <details><summary>What if someone doesn't want texts?</summary><p>They reply STOP, and Ringleader never texts them again unless they reply START.</p></details>
-        <details><summary>Is there a contract?</summary><p>No. It's month to month, and you can cancel anytime.</p></details>
+        <div><h3>Do I need a new phone number?</h3><p>No. Only calls you don't answer forward to Ringleader. Customers never notice a change.</p></div>
+        <div><h3>Will customers know the first text is automatic?</h3><p>It says it's from your business. Every reply after that comes from you.</p></div>
+        <div><h3>What about calls late at night?</h3><p>Callers get your after-hours text, saying you'll get back to them in the morning. Ringleader never sends follow-ups on its own.</p></div>
+        <div><h3>What if someone doesn't want texts?</h3><p>They reply STOP, and Ringleader never texts them again unless they reply START.</p></div>
+        <div><h3>Is there a contract?</h3><p>No. It's month to month, and you can cancel anytime by text.</p></div>
+        <div><h3>Who sees my customers' info?</h3><p>Only you. It's never sold or shared, and if you cancel, it's deleted.</p></div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="contact" style="padding-top: 0">
-    <div class="wrap">
-      <div class="contact">
-        <p class="eyebrow" style="color:inherit; opacity:.7">Contact</p>
-        <h2>Want Ringleader on your shop's line?</h2>
-        <p class="lede">Email us with your shop's name and phone number. We'll set it up with you in about 20 minutes.</p>
-        <!-- Contact email (appears twice on the next line) -->
-        <a class="btn btn-primary" href="mailto:papaadrian.0920@gmail.com">papaadrian.0920@gmail.com</a>
-      </div>
+  <section class="section band" id="contact">
+    <div class="wrap contact">
+      <h2>Want Ringleader on your shop's line?</h2>
+      <p class="lede">Email us your shop's name and phone number. We'll set it up with you in about 20 minutes.</p>
+      <!-- Contact email (appears twice on the next line) -->
+      <a class="email" href="mailto:papaadrian.0920@gmail.com">papaadrian.0920@gmail.com</a>
     </div>
   </section>
-
-  <footer>
-    <div class="wrap">
-      <span>© 2026 Ringleader · Missed-call text-back for the trades</span>
-      <nav aria-label="Legal">
-        <a href="#texting">Texting terms</a>
-        <a href="privacy.html">Privacy policy</a>
-      </nav>
-    </div>
-  </footer>
 </main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Ringleader · Made in Canada</span>
+    <nav aria-label="Legal">
+      <a href="#texting">Texting terms</a>
+      <a href="privacy.html">Privacy policy</a>
+    </nav>
+  </div>
+</footer>
 </body>
 </html>
