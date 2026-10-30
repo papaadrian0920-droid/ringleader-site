@@ -189,6 +189,7 @@ footer nav { display: flex; gap: 22px; font-weight: 600; }
 .legal { max-width: 760px; display: grid; gap: 16px; padding-block: 48px 100px; font-size: 1.05rem; }
 .legal h1 { font-size: clamp(2.6rem, 6.5vw, 4.4rem); font-weight: 900; font-stretch: 115%; line-height: .95; letter-spacing: -0.04em; text-transform: uppercase; }
 .legal h2 { font-size: 1.6rem; font-stretch: 105%; letter-spacing: -0.01em; margin-top: 26px; }
+.legal h3 { font-size: 1.15rem; font-stretch: 105%; letter-spacing: -0.01em; margin-top: 6px; }
 .legal ul { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
 .legal .updated { color: var(--hivis); font-weight: 600; }
 
