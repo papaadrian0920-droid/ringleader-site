@@ -14,10 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&display=swap">
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="fx.css?v=2">
-<script src="main.js?v=2" defer></script>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script type="module" src="hero3d.js?v=7"></script>
+<script src="main.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -32,7 +29,6 @@
     </a>
     <nav aria-label="Main">
       <a href="#how">How it works</a>
-      <a href="#dashboard">The dashboard</a>
       <a href="#cost">What it costs you</a>
       <a href="#pricing">Pricing</a>
       <a class="btn" href="#contact">Get set up</a>
@@ -42,8 +38,6 @@
 
 <main id="main">
   <section class="hero">
-    <!-- hero3d.js draws the 3D phone in here; the flat phone below stays if 3D can't run -->
-    <div class="stage" id="stage"></div>
     <div class="wrap">
       <div class="hero-copy">
         <h1 class="rise">Every missed call is a job you <span class="hi">already paid</span> to get.</h1>
@@ -74,15 +68,6 @@
       <span>Missed call</span><span>Texted back in seconds</span><span>Customer replies</span><span>You answer from the job</span><span>Job booked</span>
     </div>
   </div>
-
-  <section class="stats" aria-label="Ringleader in four numbers">
-    <div class="wrap">
-      <div class="stat"><b>~5<small>sec</small></b><span>from a missed call to your text going out</span></div>
-      <div class="stat"><b>$99</b><span>a month, CAD. No contract</span></div>
-      <div class="stat"><b>0</b><span>new phone numbers. Keep the one you have</span></div>
-      <div class="stat"><b>2<small>weeks</small></b><span>free to try it</span></div>
-    </div>
-  </section>
 
   <section class="section alt story" id="how">
     <div class="wrap">
@@ -175,34 +160,6 @@
     </div>
   </section>
 
-  <section class="section dash" id="dashboard">
-    <div class="wrap">
-      <div class="section-title">
-        <h2>Your week, <span class="hi">at a glance.</span></h2>
-        <p>Every missed call lands on your dashboard. Booked jobs stand up as green pillars, taller for bigger jobs. In your dashboard, tap any call to open the texts.</p>
-      </div>
-      <div class="dash-frame">
-        <div class="dash-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="dash-title">Ringleader · Today</span><span class="dash-chip">Example data</span></div>
-        <div class="dash-body">
-          <div class="dash-copy">
-            <p class="dash-kicker"><i></i>Last 7 days</p>
-            <p class="dash-money" data-count="4120">$4,120</p>
-            <p class="dash-sub">in jobs booked from <span class="hi-text">calls you missed</span>.</p>
-            <div class="dash-stats">
-              <div><b>14</b><span>missed calls</span></div>
-              <div><b>9</b><span>texted back</span></div>
-              <div><b>5</b><span>jobs booked</span></div>
-            </div>
-          </div>
-          <div class="dash-radar">
-            <canvas id="radar" role="img" aria-label="Example week on the Ringleader radar: 14 missed calls, 5 booked jobs shown as green pillars."></canvas>
-            <p class="radar-legend"><span><i class="lg-b"></i>Booked</span><span><i class="lg-r"></i>Texted back</span><span><i class="lg-n"></i>No reply</span></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="section" id="cost">
     <div class="wrap">
       <div class="section-title">
@@ -228,7 +185,6 @@
           <p>Jobs from missed callers, every month:</p>
           <p class="big" data-out="total">$3,510</p>
           <p data-out="jobs">About 8 jobs a month.</p>
-          <div class="jobchips" data-out="chips" aria-hidden="true"></div>
           <p class="vs">Ringleader is $99 a month.</p>
         </div>
       </form>
