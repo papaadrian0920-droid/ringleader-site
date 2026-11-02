@@ -20,6 +20,9 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 18px; line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+/* Some phones ignore the clip on body and let the page slide sideways, so the main area clips too.
+   (clip, not hidden, so the sticky phone in "One missed call" still sticks.) */
+main { overflow-x: clip; }
 /* Film grain, so the black doesn't feel flat. */
 body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: .07; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; }
