@@ -144,8 +144,8 @@ function makeChips() {
 const SCRIPT = [
   { at: 0.4, kind: "missed" },
   { at: 1.3, kind: "typing" },
-  { at: 2.3, from: "shop", text: "Hi! This is Mike's Plumbing. Sorry we missed your call, we're probably on a job. What can we help you with? Reply here and we'll get right back to you. Reply STOP to opt out.", note: "4 seconds after the missed call" },
-  { at: 5.2, from: "me", text: "Water heater is leaking in the garage. Can someone come today?" },
+  { at: 2.3, from: "shop", text: "Hi! This is Mike's Heating & Air. Sorry we missed your call, we're probably on a job. What can we help you with? Reply here and we'll get right back to you. Reply STOP to opt out.", note: "4 seconds after the missed call" },
+  { at: 5.2, from: "me", text: "Furnace quit and the house is freezing. Can someone come today?" },
   { at: 7.6, from: "shop", text: "Hi Linda, this is Mike. I can be there at 4 today. Does that work?" },
   { at: 9.6, from: "me", text: "Yes please!" },
   { at: 10.6, kind: "booked" }
@@ -169,8 +169,8 @@ function drawScreen(lt) {
   g.fillRect(SW - 110, 46, 52, 22); g.fillStyle = "#0C0C0E"; g.fillRect(SW - 106, 50, 40, 14); g.fillStyle = GREEN; g.fillRect(SW - 106, 50, 30, 14);
   g.fillStyle = "#1A1A1D"; g.fillRect(0, 96, SW, 120);
   g.fillStyle = GREEN; g.beginPath(); g.arc(90, 156, 36, 0, 7); g.fill();
-  g.fillStyle = "#0C0C0E"; g.font = font(800, 30); g.textAlign = "center"; g.fillText("MP", 90, 167); g.textAlign = "left";
-  g.fillStyle = "#F4F4F1"; g.font = font(700, 34); g.fillText("Mike's Plumbing", 146, 150);
+  g.fillStyle = "#0C0C0E"; g.font = font(800, 30); g.textAlign = "center"; g.fillText("MH", 90, 167); g.textAlign = "left";
+  g.fillStyle = "#F4F4F1"; g.font = font(700, 34); g.fillText("Mike's Heating & Air", 146, 150);
   g.fillStyle = "#9A9A94"; g.font = font(500, 24); g.fillText("Text message", 146, 184);
   let y = 260;
   const fade = lt > LOOP - 1 ? 1 - (lt - (LOOP - 1)) : 1;

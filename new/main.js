@@ -27,6 +27,17 @@
   apply();
 })();
 
+// The FAQ: every answer shows on computers. On phones you tap a question to open it, which keeps the page short.
+(() => {
+  const faq = document.querySelector('.faq');
+  if (!faq) return;
+  const wide = matchMedia('(min-width: 761px)');
+  const apply = () => faq.querySelectorAll('details').forEach(d => { d.open = wide.matches; });
+  wide.addEventListener('change', apply);
+  apply();
+  faq.addEventListener('click', e => { if (wide.matches && e.target.closest('summary')) e.preventDefault(); });
+})();
+
 // 2. The missed-call cost calculator.
 (() => {
   const form = document.getElementById('calc');
@@ -209,7 +220,7 @@
 (() => {
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.documentElement.classList.add('js-on');
-  const els = document.querySelectorAll('.section-title, .rule, .faq > div, .price-block, .calc, .dash-frame, .stat, .contact .wrap > *, .later');
+  const els = document.querySelectorAll('.section-title, .rule, .faq > details, .price-block, .calc, .dash-frame, .stat, .contact .wrap > *, .later');
   els.forEach(el => el.classList.add('rv'));
   if (still || !('IntersectionObserver' in window)) els.forEach(el => el.classList.add('in'));
   else {
