@@ -69,9 +69,9 @@
 .story.is-sticky .steps::before { content: ""; position: absolute; left: -26px; top: 0; bottom: 0; width: 2px; background: var(--line); }
 .story.is-sticky .step { position: relative; }
 .story.is-sticky .step::before { content: ""; position: absolute; left: -32px; top: calc(50% - 7px); width: 14px; height: 14px; border-radius: 50%; background: var(--bg-2); border: 2px solid var(--line); transition: background .3s, border-color .3s, box-shadow .3s; }
-.story.is-sticky .step.is-active::before { background: var(--hivis); border-color: var(--hivis); box-shadow: 0 0 0 6px rgba(200, 255, 46, .18), 0 0 24px rgba(200, 255, 46, .6); }
+.story.is-sticky .step.is-active::before { background: var(--hivis); border-color: var(--hivis); box-shadow: 0 0 0 6px rgba(200, 255, 46, .18); }
 .story-phone { perspective: 1400px; }
-.story.is-sticky .story-phone .phone { transform: rotateY(-14deg) rotateX(4deg); transition: transform .8s cubic-bezier(.2, .7, .2, 1); box-shadow: 0 50px 100px -30px rgba(200, 255, 46, .35), -30px 30px 60px -30px rgba(0, 0, 0, .8), inset 0 0 0 6px #111; }
+.story.is-sticky .story-phone .phone { transform: rotateY(-14deg) rotateX(4deg); transition: transform .8s cubic-bezier(.2, .7, .2, 1); box-shadow: -30px 30px 60px -30px rgba(0, 0, 0, .8), inset 0 0 0 6px #111; }
 .story.is-sticky .story-phone:hover .phone { transform: rotateY(-4deg) rotateX(2deg); }
 .story-phone .screen.is-active .bubble, .story-phone .screen.is-active .note, .story-phone .screen.is-active .notif, .story-phone .screen.is-active .booked { animation: pop .55s cubic-bezier(.2, .8, .2, 1.2) both; }
 .story-phone .screen.is-active > :nth-child(3) { animation-delay: .15s; }
@@ -82,7 +82,7 @@
 .step .phone { transform: rotate(-2deg); }
 
 /* ---------- the dashboard preview ---------- */
-.dash-frame { border-radius: 28px; border: 1px solid var(--line); background: linear-gradient(160deg, #141416, #0E0E10 60%); box-shadow: 0 60px 120px -50px rgba(200, 255, 46, .25), 0 0 0 1px rgba(255, 255, 255, .02) inset; overflow: hidden; }
+.dash-frame { border-radius: 28px; border: 1px solid var(--line); background: linear-gradient(160deg, #141416, #0E0E10 60%); box-shadow: 0 0 0 1px rgba(255, 255, 255, .02) inset; overflow: hidden; }
 .dash-bar { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, .02); }
 .dash-bar .dots { display: flex; gap: 7px; }
 .dash-bar .dots i { width: 11px; height: 11px; border-radius: 50%; background: #2C2C30; }
@@ -91,9 +91,7 @@
 .dash-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 20px; align-items: center; padding: clamp(22px, 4vw, 44px); }
 .dash-copy { display: grid; gap: 10px; }
 .dash-kicker { font-family: var(--f-mono); font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--hivis); display: flex; align-items: center; gap: 10px; }
-.dash-kicker i { width: 9px; height: 9px; border-radius: 50%; background: var(--hivis); animation: dpulse 1.6s infinite; }
-@keyframes dpulse { 0% { box-shadow: 0 0 0 0 rgba(200, 255, 46, .5); } 100% { box-shadow: 0 0 0 10px transparent; } }
-.dash-money { font-family: var(--f-display); font-weight: 900; font-stretch: 125%; font-size: clamp(3.6rem, 9vw, 7rem); line-height: .85; letter-spacing: -0.05em; color: var(--hivis); text-shadow: 0 0 50px rgba(200, 255, 46, .3); font-variant-numeric: tabular-nums; }
+.dash-money { font-family: var(--f-display); font-weight: 900; font-stretch: 125%; font-size: clamp(3.6rem, 9vw, 7rem); line-height: .85; letter-spacing: -0.05em; color: var(--hivis); font-variant-numeric: tabular-nums; }
 .dash-sub { font-size: 1.2rem; font-weight: 600; }
 .hi-text { color: var(--hivis); }
 .dash-stats { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
@@ -105,7 +103,7 @@
 .radar-legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 18px; font-family: var(--f-mono); font-size: .74rem; text-transform: uppercase; letter-spacing: .05em; color: var(--soft); }
 .radar-legend span { display: inline-flex; align-items: center; gap: 7px; }
 .radar-legend i { width: 10px; height: 10px; border-radius: 50%; }
-.lg-b { background: var(--hivis); box-shadow: 0 0 10px rgba(200, 255, 46, .6); }
+.lg-b { background: var(--hivis); }
 .lg-r { background: var(--ink); }
 .lg-n { background: #55555C; }
 .rtip { position: fixed; z-index: 60; pointer-events: none; background: var(--ink); color: var(--on-hivis); font-weight: 700; font-size: .88rem; padding: 7px 11px; border-radius: 10px; transform: translate(-50%, calc(-100% - 12px)); white-space: nowrap; }
@@ -116,12 +114,9 @@
 .jobchips i { width: 18px; height: 22px; border-radius: 5px; background: var(--on-hivis); opacity: .85; animation: chip-in .35s cubic-bezier(.2, .8, .2, 1.3) both; }
 @keyframes chip-in { from { transform: translateY(8px) scale(.6); opacity: 0; } }
 .slider input { cursor: pointer; }
-.calc-result { box-shadow: 0 40px 90px -40px rgba(200, 255, 46, .55); }
 
-/* ---------- pricing: the card gets a glowing edge that follows the cursor ---------- */
+/* ---------- pricing ---------- */
 .price-block { position: relative; padding: clamp(28px, 5vw, 56px); border-radius: 32px; background: #121214; border: 1px solid var(--line); overflow: hidden; }
-.price-block::before { content: ""; position: absolute; inset: 0; background: radial-gradient(600px circle at var(--mx, 30%) var(--my, 30%), rgba(200, 255, 46, .12), transparent 45%); pointer-events: none; }
-.price-block > * { position: relative; }
 
 /* ---------- rules and FAQ as cards ---------- */
 .rule, .faq > details { padding: 26px; border-radius: 22px; background: var(--bg-2); border: 1px solid var(--line); transition: border-color .3s, transform .4s cubic-bezier(.2, .7, .2, 1); }
@@ -150,5 +145,21 @@
 @media (prefers-reduced-motion: reduce) {
   .js-on .rv { opacity: 1; transform: none; transition: none; }
   .story-phone .screen.is-active * { animation: none !important; }
-  .dash-kicker i { animation: none; }
 }
+
+/* the base phone has a green halo. Computers keep the phone, without the glow. */
+.phone { box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .8), inset 0 0 0 6px #111; }
+
+/* ---------- steps: the time is the big label, it tells the story on its own ---------- */
+.step time { font-family: var(--f-display); font-weight: 900; font-stretch: 120%; font-size: clamp(2.2rem, 4.6vw, 3.4rem); line-height: .9; letter-spacing: -0.03em; color: var(--hivis); background: none; padding: 0; border-radius: 0; }
+
+/* ---------- who's behind it ---------- */
+.contact .who { font-size: 1.1rem; color: var(--soft); max-width: 36em; }
+.contact .who a { color: var(--hivis); font-weight: 700; overflow-wrap: anywhere; }
+
+/* ---------- corners: 24 for big cards, 16 for small ones, 6 for tags. Round buttons and the phones keep their own shape. ---------- */
+.deal, .price-block, .dash-frame, .calc-result, .rule, .faq > details { border-radius: 24px; }
+.dash-stats div, .notif, .bubble, .booked, .addon { border-radius: 16px; }
+.bubble.in { border-bottom-left-radius: 6px; }
+.bubble.out { border-bottom-right-radius: 6px; }
+.deal-tag, .tag, .jobchips i, .notif-app i, .logo-mark { border-radius: 6px; }

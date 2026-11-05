@@ -125,11 +125,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&display=swap">
 <link rel="stylesheet" href="../style.css?v=3">
 <script src="../deal.js?v=1" defer></script>
-<link rel="stylesheet" href="fx.css?v=4">
-<script src="main.js?v=3" defer></script>
+<link rel="stylesheet" href="fx.css?v=5">
+<script src="main.js?v=4" defer></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <!-- The 3D phone is a big download, so phones get the flat text card instead and never load it. -->
-<script type="module">if (matchMedia('(min-width: 901px)').matches) import('./hero3d.js?v=8');</script>
+<script type="module">if (matchMedia('(min-width: 901px)').matches) import('./hero3d.js?v=9');</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -144,8 +144,8 @@
     </a>
     <nav aria-label="Main">
       <a href="#how">How it works</a>
-      <a href="#dashboard">The dashboard</a>
-      <a href="#cost">What it costs you</a>
+      <a href="#dashboard">What you'll see</a>
+      <a href="#cost">Missed-call math</a>
       <a href="#pricing">Pricing</a>
       <a class="btn" href="../contact.html">Get set up</a>
     </nav>
@@ -205,7 +205,7 @@
       <div class="story-grid">
         <div class="steps">
           <article class="step">
-            <div class="step-top"><span class="step-num">01</span><time>2:14 PM</time></div>
+            <div class="step-top"><time>2:14 PM</time></div>
             <h3>Linda calls. You're elbow-deep in a furnace.</h3>
             <p>Calls you don't answer forward to your Ringleader line. Calls you pick up work like always, and your number never changes.</p>
             <div class="phone" role="img" aria-label="Your phone: missed call from Linda Park, forwarded to Ringleader.">
@@ -220,7 +220,7 @@
           </article>
 
           <article class="step">
-            <div class="step-top"><span class="step-num">02</span><time>2:14 PM</time></div>
+            <div class="step-top"><time>2:14 PM</time></div>
             <h3>She gets a text from your shop. Instantly.</h3>
             <p>In your shop's name, before she can dial anyone else. If you're closed, she gets your after-hours text instead.</p>
             <div class="phone" role="img" aria-label="Linda's phone: a text from Mike's Heating &amp; Air arrives 4 seconds after the missed call.">
@@ -234,7 +234,7 @@
           </article>
 
           <article class="step">
-            <div class="step-top"><span class="step-num">03</span><time>2:16 PM</time></div>
+            <div class="step-top"><time>2:16 PM</time></div>
             <h3>She tells you what's wrong.</h3>
             <p>No phone tag, no voicemail. By the time you look, you already know the job.</p>
             <div class="phone" role="img" aria-label="Linda's phone: she replies that her furnace quit.">
@@ -248,7 +248,7 @@
           </article>
 
           <article class="step">
-            <div class="step-top"><span class="step-num">04</span><time>3:05 PM</time></div>
+            <div class="step-top"><time>3:05 PM</time></div>
             <h3>You answer from the job site.</h3>
             <p>Her message comes to your phone as a text. Reply to it like any text, and Ringleader sends your answer from your shop's number.</p>
             <div class="phone" role="img" aria-label="Your phone: an alert with Linda's message, and your reply.">
@@ -266,7 +266,7 @@
           </article>
 
           <article class="step">
-            <div class="step-top"><span class="step-num">05</span><time>7:00 AM</time></div>
+            <div class="step-top"><time>7:00 AM</time></div>
             <h3>The next morning, you see it all.</h3>
             <p>One text before your first coffee: every missed call, every reply, every job booked, and who's still waiting on you.</p>
             <div class="phone" role="img" aria-label="Your phone the next morning: the Ringleader summary text.">
@@ -297,7 +297,7 @@
         <div class="dash-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="dash-title">Ringleader · Today</span><span class="dash-chip">Example data</span></div>
         <div class="dash-body">
           <div class="dash-copy">
-            <p class="dash-kicker"><i></i>Last 7 days</p>
+            <p class="dash-kicker">Last 7 days</p>
             <p class="dash-money" data-count="4120">$4,120</p>
             <p class="dash-sub">in jobs booked from <span class="hi-text">calls you missed</span>.</p>
             <div class="dash-stats">
@@ -360,7 +360,7 @@
           <p>Then $99. For the first 10 shops that sign up, until January 31, 2027.</p>
           <p class="deal-left" data-deal-left>Ends January 31, 2027</p>
         </div>
-        <a class="btn" href="../contact.html?deal=founding">Claim the founding deal <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn" href="../contact.html?deal=founding">Get the $69 deal <span class="arrow" aria-hidden="true">→</span></a>
       </div>
       <div class="price-block">
         <div class="price">
@@ -379,10 +379,8 @@
             <li>STOP and opt-outs handled for you</li>
           </ul>
           <a class="btn" href="../contact.html">Get set up <span class="arrow" aria-hidden="true">→</span></a>
-          <p class="addon"><b>Work Line, +$15 a month:</b> a separate business number that rings your cell. Only calls to that number get text-backs, so friends and family never do.</p>
         </div>
       </div>
-      <p class="later"><b>Coming later:</b> Front Desk ($349 a month) answers your calls out loud, day and night. Crew ($599 a month) is for shops with several phone lines.</p>
     </div>
   </section>
 
@@ -433,10 +431,10 @@
   <section class="contact" id="contact">
     <div class="wrap">
       <h2>Got a shop? <span class="hi">Let's talk.</span></h2>
-      <p>Email your shop's name and phone number. We'll set it up with you in about 20 minutes.</p>
+      <p>Tell us your shop's name and number. We'll set it up with you in about 20 minutes.</p>
+      <a class="btn" href="../contact.html">Get set up <span class="arrow" aria-hidden="true">→</span></a>
       <!-- Contact email (appears twice on the next line) -->
-      <a class="email" href="mailto:papaadrian.0920@gmail.com">papaadrian.0920@gmail.com</a>
-      <a class="btn" href="../contact.html">Or fill in the 1-minute form <span class="arrow" aria-hidden="true">→</span></a>
+      <p class="who">I'm Adrian. I built Ringleader here in Ontario, and I'll set your shop up with you myself. Questions first? <a href="mailto:papaadrian.0920@gmail.com">papaadrian.0920@gmail.com</a></p>
     </div>
   </section>
 </main>

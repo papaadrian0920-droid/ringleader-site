@@ -215,24 +215,18 @@
   }).observe(canvas);
 })();
 
-// 4. Small extras: things slide in as you reach them, the price card's glow follows the cursor,
+// 4. Small extras: things slide in as you reach them,
 //    and the dashboard's big number counts up the first time you see it.
 (() => {
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.documentElement.classList.add('js-on');
-  const els = document.querySelectorAll('.section-title, .rule, .faq > details, .price-block, .calc, .dash-frame, .stat, .contact .wrap > *, .later');
+  const els = document.querySelectorAll('.section-title, .rule, .faq > details, .price-block, .calc, .dash-frame, .stat, .contact .wrap > *');
   els.forEach(el => el.classList.add('rv'));
   if (still || !('IntersectionObserver' in window)) els.forEach(el => el.classList.add('in'));
   else {
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
     els.forEach(el => io.observe(el));
   }
-
-  const price = document.querySelector('.price-block');
-  if (price) price.addEventListener('pointermove', e => {
-    const r = price.getBoundingClientRect();
-    price.style.setProperty('--mx', (e.clientX - r.left) + 'px'); price.style.setProperty('--my', (e.clientY - r.top) + 'px');
-  });
 
   const big = document.querySelector('.dash-money');
   if (big && !still && 'IntersectionObserver' in window) {
