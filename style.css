@@ -123,6 +123,12 @@ a:hover { color: var(--hivis); }
 .booked { margin-top: auto; align-self: center; background: var(--hivis); color: var(--on-hivis); font-family: var(--f-display); font-weight: 900; font-size: 1.15rem; padding: 8px 16px; border-radius: 12px; transform: rotate(-3deg); }
 
 /* The scroll story: steps on the left, one phone on the right that changes screens */
+/* faint flickering dot grid behind the story section (flickergrid.js). It clips only itself, so the sticky phone still works. */
+.story { position: relative; }
+.story > .wrap { position: relative; z-index: 1; }
+.grid-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent); }
 .story-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: clamp(32px, 6vw, 96px); }
 .steps { display: grid; gap: 0; }
 .step { display: grid; gap: 14px; padding-block: 34px; border-top: 2px solid var(--line); }
