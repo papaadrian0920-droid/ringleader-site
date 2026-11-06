@@ -81,6 +81,9 @@
       { id: 'line', label: 'The number your customers call is...', type: 'radio', req: 'which number customers call', wide: true, options: [['A work cell', 'A work cell'], ['My personal cell', 'My personal cell'], ['An office landline', 'An office landline'], ['A phone app (VoIP)', 'A phone app (VoIP)']] },
       { id: 'carrier', label: 'Phone company', hint: 'Optional. e.g. Rogers, Bell, Telus.', type: 'text' },
       { id: 'forwarding', label: 'Call forwarding', type: 'select', options: [['Help me set it up on the call', 'Help me set it up on our call'], ['I\'ll set it up myself', 'I\'ll set it up myself'], ['Not sure', 'Not sure']] },
+      { id: 'googleLink', label: 'Google Business Profile or website link', hint: 'Optional, but it helps us check your shop faster.', type: 'text', placeholder: 'e.g. a link to your Google listing', wide: true },
+      { id: 'licence', label: 'Licence number', hint: 'Optional. e.g. your ESA electrical contractor licence, or your trade licence.', type: 'text' },
+      { id: 'wsib', label: 'WSIB account number', hint: 'Optional.', type: 'text' },
       { id: 'legalName', label: 'Legal business name', hint: 'Optional. Only if it\'s different. Phone carriers check it. We\'ll ask for your Business Number on the call.', type: 'text', wide: true },
       { id: 'agreeCalled', label: 'I understand Ringleader only texts people who called my business first, and honours every STOP.', type: 'agree', req: 'that you agree' },
       { id: 'agreeTerms', label: 'I\'ve read the <a href="terms.html" target="_blank" rel="noopener">Terms</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy policy</a>, and I agree Ringleader staff can view my account to help me.', type: 'agree', req: 'that you agree' }
@@ -283,6 +286,7 @@
       Tone: d.tone, 'Sign-off': d.signOff || '-', 'Words to use': d.wordsUse || '-', 'Words to avoid': d.wordsAvoid || '-',
       'Example text': d.exampleText || '-', 'Hand straight to owner': d.handOff.join(', ') || '-', 'Never say': d.neverSay || '-',
       'Customers call': d.line, Carrier: d.carrier || '-', Forwarding: d.forwarding,
+      'Google listing / website': d.googleLink || '-', 'Licence number': d.licence || '-', 'WSIB account': d.wsib || '-',
       Agreed: 'Only texts people who called first; Terms and Privacy; staff may view account'
     };
     sending = true;
@@ -303,7 +307,7 @@
       } finally { clearTimeout(timer); }
       Leads.send('setup', {
         email: d.email, name: d.owner, business: d.business, trade, ownerPhone: pretty(d.ownerPhone), line: d.line,
-        hours: hoursText, profileJson: JSON.stringify(profile)
+        hours: hoursText, website: d.website, googleLink: d.googleLink, licence: d.licence, wsib: d.wsib, profileJson: JSON.stringify(profile)
       });
       finished = true;
       $('#doneLine').textContent = `Thanks, ${d.owner}. We have everything we need to tailor the assistant for ${d.business}.`;
