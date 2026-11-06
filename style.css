@@ -248,52 +248,6 @@ footer nav { display: flex; gap: 22px; font-weight: 600; }
 .addon b { color: var(--hivis); }
 @media (max-width: 760px) { .deal { grid-template-columns: 1fr; } }
 
-/* Contact page */
-.get-set-up { padding-block: clamp(40px, 7vw, 96px) clamp(72px, 10vw, 130px); }
-.gsu-head { display: grid; gap: 18px; max-width: 900px; margin-bottom: 32px; }
-.gsu-head h1 { font-size: clamp(2.8rem, 8vw, 6rem); font-weight: 900; font-stretch: 115%; line-height: .9; letter-spacing: -0.04em; text-transform: uppercase; }
-.gsu-head p:last-child { font-size: 1.25rem; max-width: 34em; }
-.kicker { font-family: var(--f-mono); font-size: .9rem; text-transform: uppercase; letter-spacing: .1em; color: var(--hivis); }
-.deal-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-bottom: 40px; padding: 14px 18px; border-radius: 16px; border: 2px solid var(--hivis); font-size: 1.1rem; }
-.deal-strip s { color: var(--soft); text-decoration-color: var(--red); text-decoration-thickness: 3px; }
-.deal-strip b { color: var(--hivis); }
-.gsu-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
-.gsu-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding: clamp(22px, 3vw, 36px); border-radius: 28px; background: var(--bg-2); border: 1px solid var(--line); }
-.field { display: grid; gap: 8px; align-content: start; min-width: 0; margin: 0; padding: 0; border: 0; }
-.field.wide { grid-column: 1 / -1; }
-.field label, .field legend { font-weight: 700; font-size: 1rem; padding: 0; }
-.field legend { margin-bottom: 10px; }
-.opt { font-weight: 500; color: var(--soft); }
-.field input:not([type="checkbox"]):not([type="radio"]), .field select, .field textarea, .sent textarea { width: 100%; font: inherit; font-size: 1.05rem; color: var(--ink); background: var(--bg); border: 2px solid var(--line); border-radius: 12px; padding: 12px 14px; }
-.field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--hivis) 50%), linear-gradient(-45deg, transparent 50%, var(--hivis) 50%); background-position: right 20px center, right 14px center; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 40px; }
-.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--hivis); }
-.field [aria-invalid="true"] { border-color: var(--red); }
-.field textarea, .sent textarea { resize: vertical; }
-.chips-pick { display: flex; flex-wrap: wrap; gap: 10px; }
-.chips-pick label { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; border: 2px solid var(--line); cursor: pointer; font-weight: 600; }
-.chips-pick label:has(input:checked) { border-color: var(--hivis); color: var(--hivis); }
-.chips-pick input, .checks input { accent-color: var(--hivis); width: 18px; height: 18px; margin: 0; }
-.hint { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: rgba(255, 83, 64, .12); border: 1px solid var(--red); font-size: 1rem; }
-.checks { gap: 12px; }
-.checks label { display: flex; gap: 10px; align-items: center; font-weight: 600; cursor: pointer; }
-.form-error { grid-column: 1 / -1; color: var(--red); font-weight: 700; }
-.send-row { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 16px; }
-.send-row .btn { border: 0; cursor: pointer; font-family: inherit; }
-.small { font-size: .95rem; color: var(--soft); }
-.sent { grid-column: 1 / -1; display: grid; gap: 12px; padding: 18px; border-radius: 16px; border: 2px solid var(--hivis); }
-.sent textarea { font-family: var(--f-mono); font-size: .9rem; }
-.btn.ghost { justify-self: start; background: transparent; color: var(--hivis); border: 2px solid var(--hivis); cursor: pointer; font-family: inherit; }
-.gsu-side { display: grid; gap: 28px; position: sticky; top: 100px; }
-.gsu-side h2 { font-size: clamp(2rem, 4vw, 2.8rem); text-transform: uppercase; }
-.next { list-style: none; margin: 0; padding: 0; display: grid; gap: 20px; counter-reset: step; }
-.next li { counter-increment: step; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 16px; font-size: 1.08rem; }
-.next li::before { content: counter(step, decimal-leading-zero); grid-row: span 2; font-family: var(--f-display); font-weight: 900; font-size: 2.2rem; line-height: .9; color: transparent; -webkit-text-stroke: 2px var(--hivis); }
-.next b { display: block; }
-.side-email { display: grid; gap: 6px; padding-top: 24px; border-top: 2px solid var(--line); }
-.side-email .email { font-family: var(--f-display); font-weight: 900; font-size: clamp(1.1rem, 1.9vw, 1.45rem); color: var(--hivis); overflow-wrap: anywhere; letter-spacing: -0.02em; }
-@media (max-width: 900px) { .gsu-grid { grid-template-columns: 1fr; } .gsu-side { position: static; } }
-@media (max-width: 560px) { .gsu-form { grid-template-columns: 1fr; } .send-row { grid-template-columns: 1fr; } }
-
 /* Entrance motion, skipped for visitors who prefer less motion */
 @media (prefers-reduced-motion: no-preference) {
   .rise { animation: rise .7s cubic-bezier(.2, .7, .2, 1) both; }
@@ -311,3 +265,30 @@ footer nav { display: flex; gap: 22px; font-weight: 600; }
   .ticker-track { animation: none; }
   .call .avatar::after { animation: none; }
 }
+
+/* "Who are we setting up?": the short step before Get started. Used on the home pages and the plans page (signin.js builds it). */
+.hello { width: min(calc(100vw - 32px), 430px); padding: 0; border: 1px solid rgba(255, 255, 255, .16); border-radius: 20px; background: #101012; color: var(--ink); font-size: 16px; }
+.hello::backdrop { background: rgba(0, 0, 0, .68); }
+.hello form { position: relative; display: grid; gap: 15px; padding: 28px; }
+.hello h2 { padding-right: 28px; font-size: 1.45rem; font-weight: 800; font-stretch: 100%; letter-spacing: -0.02em; line-height: 1.12; text-transform: none; }
+.hello p { color: #A8A8A2; font-size: .95rem; line-height: 1.45; }
+.hello-x { position: absolute; top: 18px; right: 16px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: none; color: #A8A8A2; font: inherit; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+.hello-x:hover { background: rgba(255, 255, 255, .08); color: var(--ink); }
+.hello-f { display: grid; gap: 6px; }
+.hello-f label { font-weight: 600; font-size: .94rem; }
+.hello-f input { width: 100%; min-height: 48px; padding: 11px 13px; border: 1px solid rgba(255, 255, 255, .2); border-radius: 11px; background: #0A0A0B; color: var(--ink); font: inherit; font-size: 16px; }
+.hello-f input:focus { outline: none; border-color: var(--ink); }
+.hello-f input[aria-invalid="true"] { border-color: var(--red); }
+.hello-f .hello-err { color: #FF7A6B; font-size: .88rem; }
+.hello-go { min-height: 50px; margin-top: 4px; border: 0; border-radius: 12px; background: var(--ink); color: var(--bg); font: inherit; font-weight: 600; cursor: pointer; }
+.hello-go:hover { background: #fff; }
+.hello-skip { justify-self: center; color: var(--ink); font-size: .92rem; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.hello[open] { animation: hello-in .28s cubic-bezier(.32, .72, 0, 1); }
+.hello[open]::backdrop { animation: hello-fade .28s ease; }
+@keyframes hello-in { from { opacity: 0; transform: translateY(12px); } }
+@keyframes hello-fade { from { opacity: 0; } }
+@media (max-width: 560px) {
+  .hello { width: 100vw; max-width: 100vw; margin: auto 0 0; border-width: 1px 0 0; border-radius: 20px 20px 0 0; }
+  .hello form { padding: 24px 20px calc(20px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) { .hello[open], .hello[open]::backdrop { animation: none; } }

@@ -1,13 +1,21 @@
-// The plans page: the Monthly / Yearly switch and the rolling price.
+// The plans page: the Monthly / Yearly switch, the rolling price, Sign up early,
+// and the sign-up sheet the Text-Back card grows into.
 (() => {
+  // PASTE YOUR FORM KEY HERE. Get it free at https://web3forms.com (enter papaadrian.0920@gmail.com, they email you a key).
+  // Without a key nothing can send, so the page shows an honest "didn't send" message with Adrian's email and phone.
+  const FORM_KEY = '';
+
   const $ = (s, root = document) => root.querySelector(s);
   const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+  const Details = window.RingleaderDetails;
+  const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const PRICE = { monthly: 99, yearly: 79 };
+  const YEARLY_TOTAL = 950, YEARLY_FULL = 1188, WORK_LINE = 15, DEAL_PRICE = 69;
+  const dealOn = () => !document.documentElement.classList.contains('deal-over');
   let billing = 'monthly';
 
-  // The rolling price: each digit is a strip of 0-9 twice, moved up and down.
-  const roll = $('#roll');
+  /* ---------- The rolling price ---------- */
   const strips = [0, 1].map(() => {
     const digit = document.createElement('span');
     digit.className = 'roll-digit';
@@ -15,10 +23,10 @@
     strip.className = 'roll-strip';
     strip.innerHTML = [...'01234567890123456789'].map(n => `<i>${n}</i>`).join('');
     digit.append(strip);
-    roll.append(digit);
+    $('#roll').append(digit);
     return strip;
   });
-  // Which cell shows: 99 uses the far 9 on the last digit, so that digit spins too.
+  // Each digit is a strip of 0-9 twice. 99 uses the far 9 on the last digit, so that digit spins too.
   const CELLS = { monthly: [9, 19], yearly: [7, 9] };
   const showPrice = () => strips.forEach((strip, i) => {
     strip.style.transform = `translateY(calc(${CELLS[billing][i]} * -1.1em))`;
@@ -33,6 +41,367 @@
     $$('[data-when]').forEach(el => { el.hidden = el.dataset.when !== billing; });
     $('#tbPrice').setAttribute('aria-label', `$${PRICE[billing]} a month`);
     showPrice();
+    drawSummary();
   }
   $$('[data-bill]').forEach(b => b.addEventListener('click', () => setBilling(b.dataset.bill)));
+
+  /* ---------- Sending to Adrian's email ---------- */
+  async function send(subject, fields) {
+    if (!FORM_KEY) throw new Error('No form key yet');
+    const stop = new AbortController();
+    const timer = setTimeout(() => stop.abort(), 15000);
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ access_key: FORM_KEY, subject, from_name: 'Ringleader website', ...fields }),
+        signal: stop.signal,
+      });
+      const answer = await res.json().catch(() => ({}));
+      if (!res.ok || !answer.success) throw new Error(answer.message || 'Send failed');
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  /* ---------- Sign up early (Front Desk and Crew). No payment, it only tells Adrian. ---------- */
+  const earlyKey = plan => `ringleader-early-${plan}`;
+  const remember = (key, value) => { try { localStorage.setItem(key, value); } catch { /* fine */ } };
+  const recall = key => { try { return localStorage.getItem(key); } catch { return null; } };
+  const markEarly = button => {
+    const msg = button.nextElementSibling;
+    button.disabled = true;
+    button.textContent = "You're on the list";
+    msg.hidden = false;
+    msg.classList.remove('bad');
+    msg.textContent = "We'll tell you when it launches. No payment taken.";
+  };
+  $$('[data-early]').forEach(button => {
+    if (recall(earlyKey(button.dataset.early))) markEarly(button);
+    button.addEventListener('click', async () => {
+      const plan = button.dataset.early, msg = button.nextElementSibling;
+      const who = Details.get() || await Details.ask({ title: `Sign up early for ${plan}`, button: 'Sign up early' });
+      if (!who) return;
+      drawWho();
+      button.disabled = true;
+      button.textContent = 'Sending...';
+      msg.hidden = true;
+      try {
+        await send(`Ringleader: early sign-up for ${plan} (${who.business})`, { Plan: plan, Name: who.name, Business: who.business, email: who.email });
+        remember(earlyKey(plan), '1');
+        markEarly(button);
+      } catch {
+        button.disabled = false;
+        button.textContent = 'Sign up early';
+        msg.hidden = false;
+        msg.classList.add('bad');
+        msg.innerHTML = "That didn't send. Reach Adrian at papaadrian.0920@gmail.com or <a href=\"tel:+14372322281\">437-232-2281</a>.";
+      }
+    });
+  });
+
+  /* ---------- "Filling in as..." line, with a way to clear it on a shared computer ---------- */
+  function drawWho() {
+    const who = Details.get(), line = $('#whoLine');
+    line.hidden = !who;
+    if (!who) return;
+    line.textContent = `Saved on this device: ${who.name}, ${who.business}. `;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = 'Not you?';
+    button.addEventListener('click', () => {
+      Details.clear();
+      ['fName', 'fBusiness', 'fEmail'].forEach(id => { $('#' + id).value = ''; });
+      drawWho();
+    });
+    line.append(button);
+  }
+  drawWho();
+
+  /* ---------- The sheet: filling in, checking, moving between steps ---------- */
+  const sheet = $('#sheet'), stage = $('#stage'), view = $('#plans'), card = $('#textBack');
+  const STEPS = 3;
+  let step = 0, isOpen = false, moving = false, sent = false;
+
+  const fill = () => {
+    const who = Details.get();
+    if (!who) return;
+    $('#fName').value = who.name;
+    $('#fBusiness').value = who.business;
+    $('#fEmail').value = who.email;
+  };
+
+  const digitsOf = v => v.replace(/\D/g, '').replace(/^1(?=\d{10}$)/, '');
+  const okPhone = v => /^[2-9]\d{2}[2-9]\d{6}$/.test(digitsOf(v));
+  const prettyPhone = v => digitsOf(v).replace(/^(\d{3})(\d{3})(\d{4})$/, '$1-$2-$3');
+
+  const line = () => $('input[name="line"]:checked', sheet);
+  const sameInvoice = () => $('#fSameInvoice').checked;
+
+  function mark(input, message) {
+    const err = $(`#${input.id}-err`);
+    if (message) {
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', err.id);
+    } else {
+      input.removeAttribute('aria-invalid');
+      input.removeAttribute('aria-describedby');
+    }
+    err.textContent = message;
+    err.hidden = !message;
+    return !message;
+  }
+
+  function checkFirstStep() {
+    const val = id => $('#' + id).value.trim();
+    const email = (v, what) => !v ? `Add ${what}.` : Details.okEmail(v) ? '' : "That doesn't look like an email. Check for the @.";
+    const results = [
+      mark($('#fName'), val('fName') ? '' : 'Add your name.'),
+      mark($('#fBusiness'), val('fBusiness') ? '' : 'Add your business name.'),
+      mark($('#fPhone'), !val('fPhone') ? 'Add a phone number so we can reach you.' : okPhone(val('fPhone')) ? '' : "That doesn't look like a phone number. Try 10 digits, like 416-555-0182."),
+      mark($('#fEmail'), email(val('fEmail'), 'your email')),
+      mark($('#fInvoice'), sameInvoice() ? '' : email(val('fInvoice'), 'the email for your invoices')),
+      mark($('#fTrade'), val('fTrade') ? '' : 'Pick your trade.'),
+    ];
+    const lineErr = $('#fLine-err');
+    lineErr.textContent = line() ? '' : 'Pick the one that fits.';
+    lineErr.hidden = !!line();
+    $('#fLine').classList.toggle('bad', !line());
+    return results.every(Boolean) && !!line();
+  }
+
+  let tried = false;
+  sheet.addEventListener('input', () => { if (tried && step === 0) checkFirstStep(); });
+  sheet.addEventListener('change', () => {
+    $('#personalHint').hidden = line()?.value !== 'My personal cell';
+    if ($('#personalHint').hidden) $('#fWorkLine').checked = false;
+    $('#invoiceWrap').hidden = sameInvoice();
+    if (tried && step === 0) checkFirstStep();
+    drawSummary();
+  });
+  $('#fPhone').addEventListener('blur', e => { if (okPhone(e.target.value)) e.target.value = prettyPhone(e.target.value); });
+  sheet.addEventListener('submit', e => e.preventDefault());
+  sheet.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); next(); }
+  });
+
+  function drawSummary() {
+    const money = n => '$' + n.toLocaleString('en-CA');
+    const work = $('#fWorkLine').checked;
+    const deal = billing === 'monthly' && dealOn();
+    const rows = [];
+    let total, small;
+    if (billing === 'yearly') {
+      rows.push(`<div class="sum-row"><span>Text-Back, yearly</span><span><s>${money(YEARLY_FULL)}</s> ${money(YEARLY_TOTAL)}</span></div><span class="sum-save">Save ${money(YEARLY_FULL - YEARLY_TOTAL)}</span>`);
+      total = money(YEARLY_TOTAL) + (work ? ` + ${money(WORK_LINE)} a month` : '');
+      small = `${money(YEARLY_TOTAL)} billed yearly. Canadian dollars, plus any tax.`;
+    } else if (deal) {
+      rows.push(`<div class="sum-row"><span>Text-Back, monthly</span><span><s>${money(PRICE.monthly)}</s> ${money(DEAL_PRICE)} a month</span></div>`);
+      total = `${money(DEAL_PRICE + (work ? WORK_LINE : 0))} a month`;
+      small = `Founding shop price for your first 3 months, then ${money(PRICE.monthly + (work ? WORK_LINE : 0))} a month. Cancel anytime. Canadian dollars, plus any tax.`;
+    } else {
+      rows.push(`<div class="sum-row"><span>Text-Back, monthly</span><span>${money(PRICE.monthly)} a month</span></div>`);
+      total = `${money(PRICE.monthly + (work ? WORK_LINE : 0))} a month`;
+      small = 'Cancel anytime. Canadian dollars, plus any tax.';
+    }
+    if (work) rows.push(`<div class="sum-row"><span>Work Line</span><span>+${money(WORK_LINE)} a month</span></div>`);
+    $('#sumRows').innerHTML = rows.join('');
+    $('#sumTotal').textContent = total;
+    $('#sumSmall').textContent = small;
+    $('#sumSwitch').textContent = billing === 'monthly' ? 'Switch to yearly and save 20%' : 'Switch to monthly';
+  }
+  $('#sumSwitch').addEventListener('click', () => setBilling(billing === 'monthly' ? 'yearly' : 'monthly'));
+
+  // Draws whichever step we're on. step === 'done' is the finished state.
+  function draw() {
+    const done = step === 'done';
+    $$('.stepper li').forEach((li, i) => {
+      const isDone = done || i < step;
+      li.classList.toggle('is-done', isDone);
+      li.classList.toggle('is-on', i === step);
+      const button = $('button', li);
+      button.disabled = done || i >= step;
+      if (i === step) button.setAttribute('aria-current', 'step'); else button.removeAttribute('aria-current');
+    });
+    $$('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== String(step); });
+    $('#sheetNav').hidden = done;
+    $('#navNext').textContent = step === STEPS - 1 ? 'Send' : 'Next';
+    drawSummary();
+  }
+
+  function showStep(n, focus = true) {
+    step = n;
+    draw();
+    if (!isOpen || !focus) return;
+    window.scrollTo({ top: Math.max(0, stage.getBoundingClientRect().top + scrollY - 76), behavior: calm() ? 'auto' : 'smooth' });
+    $('#sheetTitle').focus({ preventScroll: true });
+  }
+
+  function next() {
+    if (step === 0) {
+      tried = true;
+      if (!checkFirstStep()) { $('[aria-invalid="true"], .pick.bad input', sheet)?.focus(); return; }
+      Details.save({ email: $('#fEmail').value.trim(), name: $('#fName').value.trim(), business: $('#fBusiness').value.trim() });
+      drawWho();
+    }
+    if (step === STEPS - 1) { sendSignUp(); return; }
+    history.pushState({ step: step + 1 }, '', '#setup');
+    showStep(step + 1);
+  }
+  $('#navNext').addEventListener('click', next);
+  $('#navBack').addEventListener('click', () => history.back());
+  $$('.stepper li').forEach((li, i) => $('button', li).addEventListener('click', () => {
+    history.pushState({ step: i }, '', '#setup');
+    showStep(i);
+  }));
+
+  async function sendSignUp() {
+    const nextBtn = $('#navNext'), fail = $('#sendFail');
+    const val = id => $('#' + id).value.trim();
+    fail.hidden = true;
+    if (val('fWebsite')) { fail.hidden = false; return; } // only a bot fills in the hidden box
+    nextBtn.disabled = true;
+    nextBtn.textContent = 'Sending...';
+    const fields = {
+      Plan: `Text-Back, ${billing}`,
+      Price: $('#sumTotal').textContent,
+      'Founding deal': billing === 'monthly' && dealOn() ? 'Yes' : 'No',
+      Name: val('fName'),
+      Business: val('fBusiness'),
+      Trade: val('fTrade'),
+      Phone: prettyPhone(val('fPhone')),
+      email: val('fEmail'),
+      'Invoice email': sameInvoice() ? val('fEmail') : val('fInvoice'),
+      'Customers call': line().value,
+      'Work Line': $('#fWorkLine').checked ? 'Yes (+$15 a month)' : 'No',
+      'Anything else': val('fMessage') || '-',
+    };
+    try {
+      await send(`Ringleader sign-up: ${fields.Business}`, fields);
+      sent = true;
+      $('#doneLine').textContent = `Thanks, ${fields.Name}. We'll get back to you within a day at ${fields.Phone} or ${fields.email}, and set it up with you in about 20 minutes.`;
+      history.replaceState({ step: 'done' }, '', '#setup');
+      showStep('done');
+    } catch {
+      fail.hidden = false;
+      fail.scrollIntoView({ block: 'nearest', behavior: calm() ? 'auto' : 'smooth' });
+    } finally {
+      nextBtn.disabled = false;
+      nextBtn.textContent = 'Send';
+    }
+  }
+
+  /* ---------- The move: Text-Back card <-> sheet. Only transform and opacity animate. ---------- */
+  const EASE = 'cubic-bezier(.32, .72, 0, 1)';
+  const radiusOf = el => parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
+  const widthOf = el => parseFloat(getComputedStyle(el).borderTopWidth) || 0;
+
+  // The surface starts (or ends) exactly on top of the card. Corners and border are un-stretched as it scales.
+  const cardShape = (from, to, surface, r, b) => {
+    const sx = from.width / to.width, sy = from.height / to.height;
+    return {
+      transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${sx}, ${sy})`,
+      borderRadius: `${r / sx}px / ${r / sy}px`,
+      borderWidth: `${b / sy}px ${b / sx}px`,
+    };
+  };
+
+  async function openSheet() {
+    if (isOpen || moving) return;
+    moving = true;
+    isOpen = true;
+    const body = $('.sheet-body'), surface = $('.sheet-surface');
+    const animate = !calm();
+    const viewHeight = view.offsetHeight;
+    const first = card.getBoundingClientRect();
+    const cardR = radiusOf(card), cardB = widthOf(card);
+    const others = $$('.card', view).filter(c => c !== card);
+
+    fill();
+    showStep(typeof step === 'number' ? step : 0, false);
+    stage.classList.add('is-open');
+    sheet.hidden = false;
+    if (animate) {
+      stage.style.minHeight = viewHeight + 'px'; // keeps the page from jumping while things swap
+      stage.classList.add('moving');
+      const last = surface.getBoundingClientRect();
+      const anims = [
+        surface.animate([cardShape(first, last, surface, cardR, cardB), { transform: 'none', borderRadius: `${radiusOf(surface)}px`, borderWidth: `${widthOf(surface)}px` }], { duration: 520, easing: EASE }),
+        body.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 300, delay: 220, easing: 'ease-out', fill: 'backwards' }),
+        ...[...card.children].map(child => child.animate({ opacity: [1, 0] }, { duration: 140, easing: 'ease-out', fill: 'forwards' })),
+        ...others.map((c, i) => c.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: `translateX(${i ? 18 : -18}px) scale(.98)` }], { duration: 240, easing: 'ease-out', fill: 'forwards' })),
+        ...[$('.bill'), $('.su-foot')].map(el => el.animate({ opacity: [1, 0] }, { duration: 160, fill: 'forwards' })),
+      ];
+      window.scrollTo({ top: Math.max(0, stage.getBoundingClientRect().top + scrollY - 76), behavior: 'smooth' });
+      await Promise.allSettled(anims.map(a => a.finished));
+      anims.forEach(a => a.cancel());
+      stage.classList.remove('moving');
+      stage.style.minHeight = '';
+    } else {
+      window.scrollTo(0, Math.max(0, stage.getBoundingClientRect().top + scrollY - 76));
+    }
+    view.hidden = true;
+    moving = false;
+    $('#sheetTitle').focus({ preventScroll: true });
+  }
+
+  async function closeSheet() {
+    if (!isOpen || moving) return;
+    moving = true;
+    isOpen = false;
+    const body = $('.sheet-body'), surface = $('.sheet-surface');
+    if (!calm()) {
+      const sheetHeight = sheet.offsetHeight;
+      view.hidden = false;
+      stage.classList.add('moving');
+      stage.style.minHeight = Math.max(view.offsetHeight, sheetHeight) + 'px';
+      const to = card.getBoundingClientRect();
+      const now = surface.getBoundingClientRect();
+      const others = $$('.card', view).filter(c => c !== card);
+      const anims = [
+        surface.animate([{ transform: 'none', borderRadius: `${radiusOf(surface)}px`, borderWidth: `${widthOf(surface)}px` }, cardShape(to, now, surface, 22, 1.5)], { duration: 420, easing: EASE, fill: 'forwards' }),
+        body.animate({ opacity: [1, 0] }, { duration: 140, fill: 'forwards' }),
+        ...[...card.children].map(child => child.animate({ opacity: [0, 1] }, { duration: 220, delay: 200, fill: 'backwards' })),
+        ...others.map(c => c.animate({ opacity: [0, 1] }, { duration: 260, delay: 180, fill: 'backwards' })),
+        ...[$('.bill'), $('.su-foot')].map(el => el.animate({ opacity: [0, 1] }, { duration: 260, delay: 180, fill: 'backwards' })),
+      ];
+      window.scrollTo({ top: Math.max(0, stage.getBoundingClientRect().top + scrollY - 76), behavior: 'smooth' });
+      await Promise.allSettled(anims.map(a => a.finished));
+      sheet.hidden = true;
+      anims.forEach(a => a.cancel());
+      stage.classList.remove('moving');
+      stage.style.minHeight = '';
+    } else {
+      view.hidden = false;
+      sheet.hidden = true;
+    }
+    stage.classList.remove('is-open');
+    moving = false;
+    if (sent) { sent = false; step = 0; }
+    $('#getStarted').focus({ preventScroll: true });
+  }
+
+  /* ---------- Get started ---------- */
+  $('#getStarted').addEventListener('click', async () => {
+    if (!Details.get()) {
+      const who = await Details.ask();
+      if (!who) return;
+      drawWho();
+    }
+    step = 0;
+    history.pushState({ step: 0 }, '', '#setup');
+    openSheet();
+  });
+
+  // The phone's back button walks back through the steps, then out to the plans.
+  addEventListener('popstate', e => {
+    const to = e.state && e.state.step;
+    if (to === undefined || to === null) { closeSheet(); return; }
+    if (sent) { showStep('done'); return; }
+    if (!isOpen) { step = to; openSheet(); return; }
+    showStep(to);
+  });
+  // A refresh in the middle starts back at the plans, with nothing half-shown.
+  if (location.hash === '#setup') history.replaceState(null, '', location.pathname + location.search);
+  draw();
 })();
