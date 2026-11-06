@@ -1,6 +1,6 @@
 // The short "who are we setting up?" step before Get started.
-// This isn't a real account: no passwords, no server. It only remembers email, name and business name
-// in this browser, so later forms can fill themselves in.
+// This isn't a real account: no passwords. It remembers email, name and business name in this browser, so later
+// forms can fill themselves in, and (leads.js) saves a copy to Adrian's sheet so he can follow up.
 (() => {
   const KEY = 'ringleader-details';
   let memory = null; // used if this browser blocks saving
@@ -30,7 +30,7 @@
       box.innerHTML = `<form novalidate>
         <button type="button" class="hello-x" aria-label="Close">×</button>
         <h2 id="helloTitle"></h2>
-        <p>So you won't type it twice. No password. It's only saved on this device.</p>
+        <p>So you won't type it twice. No password. We keep a copy so we can set you up and follow up, and you agree we may email you about Ringleader. <a href="/privacy.html" target="_blank" rel="noopener">Privacy policy</a></p>
         ${field('helloEmail', 'Email', 'email', 'email')}
         ${field('helloName', 'Your name', 'text', 'name')}
         ${field('helloBusiness', 'Business name', 'text', 'organization')}
@@ -72,6 +72,7 @@
         if (!validate()) { box.querySelector('[aria-invalid="true"]').focus(); return; }
         result = { email: $('helloEmail').value.trim(), name: $('helloName').value.trim(), business: $('helloBusiness').value.trim() };
         save(result);
+        if (window.RingleaderLeads) RingleaderLeads.send('signin', result);
         box.close();
       });
       box.querySelector('.hello-x').addEventListener('click', () => box.close());

@@ -89,6 +89,7 @@
       try {
         await send(`Ringleader: early sign-up for ${plan} (${who.business})`, { Plan: plan, Name: who.name, Business: who.business, email: who.email });
         remember(earlyKey(plan), '1');
+        if (window.RingleaderLeads) RingleaderLeads.send('early', { email: who.email, name: who.name, business: who.business, plan });
         markEarly(button);
       } catch {
         button.disabled = false;
@@ -278,6 +279,7 @@
     };
     try {
       await send(`Ringleader sign-up: ${fields.Business}`, fields);
+      if (window.RingleaderLeads) RingleaderLeads.send('signup', { email: fields.email, name: fields.Name, business: fields.Business, plan: fields.Plan, trade: fields.Trade, phone: fields.Phone, invoiceEmail: fields['Invoice email'], customersCall: fields['Customers call'], workLine: fields['Work Line'], foundingDeal: fields['Founding deal'] });
       sent = true;
       $('#doneLine').textContent = `Thanks, ${fields.Name}. We'll get back to you within a day at ${fields.Phone} or ${fields.email}, and set it up with you in about 20 minutes.`;
       history.replaceState({ step: 'done' }, '', '#setup');
