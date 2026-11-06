@@ -1,0 +1,31 @@
+/* The shop-setup questionnaire. Builds on plans.css (the sheet, stepper, fields). */
+.setup { margin-bottom: clamp(56px, 8vw, 96px); }
+.setup .stepper { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(6px, 1.2vw, 14px); }
+.setup .stepper button { font-size: .85rem; }
+.setup .stepper .done-tick { display: none; }
+.setup .stepper li.is-done .done-tick { display: inline-flex; }
+.setup .pane + .pane { margin-top: 0; }
+.setup .grid2 .wide { grid-column: 1 / -1; }
+.setup .hint { color: var(--su-soft); font-size: .88rem; line-height: 1.4; font-weight: 400; }
+.setup h3.group { font-size: 1.05rem; font-weight: 700; margin-top: 4px; }
+.setup .pick-row.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.setup .pick-row.chips label { flex: 0 0 auto; }
+.setup .pick-row.chips span { min-height: 44px; padding: 8px 16px; }
+.setup .pick-row.chips.small span { min-height: 38px; padding: 6px 13px; font-size: .9rem; }
+.setup .pick-row.chips button { min-height: 38px; padding: 6px 13px; border: 1px dashed rgba(255, 255, 255, .3); border-radius: 11px; background: none; color: var(--soft); font: inherit; font-size: .9rem; cursor: pointer; }
+.setup .pick-row.chips button[aria-pressed="true"] { border-style: solid; border-color: var(--ink); color: var(--ink); background: rgba(255, 255, 255, .08); }
+.hours { display: grid; gap: 8px; max-width: 620px; }
+.hours-row select:disabled { opacity: .35; }
+.hours-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.hours-row b { font-weight: 600; }
+.hours-row select { min-height: 42px; }
+.hours-row .tickbox { margin: 0; white-space: nowrap; }
+.setup .agree { align-items: flex-start; line-height: 1.4; }
+.setup .agree input { margin-top: 2px; }
+.cta-solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+@media (max-width: 760px) {
+  .setup .stepper { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; }
+  .setup .stepper button { font-size: .68rem; }
+  .hours-row { grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1fr); }
+  .hours-row .tickbox { grid-column: 2 / -1; }
+}

@@ -7,7 +7,11 @@
   // The same word as SECRET in the Google script. It only keeps casual spam out; it is visible in this file.
   const SECRET = '';
 
+  // The Web3Forms key that emails Adrian. It's meant to be public: it can only send mail to him. plans.js and setup.js both use it.
+  const FORM_KEY = 'ef8b60ea-1cdf-4179-a649-e66fd541b137';
+
   window.RingleaderLeads = {
+    formKey: FORM_KEY,
     send(kind, fields) {
       if (!LEADS_URL) return;
       try {

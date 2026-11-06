@@ -1,9 +1,8 @@
 // The plans page: the Monthly / Yearly switch, the rolling price, Sign up early,
 // and the sign-up sheet the Text-Back card grows into.
 (() => {
-  // The Web3Forms key that sends sign-ups to papaadrian.0920@gmail.com. It's meant to be public: it can only email Adrian.
-  // Without a key nothing can send, so the page shows an honest "didn't send" message with Adrian's email and phone.
-  const FORM_KEY = 'ef8b60ea-1cdf-4179-a649-e66fd541b137';
+  // The Web3Forms key lives in leads.js. Without one nothing can send, so the page shows an honest "didn't send" message with Adrian's email and phone.
+  const FORM_KEY = (window.RingleaderLeads && RingleaderLeads.formKey) || '';
 
   const $ = (s, root = document) => root.querySelector(s);
   const $$ = (s, root = document) => [...root.querySelectorAll(s)];
