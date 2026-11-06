@@ -292,3 +292,30 @@ footer nav { display: flex; gap: 22px; font-weight: 600; }
   .hello form { padding: 24px 20px calc(20px + env(safe-area-inset-bottom, 0px)); }
 }
 @media (prefers-reduced-motion: reduce) { .hello[open], .hello[open]::backdrop { animation: none; } }
+
+/* The live deal countdown (deal.js). Same-width digits, so it doesn't jiggle as it ticks. */
+.deal-clock { font-family: var(--f-mono); font-weight: 500; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* iPhone details on every phone picture: status bar with battery, home bar, the text box, the lock screen buttons. */
+.screen { padding-bottom: 26px; }
+.screen::after { content: ""; position: absolute; left: 50%; bottom: 8px; width: 36%; height: 5px; margin-left: -18%; border-radius: 3px; background: rgba(255, 255, 255, .85); }
+.ios-status { position: absolute; top: 13px; left: 26px; right: 20px; display: flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 600; line-height: 1; }
+.ios-status span { margin-right: auto; }
+.ios-sig { width: 16px; height: 10px; background: linear-gradient(#fff, #fff) 0 100% / 3px 40% no-repeat, linear-gradient(#fff, #fff) 4.3px 100% / 3px 60% no-repeat, linear-gradient(#fff, #fff) 8.6px 100% / 3px 80% no-repeat, linear-gradient(#fff, #fff) 100% 100% / 3px 100% no-repeat; }
+.ios-bat { position: relative; width: 23px; height: 11px; border: 1px solid rgba(255, 255, 255, .6); border-radius: 3.5px; }
+.ios-bat::before { content: ""; position: absolute; inset: 1.5px 5px 1.5px 1.5px; border-radius: 1.5px; background: #fff; }
+.ios-bat::after { content: ""; position: absolute; top: 2.5px; right: -3.5px; width: 2px; height: 4px; border-radius: 0 1.5px 1.5px 0; background: rgba(255, 255, 255, .6); }
+.screen-head { display: grid; justify-items: center; gap: 3px; padding-bottom: 8px; }
+.ios-ava { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #55555C; color: #fff; font-size: .68rem; font-style: normal; font-weight: 600; }
+.ios-input { margin-top: auto; display: flex; align-items: center; gap: 8px; color: #8A8A8E; font-size: .8rem; line-height: 1; }
+.ios-input span { flex: 1; padding: 7px 12px; border: 1px solid rgba(255, 255, 255, .22); border-radius: 999px; }
+.ios-plus { position: relative; flex: none; width: 24px; height: 24px; border-radius: 50%; background: #2A2A2F; }
+.ios-plus::before, .ios-plus::after { content: ""; position: absolute; left: 50%; top: 50%; width: 10px; height: 1.5px; margin: -.75px 0 0 -5px; background: #C8C8CC; }
+.ios-plus::after { transform: rotate(90deg); }
+.lock { padding-bottom: 84px; background: radial-gradient(130% 70% at 50% 0%, #2B2E26, #111113 72%); }
+.ios-tools { position: absolute; left: 24px; right: 24px; bottom: 26px; display: flex; justify-content: space-between; }
+.ios-tools span { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(255, 255, 255, .13); }
+.ios-tools svg { width: 19px; height: 19px; fill: none; stroke: #fff; stroke-width: 1.7; stroke-linejoin: round; }
+/* Phones inside the steps keep phone-sized text (the steps' own paragraph size is too big for them). */
+.step .screen .bubble, .step .screen .notif p { font-size: .86rem; }
+.step .screen .stamp, .step .screen .note { font-size: .72rem; }

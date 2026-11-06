@@ -10,6 +10,7 @@
 .su-deal b { color: var(--hivis); font-weight: 600; }
 .su-deal s { color: var(--su-soft); }
 .su-deal-left { color: var(--su-soft); }
+.su-deal-offer { color: var(--ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--hivis); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .su-noscript { text-align: center; padding-bottom: 24px; }
 
 /* Monthly / Yearly switch */

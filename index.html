@@ -114,8 +114,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&display=swap">
-<link rel="stylesheet" href="style.css?v=14">
-<script src="deal.js?v=2" defer></script>
+<link rel="stylesheet" href="style.css?v=16">
+<script src="deal.js?v=3" defer></script>
 <script src="signin.js?v=4" defer></script>
 <script src="main.js" defer></script>
 <script src="paths.js?v=4" defer></script>
@@ -155,15 +155,17 @@
         </div>
       </div>
 
-      <!-- What the caller sees. These are the real default texts the server sends. -->
-      <div class="phone" role="img" aria-label="Example: a caller gets a text from Mike's Plumbing seconds after a missed call, replies, and Mike answers.">
+      <!-- The shop's side of the thread: the shop's texts on the right, the caller on the left. These are the real default texts the server sends. -->
+      <div class="phone" role="img" aria-label="Example text thread: a caller gets a text from Mike's Plumbing seconds after a missed call, replies, and Mike answers.">
         <div class="screen">
-          <div class="screen-head"><b>Mike's Plumbing</b><span>Text message</span></div>
+          <div class="screen-head"><i class="ios-ava">LP</i><b>Linda Park</b></div>
           <p class="stamp missed">Missed call · 2:14 PM</p>
-          <p class="bubble in">Hi! This is Mike's Plumbing. Sorry we missed your call, we're probably on a job. What can we help you with? Reply here and we'll get right back to you. Reply STOP to opt out.</p>
-          <p class="note">↑ 4 seconds after the missed call</p>
-          <p class="bubble out">Water heater is leaking in the garage. Can someone come today?</p>
-          <p class="bubble in">Hi Linda, this is Mike. I can be there at 4 today. Does that work?</p>
+          <p class="bubble out">Hi! This is Mike's Plumbing. Sorry we missed your call, we're probably on a job. What can we help you with? Reply here and we'll get right back to you. Reply STOP to opt out.</p>
+          <p class="note right">↑ 4 seconds after the missed call</p>
+          <p class="bubble in">Water heater is leaking in the garage. Can someone come today?</p>
+          <p class="bubble out">Hi Linda, this is Mike. I can be there at 4 today. Does that work?</p>
+          <div class="ios-input" aria-hidden="true"><i class="ios-plus"></i><span>Text Message</span></div>
+          <div class="ios-status" aria-hidden="true"><span>2:14</span><i class="ios-sig"></i><i class="ios-bat"></i></div>
         </div>
       </div>
     </div>
@@ -196,6 +198,7 @@
                 <span>mobile</span>
                 <span class="missed-pill">Missed call</span>
                 <span class="fwd">↳ Forwarded to Ringleader</span>
+                <div class="ios-status" aria-hidden="true"><span>2:14</span><i class="ios-sig"></i><i class="ios-bat"></i></div>
               </div>
             </div>
           </article>
@@ -204,12 +207,14 @@
             <div class="step-top"><span class="step-num">02</span><time>2:14 PM</time></div>
             <h3>She gets a text from your shop. Instantly.</h3>
             <p>In your shop's name, before she can dial anyone else. If you're closed, she gets your after-hours text instead.</p>
-            <div class="phone" role="img" aria-label="Linda's phone: a text from Mike's Plumbing arrives 4 seconds after the missed call.">
+            <div class="phone" role="img" aria-label="Text thread with Linda Park: a text from Mike's Plumbing goes out 4 seconds after the missed call.">
               <div class="screen">
-                <div class="screen-head"><b>Mike's Plumbing</b><span>Text message</span></div>
+                <div class="screen-head"><i class="ios-ava">LP</i><b>Linda Park</b></div>
                 <p class="stamp missed">Missed call · 2:14 PM</p>
-                <p class="bubble in">Hi! This is Mike's Plumbing. Sorry we missed your call, we're probably on a job. What can we help you with? Reply here and we'll get right back to you. 18 Barton St E, Hamilton ON, mikesplumbing.ca Reply STOP to opt out.</p>
-                <p class="note">↑ 4 seconds after the missed call</p>
+                <p class="bubble out">Hi! This is Mike's Plumbing. Sorry we missed your call, we're probably on a job. What can we help you with? Reply here and we'll get right back to you. 18 Barton St E, Hamilton ON, mikesplumbing.ca Reply STOP to opt out.</p>
+                <p class="note right">↑ 4 seconds after the missed call</p>
+                <div class="ios-input" aria-hidden="true"><i class="ios-plus"></i><span>Text Message</span></div>
+                <div class="ios-status" aria-hidden="true"><span>2:14</span><i class="ios-sig"></i><i class="ios-bat"></i></div>
               </div>
             </div>
           </article>
@@ -218,12 +223,13 @@
             <div class="step-top"><span class="step-num">03</span><time>2:16 PM</time></div>
             <h3>She tells you what's wrong.</h3>
             <p>No phone tag, no voicemail. By the time you look, you already know the job.</p>
-            <div class="phone" role="img" aria-label="Linda's phone: she replies that her water heater is leaking.">
+            <div class="phone" role="img" aria-label="Text thread with Linda Park: she replies with what is wrong.">
               <div class="screen">
-                <div class="screen-head"><b>Mike's Plumbing</b><span>Text message</span></div>
-                <p class="bubble in">Hi! This is Mike's Plumbing. Sorry we missed your call, we're probably on a job. What can we help you with?</p>
-                <p class="bubble out">Water heater is leaking in the garage. Can someone come today?</p>
-                <p class="note right">Delivered</p>
+                <div class="screen-head"><i class="ios-ava">LP</i><b>Linda Park</b></div>
+                <p class="bubble out">Hi! This is Mike's Plumbing. Sorry we missed your call, we're probably on a job. What can we help you with?</p>
+                <p class="bubble in">Water heater is leaking in the garage. Can someone come today?</p>
+                <div class="ios-input" aria-hidden="true"><i class="ios-plus"></i><span>Text Message</span></div>
+                <div class="ios-status" aria-hidden="true"><span>2:16</span><i class="ios-sig"></i><i class="ios-bat"></i></div>
               </div>
             </div>
           </article>
@@ -232,7 +238,7 @@
             <div class="step-top"><span class="step-num">04</span><time>3:05 PM</time></div>
             <h3>You answer from the job site.</h3>
             <p>Her message comes to your phone as a text. Reply to it like any text, and Ringleader sends your answer from your shop's number.</p>
-            <div class="phone" role="img" aria-label="Your phone: an alert with Linda's message, and your reply.">
+            <div class="phone" role="img" aria-label="Your lock screen: a Ringleader text with Linda's message.">
               <div class="screen lock">
                 <p class="clock">3:05</p>
                 <p class="date">Wednesday</p>
@@ -240,17 +246,34 @@
                   <span class="notif-app"><i></i>Ringleader · now</span>
                   <p>#12: Linda Park texted: "Water heater is leaking in the garage. Can someone come today?" Reply to this text to answer them.</p>
                 </div>
-                <p class="bubble out">I can be there at 4 today. Does that work?</p>
-                <p class="note right">Sent to Linda Park (#12)</p>
+                <div class="ios-status" aria-hidden="true"><span></span><i class="ios-sig"></i><i class="ios-bat"></i></div>
+                <div class="ios-tools" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M8 3h8v3l-2 4v10a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V10L8 6z"/></svg></span><span><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg></span></div>
               </div>
             </div>
           </article>
 
           <article class="step">
-            <div class="step-top"><span class="step-num">05</span><time>7:00 AM</time></div>
+            <div class="step-top"><span class="step-num">05</span><time>3:06 PM</time></div>
+            <h3>You text back. The job's booked.</h3>
+            <p>Your answer goes out from your shop's number, so Linda knows exactly who's coming and when.</p>
+            <div class="phone" role="img" aria-label="Text thread with Linda Park: you offer 4 today, she says yes, and you confirm the booking.">
+              <div class="screen">
+                <div class="screen-head"><i class="ios-ava">LP</i><b>Linda Park</b></div>
+                <p class="bubble in">Water heater is leaking in the garage. Can someone come today?</p>
+                <p class="bubble out">Hi Linda, this is Mike. I can be there at 4 today. Does that work?</p>
+                <p class="bubble in">Yes please! Thank you.</p>
+                <p class="bubble out">You're booked for 4 today, Linda. See you then.</p>
+                <div class="ios-input" aria-hidden="true"><i class="ios-plus"></i><span>Text Message</span></div>
+                <div class="ios-status" aria-hidden="true"><span>3:06</span><i class="ios-sig"></i><i class="ios-bat"></i></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <div class="step-top"><span class="step-num">06</span><time>7:00 AM</time></div>
             <h3>The next morning, you see it all.</h3>
             <p>One text before your first coffee: every missed call, every reply, every job booked, and who's still waiting on you.</p>
-            <div class="phone" role="img" aria-label="Your phone the next morning: the Ringleader summary text.">
+            <div class="phone" role="img" aria-label="Your lock screen the next morning: the Ringleader summary text.">
               <div class="screen lock">
                 <p class="clock">7:00</p>
                 <p class="date">Thursday</p>
@@ -258,7 +281,8 @@
                   <span class="notif-app"><i></i>Ringleader · now</span>
                   <p>Good morning! Last 24 hours: 4 missed calls, 4 texted back, 3 wrote back. Booked: 2 jobs, $1,850. Waiting on you: (905) 555-0143 (#14).</p>
                 </div>
-                <p class="booked">+$1,850 booked</p>
+                <div class="ios-status" aria-hidden="true"><span></span><i class="ios-sig"></i><i class="ios-bat"></i></div>
+                <div class="ios-tools" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M8 3h8v3l-2 4v10a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V10L8 6z"/></svg></span><span><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg></span></div>
               </div>
             </div>
           </article>

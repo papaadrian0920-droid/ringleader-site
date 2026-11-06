@@ -46,7 +46,11 @@
   .step .lock .clock, .step .lock .date { display: none; }
   .step .booked { align-self: flex-start; transform: none; border-radius: 16px; margin-top: 4px; }
   /* step 3: the shop's text was already shown in step 2 */
-  .step:nth-child(3) .bubble.in { display: none; }
+  .step:nth-child(3) .bubble.out { display: none; }
+  /* flat cards here, so no iPhone details */
+  .hero .ios-status, .step .ios-status, .hero .ios-input, .step .ios-input, .step .ios-tools, .hero .ios-ava, .step .ios-ava, .hero .screen::after, .step .screen::after { display: none; }
+  .step .lock { padding-bottom: 14px; }
+  .step .screen .bubble, .step .screen .notif p { font-size: 1rem; }
   .step { padding-block: 26px; gap: 10px; }
   .section { padding-block: 56px; }
 }

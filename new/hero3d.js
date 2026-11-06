@@ -140,7 +140,7 @@ function makeChips() {
 }
 
 // ---------- the conversation on the screen ----------
-// Linda's phone (the caller). Grey bubbles come from the shop, green ones are Linda.
+// The shop's side of the thread. Green bubbles on the right come from the shop, grey ones on the left are Linda.
 const SCRIPT = [
   { at: 0.4, kind: "missed" },
   { at: 1.3, kind: "typing" },
@@ -168,9 +168,9 @@ function drawScreen(lt) {
   g.fillStyle = "#F4F4F1"; g.font = font(700, 30); g.textBaseline = "alphabetic"; g.fillText("2:14", 52, 66);
   g.fillRect(SW - 110, 46, 52, 22); g.fillStyle = "#0C0C0E"; g.fillRect(SW - 106, 50, 40, 14); g.fillStyle = GREEN; g.fillRect(SW - 106, 50, 30, 14);
   g.fillStyle = "#1A1A1D"; g.fillRect(0, 96, SW, 120);
-  g.fillStyle = GREEN; g.beginPath(); g.arc(90, 156, 36, 0, 7); g.fill();
-  g.fillStyle = "#0C0C0E"; g.font = font(800, 30); g.textAlign = "center"; g.fillText("MH", 90, 167); g.textAlign = "left";
-  g.fillStyle = "#F4F4F1"; g.font = font(700, 34); g.fillText("Mike's Heating & Air", 146, 150);
+  g.fillStyle = "#55555C"; g.beginPath(); g.arc(90, 156, 36, 0, 7); g.fill();
+  g.fillStyle = "#FFFFFF"; g.font = font(700, 30); g.textAlign = "center"; g.fillText("LP", 90, 167); g.textAlign = "left";
+  g.fillStyle = "#F4F4F1"; g.font = font(700, 34); g.fillText("Linda Park", 146, 150);
   g.fillStyle = "#9A9A94"; g.font = font(500, 24); g.fillText("Text message", 146, 184);
   let y = 260;
   const fade = lt > LOOP - 1 ? 1 - (lt - (LOOP - 1)) : 1;
@@ -181,8 +181,8 @@ function drawScreen(lt) {
     if (step.kind === "typing") {
       const next = SCRIPT[SCRIPT.indexOf(step) + 1];
       if (lt >= next.at) continue;
-      g.fillStyle = "#26262B"; g.beginPath(); g.roundRect(40, y, 130, 66, 33); g.fill();
-      for (let i = 0; i < 3; i++) { g.fillStyle = `rgba(244,244,241,${0.4 + 0.6 * Math.abs(Math.sin(lt * 5 + i))})`; g.beginPath(); g.arc(78 + i * 28, y + 33, 8, 0, 7); g.fill(); }
+      g.fillStyle = "#26262B"; g.beginPath(); g.roundRect(SW - 170, y, 130, 66, 33); g.fill();
+      for (let i = 0; i < 3; i++) { g.fillStyle = `rgba(244,244,241,${0.4 + 0.6 * Math.abs(Math.sin(lt * 5 + i))})`; g.beginPath(); g.arc(SW - 132 + i * 28, y + 33, 8, 0, 7); g.fill(); }
       continue;
     }
     if (step.kind === "missed") {
@@ -200,7 +200,7 @@ function drawScreen(lt) {
       g.restore(); continue;
     }
     g.font = font(500, 29);
-    const me = step.from === "me", maxW = 380, lines = wrap(step.text, maxW - 48);
+    const me = step.from === "shop", maxW = 380, lines = wrap(step.text, maxW - 48);
     const bw = Math.min(maxW, Math.max(...lines.map((l) => g.measureText(l).width)) + 48), bh = lines.length * 40 + 30;
     const x = me ? SW - 40 - bw : 40;
     g.save(); g.globalAlpha *= k; g.translate(0, (1 - k) * 24);
@@ -209,8 +209,16 @@ function drawScreen(lt) {
     lines.forEach((l, i) => g.fillText(l, x + 24, y + 46 + i * 40));
     g.restore();
     y += bh + 16;
-    if (step.note) { g.save(); g.globalAlpha *= k; g.fillStyle = GREEN; g.font = font(600, 22); g.fillText("↑ " + step.note, 44, y + 10); g.restore(); y += 40; }
+    if (step.note) { g.save(); g.globalAlpha *= k; g.fillStyle = GREEN; g.font = font(600, 22); g.textAlign = "right"; g.fillText("↑ " + step.note, SW - 44, y + 10); g.textAlign = "left"; g.restore(); y += 40; }
   }
+  g.globalAlpha = 1;
+  // the iPhone details: text box and home bar
+  g.fillStyle = "#0C0C0E"; g.fillRect(0, SH - 150, SW, 150);
+  g.strokeStyle = "rgba(255,255,255,.22)"; g.lineWidth = 2; g.beginPath(); g.roundRect(104, SH - 132, SW - 144, 60, 30); g.stroke();
+  g.fillStyle = "#2A2A2F"; g.beginPath(); g.arc(68, SH - 102, 26, 0, 7); g.fill();
+  g.fillStyle = "#C8C8CC"; g.fillRect(56, SH - 104, 24, 3); g.fillRect(66.5, SH - 114, 3, 24);
+  g.fillStyle = "#8A8A8E"; g.font = font(500, 26); g.fillText("Text Message", 130, SH - 93);
+  g.fillStyle = "rgba(255,255,255,.85)"; g.beginPath(); g.roundRect(SW / 2 - 90, SH - 34, 180, 10, 5); g.fill();
   g.restore();
   screenTex.needsUpdate = true;
 }
