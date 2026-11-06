@@ -61,7 +61,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&display=swap">
 <link rel="stylesheet" href="style.css?v=14">
-<link rel="stylesheet" href="plans.css?v=3">
+<link rel="stylesheet" href="plans.css?v=5">
 <script src="deal.js?v=2" defer></script>
 <script src="signin.js?v=4" defer></script>
 <script src="plans.js?v=2" defer></script>
@@ -183,12 +183,9 @@
             <div class="grid2">
               <div class="f"><label for="fName">Your name</label><input id="fName" name="name" autocomplete="name"><p class="err" id="fName-err" hidden></p></div>
               <div class="f"><label for="fBusiness">Business name</label><input id="fBusiness" name="business" autocomplete="organization"><p class="err" id="fBusiness-err" hidden></p></div>
-              <div class="f"><label for="fPhone">Best phone number to reach you</label><input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel"><p class="err" id="fPhone-err" hidden></p></div>
-              <div class="f"><label for="fEmail">Best email</label><input id="fEmail" name="email" type="email" inputmode="email" autocomplete="email"><p class="err" id="fEmail-err" hidden></p>
-                <label class="tickbox"><input type="checkbox" id="fSameInvoice" checked> Use this email for my invoice</label>
-                <div class="f" id="invoiceWrap" hidden><label for="fInvoice">Invoice email</label><input id="fInvoice" name="invoiceEmail" type="email" inputmode="email"><p class="err" id="fInvoice-err" hidden></p></div>
-              </div>
-              <div class="f"><label for="fTrade">Your trade</label>
+              <div class="col">
+                <div class="f"><label for="fPhone">Best phone number to reach you</label><input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel"><p class="err" id="fPhone-err" hidden></p></div>
+                <div class="f"><label for="fTrade">Your trade</label>
                 <select id="fTrade" name="trade"><option value="">Pick one</option>
                 <option>Plumbing</option>
                 <option>Heating and cooling (HVAC)</option>
@@ -198,6 +195,11 @@
                 <option>General contracting or renos</option>
                 <option>Other</option>
                 </select><p class="err" id="fTrade-err" hidden></p></div>
+              </div>
+              <div class="f"><label for="fEmail">Best email</label><input id="fEmail" name="email" type="email" inputmode="email" autocomplete="email"><p class="err" id="fEmail-err" hidden></p>
+                <label class="tickbox"><input type="checkbox" id="fSameInvoice" checked> Use this email for my invoice</label>
+                <div class="f" id="invoiceWrap" hidden><label for="fInvoice">Invoice email</label><input id="fInvoice" name="invoiceEmail" type="email" inputmode="email"><p class="err" id="fInvoice-err" hidden></p></div>
+              </div>
             </div>
             <fieldset class="f pick" id="fLine">
               <legend>The number your customers call is...</legend>
