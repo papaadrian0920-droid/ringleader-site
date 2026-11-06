@@ -83,7 +83,7 @@
       { id: 'forwarding', label: 'Call forwarding', type: 'select', options: [['Help me set it up on the call', 'Help me set it up on our call'], ['I\'ll set it up myself', 'I\'ll set it up myself'], ['Not sure', 'Not sure']] },
       { id: 'legalName', label: 'Legal business name', hint: 'Optional. Only if it\'s different. Phone carriers check it. We\'ll ask for your Business Number on the call.', type: 'text', wide: true },
       { id: 'agreeCalled', label: 'I understand Ringleader only texts people who called my business first, and honours every STOP.', type: 'agree', req: 'that you agree' },
-      { id: 'agreeTerms', label: 'I\'ve read the <a href="terms.html" target="_blank" rel="noopener">Terms</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy policy</a>, including that Ringleader staff can view my account to help me.', type: 'agree', req: 'that you agree' }
+      { id: 'agreeTerms', label: 'I\'ve read the <a href="terms.html" target="_blank" rel="noopener">Terms</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy policy</a>, and I agree Ringleader staff can view my account to help me.', type: 'agree', req: 'that you agree' }
     ] }
   ];
 

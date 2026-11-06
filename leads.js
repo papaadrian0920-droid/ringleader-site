@@ -3,9 +3,9 @@
 // The Web3Forms email in plans.js is still what tells Adrian right away.
 (() => {
   // PASTE the Google web app link here (it ends in /exec). Empty = nothing is saved to a sheet.
-  const LEADS_URL = '';
+  const LEADS_URL = 'https://script.google.com/macros/s/AKfycbw_vSWGNUm6tzuX6Pt9K_RWFoHMCwYLKafBwamqR-SOvagiBtaONP3w1O5kr0ggw-HxJw/exec';
   // The same word as SECRET in the Google script. It only keeps casual spam out; it is visible in this file.
-  const SECRET = '';
+  const SECRET = 'bluefalcon7';
 
   // The Web3Forms key that emails Adrian. It's meant to be public: it can only send mail to him. plans.js and setup.js both use it.
   const FORM_KEY = 'ef8b60ea-1cdf-4179-a649-e66fd541b137';
