@@ -126,8 +126,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&display=swap">
 <link rel="stylesheet" href="../style.css?v=3">
 <script src="../deal.js?v=1" defer></script>
-<link rel="stylesheet" href="fx.css?v=5">
+<link rel="stylesheet" href="fx.css?v=9">
 <script src="main.js?v=4" defer></script>
+<script src="paths.js?v=2" defer></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <!-- The 3D phone is a big download, so phones get the flat text card instead and never load it. -->
 <script type="module">if (matchMedia('(min-width: 901px)').matches) import('./hero3d.js?v=9');</script>
@@ -156,6 +157,7 @@
 <main id="main">
   <section class="hero">
     <!-- hero3d.js draws the 3D phone in here on computers; the flat text card below is what phones get, and what stays if 3D can't run -->
+    <div class="paths" id="paths" aria-hidden="true"></div>
     <div class="stage" id="stage"></div>
     <div class="wrap">
       <div class="hero-copy">
