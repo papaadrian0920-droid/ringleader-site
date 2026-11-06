@@ -124,8 +124,8 @@ a:hover { color: var(--hivis); }
 
 /* The scroll story: steps on the left, one phone on the right that changes screens */
 /* soft drifting light behind the pricing and FAQ sections (the "aurora"). Pure CSS, a few big blurry glows that float slowly. */
-#pricing, #faq { position: relative; }
-#pricing > .wrap, #faq > .wrap { position: relative; z-index: 1; }
+#pricing, #faq, #cost, #texting { position: relative; }
+#pricing > .wrap, #faq > .wrap, #cost > .wrap, #texting > .wrap { position: relative; z-index: 1; }
 .aurora { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
   mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent); }
@@ -133,6 +133,10 @@ a:hover { color: var(--hivis); }
 .aurora i:nth-child(1) { left: -18%; top: -22%; background: radial-gradient(closest-side, rgba(244, 244, 241, .14), transparent); }
 .aurora i:nth-child(2) { right: -20%; top: 8%; background: radial-gradient(closest-side, rgba(200, 255, 46, .13), transparent); animation-duration: 33s; animation-direction: alternate-reverse; }
 .aurora i:nth-child(3) { left: 18%; bottom: -34%; background: radial-gradient(closest-side, rgba(200, 255, 46, .1), rgba(244, 244, 241, .05) 55%, transparent); animation-duration: 40s; }
+/* the darker version for the black sections: same drifting light, about half as strong, so they stay dark */
+.aurora.dim i:nth-child(1) { background: radial-gradient(closest-side, rgba(244, 244, 241, .06), transparent); }
+.aurora.dim i:nth-child(2) { background: radial-gradient(closest-side, rgba(200, 255, 46, .06), transparent); }
+.aurora.dim i:nth-child(3) { background: radial-gradient(closest-side, rgba(200, 255, 46, .05), rgba(244, 244, 241, .02) 55%, transparent); }
 @keyframes aurora-drift { from { transform: translate3d(-6%, -4%, 0) scale(.95); } to { transform: translate3d(8%, 6%, 0) scale(1.08); } }
 @media (prefers-reduced-motion: reduce) { .aurora i { animation: none; } }
 
