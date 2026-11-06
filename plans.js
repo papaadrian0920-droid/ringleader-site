@@ -295,6 +295,11 @@
   const EASE = 'cubic-bezier(.32, .72, 0, 1)';
   const radiusOf = el => parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
   const widthOf = el => parseFloat(getComputedStyle(el).borderTopWidth) || 0;
+  // Wait for the move to end. Browsers pause animations in background tabs, so never wait forever.
+  const settled = anims => Promise.race([
+    Promise.allSettled(anims.map(a => a.finished)),
+    new Promise(done => setTimeout(done, 900)),
+  ]);
 
   // The surface starts (or ends) exactly on top of the card. Corners and border are un-stretched as it scales.
   const cardShape = (from, to, surface, r, b) => {
@@ -333,7 +338,7 @@
         ...[$('.bill'), $('.su-foot')].map(el => el.animate({ opacity: [1, 0] }, { duration: 160, fill: 'forwards' })),
       ];
       window.scrollTo({ top: Math.max(0, stage.getBoundingClientRect().top + scrollY - 76), behavior: 'smooth' });
-      await Promise.allSettled(anims.map(a => a.finished));
+      await settled(anims);
       anims.forEach(a => a.cancel());
       stage.classList.remove('moving');
       stage.style.minHeight = '';
@@ -366,7 +371,7 @@
         ...[$('.bill'), $('.su-foot')].map(el => el.animate({ opacity: [0, 1] }, { duration: 260, delay: 180, fill: 'backwards' })),
       ];
       window.scrollTo({ top: Math.max(0, stage.getBoundingClientRect().top + scrollY - 76), behavior: 'smooth' });
-      await Promise.allSettled(anims.map(a => a.finished));
+      await settled(anims);
       sheet.hidden = true;
       anims.forEach(a => a.cancel());
       stage.classList.remove('moving');
