@@ -46,23 +46,25 @@
    "@type": "Offer",
    "price": "99",
    "priceCurrency": "CAD",
-   "description": "Per month, no contract. Founding shops pay $69 a month for the first 3 months until January 31, 2027."
+   "description": "Per month, no contract. Or $950 billed yearly. Founding shops on the monthly plan pay $69 a month for the first 3 months until January 31, 2027."
   }
  }
 ]
 </script>
 <meta name="theme-color" content="#0D0D0E">
-<meta name="description" content="Tell us about your shop and we'll set up Ringleader with you in about 20 minutes. Missed-call text-back for plumbers, HVAC, roofers and electricians in Ontario.">
+<meta name="description" content="Pick a plan and we'll set up Ringleader with you in about 20 minutes. Missed-call text-back for plumbers, HVAC, roofers and electricians in Ontario.">
 <meta property="og:title" content="Get set up with Ringleader">
-<meta property="og:description" content="Missed-call text-back for the trades. Tell us about your shop and we'll set it up with you.">
+<meta property="og:description" content="Missed-call text-back for the trades. Pick a plan and we'll set it up with you.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23C8FF2E'/%3E%3Cpath d='M10 8h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 17l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 8 10a2 2 0 0 1 2-2' fill='none' stroke='%230D0D0E' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&display=swap">
-<link rel="stylesheet" href="style.css?v=3">
-<script src="deal.js?v=1" defer></script>
-<script src="contact.js?v=1" defer></script>
+<link rel="stylesheet" href="style.css?v=13">
+<link rel="stylesheet" href="plans.css?v=1">
+<script src="deal.js?v=2" defer></script>
+<script src="signin.js?v=1" defer></script>
+<script src="plans.js?v=1" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -81,124 +83,93 @@
   </div>
 </header>
 
-<main id="main">
-  <section class="get-set-up">
-    <div class="wrap">
-      <div class="gsu-head">
-        <p class="kicker">Get set up</p>
-        <h1>Let's get your phone <span class="hi">texting back.</span></h1>
-        <p>Tell us about your shop. We'll get back to you within a day and set it up with you in about 20 minutes.</p>
-      </div>
+<main id="main" class="su">
+  <div class="wrap">
+    <section class="su-head">
+      <h1>Let's get your phone <span class="hi">texting back.</span></h1>
+      <p>Pick a plan, and we'll set it up with you in about 20 minutes.</p>
+      <!-- The founding deal. deal.js fills in the true days and spots left, and hides this once it's over. -->
+      <p class="su-deal" data-deal>
+        <b>Founding shops</b>
+        <span><s>$99</s> $69 a month for your first 3 months</span>
+        <span class="su-deal-left" data-deal-left>Ends January 31, 2027</span>
+      </p>
+    </section>
 
-      <!-- The founding deal. deal.js hides this once the deal is over. -->
-      <div class="deal-strip" data-deal>
-        <span class="deal-tag">Founding shops</span>
-        <span><s>$99</s> <b>$69 a month</b> for your first 3 months</span>
-        <span class="deal-left" data-deal-left>Ends January 31, 2027</span>
-      </div>
+    <noscript><p class="su-noscript">This page needs JavaScript to sign up. Call <a href="tel:+14372322281">437-232-2281</a> and we'll set you up.</p></noscript>
 
-      <div class="gsu-grid">
-        <!-- Send opens the visitor's email app with everything filled in. Nothing is stored on this site. -->
-        <form class="gsu-form" id="getSetUp" novalidate>
-          <div class="field">
-            <label for="name">Your name</label>
-            <input id="name" name="name" autocomplete="name" required>
-          </div>
-          <div class="field">
-            <label for="business">Business name</label>
-            <input id="business" name="business" autocomplete="organization" required>
-          </div>
-          <div class="field">
-            <label for="trade">Your trade</label>
-            <select id="trade" name="trade" required>
-              <option value="">Pick one</option>
-              <option>Plumbing</option>
-              <option>Heating and cooling (HVAC)</option>
-              <option>Electrical</option>
-              <option>Roofing</option>
-              <option>Waterproofing</option>
-              <option>General contracting or renos</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="city">City or area</label>
-            <input id="city" name="city" autocomplete="address-level2" placeholder="e.g. North York">
-          </div>
-          <div class="field">
-            <label for="phone">Your phone</label>
-            <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
-          </div>
-          <div class="field">
-            <label for="email">Your email <span class="opt">(optional)</span></label>
-            <input id="email" name="email" type="email" autocomplete="email">
-          </div>
-          <div class="field">
-            <label for="missed">Missed calls a week</label>
-            <select id="missed" name="missed">
-              <option>Not sure</option>
-              <option>1 to 3</option>
-              <option>4 to 10</option>
-              <option>More than 10</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="best">Best time to call you</label>
-            <select id="best" name="best">
-              <option>Anytime</option>
-              <option>Early morning (before 8)</option>
-              <option>Lunch</option>
-              <option>After 5</option>
-              <option>Weekends</option>
-            </select>
-          </div>
-          <fieldset class="field wide">
-            <legend>The number your customers call is…</legend>
-            <div class="chips-pick">
-              <label><input type="radio" name="line" value="A separate work cell" checked> A work cell</label>
-              <label><input type="radio" name="line" value="My personal cell"> My personal cell</label>
-              <label><input type="radio" name="line" value="An office landline"> An office landline</label>
-              <label><input type="radio" name="line" value="A business phone app (VoIP)"> A phone app (VoIP)</label>
+    <div class="stage" id="stage">
+      <div class="plans-view" id="plans">
+        <div class="bill" role="group" aria-label="How you pay" data-billing="monthly">
+          <span class="bill-thumb" aria-hidden="true"></span>
+          <button type="button" data-bill="monthly" aria-pressed="true">Monthly</button>
+          <button type="button" data-bill="yearly" aria-pressed="false">Yearly <em>Save 20%</em></button>
+        </div>
+
+        <div class="cards">
+          <article class="card" data-plan="Front Desk">
+            <span class="pill pill-quiet">Coming soon</span>
+            <h2>Front Desk</h2>
+            <p class="card-desc">An AI receptionist that answers your calls out loud, day and night.</p>
+            <p class="price"><span class="price-num">$349</span> <span class="price-per">/ month</span></p>
+            <p class="price-note">Price when it launches</p>
+            <ul class="feats">
+              <li><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>Answers the calls you miss</li>
+              <li><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>Takes the job details</li>
+              <li><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>Texts you a summary</li>
+            </ul>
+            <div class="card-foot">
+              <p class="early-note">Sign up early for 20% off your first year when it launches.</p>
+              <button type="button" class="cta cta-ghost" data-early="Front Desk">Sign up early</button>
+              <p class="early-msg" role="status" hidden></p>
             </div>
-            <p class="hint" id="personalHint" hidden>Heads up: if customers call your personal cell, friends and family who miss you would get the text too. Our <b>Work Line</b> (+$15 a month) gives you a separate business number that rings your cell, so only customers get texted.</p>
-          </fieldset>
-          <div class="field wide">
-            <label for="message">Anything else? <span class="opt">(optional)</span></label>
-            <textarea id="message" name="message" rows="3" placeholder="Questions, how you handle calls now, anything."></textarea>
-          </div>
-          <div class="field wide checks">
-            <label data-deal><input type="checkbox" name="founding" id="founding"> I want the founding deal ($69 a month for 3 months)</label>
-            <label><input type="checkbox" name="workline" id="workline"> I'm interested in the Work Line (+$15 a month)</label>
-          </div>
-          <p class="form-error" id="formError" role="alert" hidden></p>
-          <div class="field wide send-row">
-            <button class="btn" type="submit">Send <span class="arrow" aria-hidden="true">→</span></button>
-            <p class="small">Opens your email app with everything filled in. We only use this to get back to you.</p>
-          </div>
-          <div class="sent" id="sent" hidden>
-            <p><b>Your email app should be open now.</b> Just hit send. If nothing opened, copy this and email it to <a href="mailto:papaadrian.0920@gmail.com">papaadrian.0920@gmail.com</a>.</p>
-            <textarea id="sentText" rows="8" readonly aria-label="Your details"></textarea>
-            <button class="btn ghost" type="button" id="copy">Copy details</button>
-          </div>
-        </form>
+          </article>
 
-        <aside class="gsu-side">
-          <h2>What happens next</h2>
-          <ol class="next">
-            <li><b>We reply within a day.</b> By email, or a call at the time you picked.</li>
-            <li><b>A 20-minute setup call.</b> We turn on call forwarding with you, set your shop's texts and hours, and test it together.</li>
-            <li><b>You're live.</b> $99 a month, or $69 for your first 3 months if you're a founding shop. No contract.</li>
-          </ol>
-          <div class="side-email">
-            <p>Rather just email or call?</p>
-            <!-- Contact email (appears twice on the next line) -->
-            <a class="email" href="mailto:papaadrian.0920@gmail.com">papaadrian.0920@gmail.com</a>
-            <a class="email" href="tel:+14372322281">437-232-2281</a>
-          </div>
-        </aside>
+          <article class="card card-main" id="textBack" data-plan="Text-Back">
+            <span class="pill">Start here</span>
+            <h2>Text-Back</h2>
+            <p class="card-desc">Every missed call gets a text back within seconds.</p>
+            <p class="price" id="tbPrice" aria-label="$99 a month"><span class="price-num" aria-hidden="true"><span class="price-cur">$</span><span class="roll" id="roll"></span></span> <span class="price-per" aria-hidden="true">/ month</span></p>
+            <div class="price-note swap" aria-live="polite">
+              <span data-when="monthly"><span data-deal>Founding shops: $69 for the first 3 months</span><span data-deal-ended hidden>No contract</span></span>
+              <span data-when="yearly" hidden><b>$950 billed yearly</b>, instead of $1,188</span>
+            </div>
+            <ul class="feats">
+              <li><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>Texts every missed caller within seconds</li><li><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>A different text when you're closed</li><li><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>Their replies come straight to your phone</li><li><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>Answer by text or from your dashboard</li><li><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>A summary text every morning</li><li><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>STOP and opt-outs handled for you</li>
+              <li data-when="monthly"><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>Cancel anytime</li>
+              <li data-when="yearly" hidden><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>One payment for the year</li>
+            </ul>
+            <div class="card-foot">
+              <button type="button" class="cta" id="getStarted">Get started</button>
+            </div>
+          </article>
+
+          <article class="card" data-plan="Crew">
+            <span class="pill pill-quiet">Coming soon</span>
+            <h2>Crew</h2>
+            <p class="card-desc">For shops with several phone lines.</p>
+            <p class="price"><span class="price-num">$599</span> <span class="price-per">/ month</span></p>
+            <p class="price-note">Price when it launches</p>
+            <ul class="feats">
+              <li><svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>Several phone lines</li>
+            </ul>
+            <div class="card-foot">
+              <p class="early-note">Sign up early for 20% off your first year when it launches.</p>
+              <button type="button" class="cta cta-ghost" data-early="Crew">Sign up early</button>
+              <p class="early-msg" role="status" hidden></p>
+            </div>
+          </article>
+        </div>
+
+        <div class="su-foot">
+          <p>All prices in Canadian dollars, plus any tax.</p>
+          <p>Questions first? Call <a href="tel:+14372322281">437-232-2281</a>.</p>
+          <p id="whoLine" hidden></p>
+        </div>
       </div>
+      <!--SHEET-->
     </div>
-  </section>
+  </div>
 </main>
 
 <footer>

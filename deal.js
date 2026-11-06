@@ -1,7 +1,7 @@
 // The founding-shop deal: $69 a month for the first 3 months. It really ends on this date,
 // so this counts down to it and hides the deal after. Change SPOTS_TAKEN as shops sign up.
 const DEAL_ENDS = new Date('2027-02-01T00:00:00-05:00'); // the end of January 31, 2027, Toronto time
-const DEAL_SPOTS = 10;
+const DEAL_SPOTS = 20;
 const SPOTS_TAKEN = 0;
 
 (() => {
