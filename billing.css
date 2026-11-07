@@ -46,7 +46,12 @@ button:disabled { opacity: .55; cursor: wait; }
 .notice { background: rgba(200,255,46,.06); border: 1px solid rgba(200,255,46,.3); }
 .error { color: #ffc3ba; border: 1px solid rgba(255,122,107,.5); background: rgba(255,83,64,.06); }
 .test-banner { color: var(--hivis); border: 1px dashed rgba(200,255,46,.5); }
-#checkout { min-height: 320px; }
+#checkout { min-width: 0; }
+.stripe-elements { display: grid; gap: 18px; }
+.wallet-divider { color: var(--soft); text-align: center; font-size: .8rem; margin-top: 14px; }
+.stripe-pay { background: var(--hivis); color: var(--on-hivis); border-color: var(--hivis); }
+.stripe-pay:hover:not(:disabled) { background: #DBFF74; }
+.stripe-error { color: #ffc3ba; font-size: .9rem; }
 .receipts { margin-top: 40px; padding-block: 24px; border-top: 1px solid var(--billing-line); }
 .receipts h2 { font-size: 1.15rem; line-height: 1.3; }
 .receipts ul { padding: 0; list-style: none; }

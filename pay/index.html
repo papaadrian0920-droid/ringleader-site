@@ -5,14 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex,nofollow">
   <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self';
+    script-src 'self' https://js.stripe.com https://*.paypal.com https://*.paypalobjects.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.paypal.com https://*.paypalobjects.com;
+    font-src 'self' data: https://fonts.gstatic.com https://*.paypalobjects.com;
+    img-src 'self' data: https://*.stripe.com https://*.paypal.com https://*.paypalobjects.com;
+    connect-src 'self' https://billing.getringleader.ca https://*.stripe.com https://m.stripe.network https://*.paypal.com https://*.paypalobjects.com;
+    frame-src https://*.stripe.com https://*.paypal.com; object-src 'none'; base-uri 'none';
+    form-action 'self' https://*.stripe.com https://*.paypal.com">
   <meta name="theme-color" content="#0D0D0E">
   <title>Your Ringleader subscription</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400..700&display=swap">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="billing.css">
-  <script src="billing.js" defer></script>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/billing.css">
+  <script src="/billing.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to payment</a>
@@ -22,18 +30,29 @@
   </div></header>
   <main id="main" class="billing wrap">
     <p id="testBanner" class="test-banner" hidden>Test checkout · No real payment will be taken.</p>
-    <div class="billing-heading"><p class="eyebrow">YOUR RINGLEADER PLAN</p><h1 id="pageTitle">One last thing.<br><span class="hi">Make it monthly.</span></h1><p id="intro">Open the secure link we sent after your setup call to start or manage billing.</p></div>
+    <div class="billing-heading"><p class="eyebrow">RINGLEADER BILLING</p><h1>Your Text-Back<br><span class="hi">subscription.</span></h1><p id="intro">Open the secure link we sent after your setup call to start or manage billing.</p></div>
     <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
     <p id="error" class="error" role="alert" hidden></p>
     <div id="billingBody" class="billing-grid" hidden>
       <section class="payment-panel" aria-labelledby="paymentTitle">
         <div class="panel-heading"><span class="step-number" aria-hidden="true">01</span><h2 id="paymentTitle">Choose how to pay</h2></div>
         <div id="methods" class="methods" hidden>
-          <button id="cardButton" class="payment-choice" type="button"><span><b>Card or Apple Pay</b><small>Apple Pay appears when available.</small></span><span class="card-brands" aria-label="Visa and Mastercard"><span class="visa">VISA</span><span class="mastercard" aria-hidden="true"><i></i><i></i></span></span><span aria-hidden="true">↗</span></button>
+          <button id="cardButton" class="payment-choice" type="button"><span><b>Card or Apple Pay</b><small>Apple Pay appears when available.</small></span><span class="card-brands" aria-label="Visa and Mastercard"><span class="visa">VISA</span><span class="mastercard" aria-hidden="true"><i></i><i></i></span></span><span aria-hidden="true">→</span></button>
           <div id="paypalWrap" class="paypal-choice" hidden><p>Or subscribe with PayPal</p><paypal-button id="paypalButton" type="subscribe" hidden></paypal-button><p id="paypalHint" class="fine">Loading PayPal…</p></div>
         </div>
-        <div id="checkout" hidden></div>
-        <button id="abandonButton" class="text-button" type="button" hidden>Cancel this checkout to change payment method</button>
+        <div id="checkout" role="region" aria-label="Secure card checkout" tabindex="-1" hidden>
+          <div id="legacyCheckout" hidden></div>
+          <form id="stripeElements" class="stripe-elements" hidden>
+            <div id="stripeWallet" hidden>
+              <div id="expressCheckout"></div>
+              <p id="walletDivider" class="wallet-divider" hidden>or pay by card</p>
+            </div>
+            <div id="paymentElement"></div>
+            <p id="stripeError" class="stripe-error" role="alert" hidden></p>
+            <button id="stripePayButton" class="action stripe-pay" type="submit" disabled>Subscribe and pay</button>
+          </form>
+        </div>
+        <button id="abandonButton" class="text-button" type="button" hidden>Cancel this checkout</button>
         <div id="manage" class="manage" hidden><p id="paymentState"></p><button id="manageButton" class="action" type="button">Payment details &amp; invoices</button><button id="cancelButton" class="text-button" type="button">Cancel automatic renewal</button></div>
         <button id="refreshButton" class="text-button" type="button">Check payment status</button>
         <div class="payment-note"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><p>Your card details go directly to your payment provider. Ringleader never stores your card number or security code.</p></div>
