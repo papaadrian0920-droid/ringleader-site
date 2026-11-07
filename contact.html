@@ -71,13 +71,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&display=swap">
 <link rel="stylesheet" href="style.css?v=16">
-<link rel="stylesheet" href="plans.css?v=8">
+<link rel="stylesheet" href="plans.css?v=9">
 <link rel="stylesheet" href="/billing.css?v=2">
-<script src="/billing.js?v=2" defer></script>
-<script src="deal.js?v=3" defer></script>
+<script src="/billing.js?v=3" defer></script>
+<script src="deal.js?v=4" defer></script>
 <script src="leads.js?v=3" defer></script>
 <script src="signin.js?v=5" defer></script>
-<script src="plans.js?v=8" defer></script>
+<script src="plans.js?v=9" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -228,24 +228,20 @@
                 <p>Friends and family who call this number could receive the same text. We’ll talk through your phone setup before turning anything on.</p>
               </div>
             </fieldset>
+            <label class="tickbox" id="checkoutProvince" hidden><input type="checkbox" id="fOntario"> My shop is based in Ontario</label>
+            <p id="checkoutError" class="err" role="alert" hidden></p>
           </div>
 
           <div class="pane pay" data-panel="1" hidden>
             <div class="pay-left">
-              <h3>Payment comes after setup.</h3>
-              <p class="pay-note">Your first payment is due after we test your setup. We’ll email you a secure payment link.</p>
-              <ol class="pay-how">
-                <li><span>1</span><div><b>We set it up together.</b><p>We test a missed call, the text back, and your reply.</p></div></li>
-                <li><span>2</span><div><b>You get a secure payment link.</b><p>Choose card or Apple Pay when available. You can also ask for PayPal or Interac.</p></div></li>
-                <li><span>3</span><div><b>Your monthly billing starts.</b><p>Your price and renewal terms are shown before you pay.</p></div></li>
-              </ol>
+              <h3>Online checkout is being connected.</h3>
+              <p class="pay-note">You can request setup now. We’ll contact you to arrange setup and billing.</p>
             </div>
             <aside class="summary" aria-label="Summary">
               <h3>Summary</h3>
               <div id="sumRows"></div>
               <div class="sum-total"><span>Due now</span><b id="sumTotal">C$0</b></div>
               <p class="sum-small" id="sumSmall"></p>
-              <p class="sum-small">Monthly billing starts after your setup works. No card required to request setup.</p>
             </aside>
           </div>
 
@@ -273,9 +269,10 @@
           </form>
           <section id="billingStep" class="pane billing" aria-label="Payment" hidden>
             <p id="testBanner" class="test-banner" hidden>Test checkout · No real payment will be taken.</p>
-            <p id="intro" class="pay-note">Open the private link from your setup email to start or manage billing.</p>
+            <p id="intro" class="pay-note">Start or manage your Text-Back subscription.</p>
             <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
             <p id="error" class="error" role="alert" hidden></p>
+            <a id="restartSignup" class="text-link" href="/contact.html" hidden>Back to setup</a>
             <div id="billingBody" class="pay billing-grid" hidden>
               <section class="pay-left payment-panel" aria-labelledby="paymentTitle">
                 <h3 id="paymentTitle">Payment method</h3>

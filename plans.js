@@ -8,6 +8,11 @@
   const $ = (s, root = document) => root.querySelector(s);
   const $$ = (s, root = document) => [...root.querySelectorAll(s)];
   const Details = window.RingleaderDetails;
+  const checkout = window.RingleaderCheckout;
+  const checkoutReady = checkout?.available().then(available => {
+    $('#checkoutProvince').hidden = !available;
+    return available;
+  });
   const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const PRICE = { monthly: 99 };
@@ -182,7 +187,7 @@
     $('#sumTotal').textContent = 'C$0';
     $('#sumSmall').textContent = deal
       ? 'Founding shop price for your first 3 months, then C$99 a month. Cancel anytime. Canadian dollars, plus applicable tax.'
-      : 'C$99 a month after setup. Cancel anytime. Canadian dollars, plus applicable tax.';
+      : 'C$99 a month. Cancel anytime. Canadian dollars, plus applicable tax.';
   }
 
   // Draws whichever step we're on. step === 'done' is the finished state.
@@ -210,12 +215,46 @@
     $('#sheetTitle').focus({ preventScroll: true });
   }
 
-  function next() {
+  let openingCheckout = false;
+  async function next() {
+    if (openingCheckout) return;
     if (step === 0) {
       tried = true;
       if (!checkFirstStep()) { $('[aria-invalid="true"], .pick.bad input', sheet)?.focus(); return; }
       Details.save({ email: $('#fEmail').value.trim(), name: $('#fName').value.trim(), business: $('#fBusiness').value.trim() });
       drawWho();
+      const error = $('#checkoutError'), button = $('#navNext');
+      error.hidden = true;
+      openingCheckout = true;
+      button.disabled = true;
+      try {
+        if (await checkoutReady) {
+          if (!$('#fOntario').checked) {
+            error.textContent = 'Confirm your shop is based in Ontario to pay online.';
+            error.hidden = false;
+            $('#fOntario').focus();
+            return;
+          }
+          const val = id => $('#' + id).value.trim();
+          button.textContent = 'Opening checkout…';
+          await checkout.start({
+            name: val('fName'), business: val('fBusiness'), email: val('fEmail'),
+            invoiceEmail: sameInvoice() ? val('fEmail') : val('fInvoice'),
+            phone: val('fPhone'), trade: val('fTrade'), line: line().value, province: 'ON',
+          });
+          return;
+        }
+      } catch (failure) {
+        error.textContent = failure.name === 'TypeError' || failure.name === 'TimeoutError'
+          ? 'Checkout could not open. Try again in a moment.'
+          : failure.message;
+        error.hidden = false;
+        return;
+      } finally {
+        openingCheckout = false;
+        button.disabled = false;
+        button.textContent = 'Next';
+      }
     }
     if (step === STEPS - 1) { sendSignUp(); return; }
     history.pushState({ step: step + 1 }, '', '#setup');
@@ -238,7 +277,7 @@
     const fields = {
       Plan: `Text-Back, ${billing}`,
       Price: dealOn() ? 'C$69 a month for 3 months, then C$99' : 'C$99 a month',
-      'Due now': 'C$0 — billing after setup works',
+      'Due now': 'C$0 — setup request',
       'Founding deal': billing === 'monthly' && dealOn() ? 'Yes' : 'No',
       Name: val('fName'),
       Business: val('fBusiness'),

@@ -4,6 +4,17 @@
   const tokenPattern = /^[A-Za-z0-9_-]{43}$/;
   const fragment = location.hash.slice(1);
   const returning = params.has('return');
+  const apiOrigin = location.origin === 'https://getringleader.ca' ? 'https://billing.getringleader.ca' : '';
+  async function request(route, body, proof = '', timeout = 25000) {
+    const response = await fetch(apiOrigin + '/api/billing/' + route, {
+      method: body === undefined ? 'GET' : 'POST', credentials: 'omit', cache: 'no-store', redirect: 'error',
+      headers: { ...(proof ? { Authorization: `Bearer ${proof}` } : {}), ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }), signal: AbortSignal.timeout(timeout),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || 'That request could not be completed. Please try again.');
+    return data;
+  }
   if (document.body.hasAttribute('data-legacy-billing')) {
     if (window.top !== window.self) return;
     const target = new URL('/contact.html?step=payment', location.origin);
@@ -12,14 +23,40 @@
     location.replace(target);
     return;
   }
-  if (params.get('step') !== 'payment') return;
+  if (params.get('step') !== 'payment') {
+    window.RingleaderCheckout = {
+      async available() {
+        if (window.top !== window.self) return false;
+        try { return (await request('availability', undefined, '', 3000)).onsite === true; }
+        catch { return false; }
+      },
+      async start(fields) {
+        const key = 'ringleader-signup-checkout';
+        const email = fields.invoiceEmail.toLowerCase();
+        let proof;
+        try {
+          const saved = JSON.parse(sessionStorage.getItem(key) || 'null');
+          if (saved?.email === email && saved.business === fields.business && tokenPattern.test(saved.proof)) proof = saved.proof;
+          else {
+            proof = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))))
+              .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+            sessionStorage.setItem(key, JSON.stringify({ email, business: fields.business, proof }));
+          }
+        } catch {
+          throw new Error('Open this page in a browser tab that can save your checkout session.');
+        }
+        await request('signup', fields, proof);
+        sessionStorage.setItem('ringleader-billing-token', proof);
+        location.assign('/contact.html?step=payment');
+      },
+    };
+    return;
+  }
 
   const $ = id => document.getElementById(id);
   const money = cents => new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(cents / 100).replace('$', 'C$');
   const date = value => value ? new Date(value).toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'America/Toronto' }) : '';
   const hasCurrentPayment = data => Date.parse(data?.paidThrough) > Date.now();
-  // The public website serves the wizard. On localhost the Node server serves both the page and API.
-  const apiOrigin = location.origin === 'https://getringleader.ca' ? 'https://billing.getringleader.ca' : '';
   let token = '', details = null, embedded = null, stripeActions = null, stripeCanConfirm = false;
   let busy = false, paypalSession = null, paypalKey = '', pollTimer = null;
   function message(id, text) { $(id).textContent = text; $(id).hidden = !text; }
@@ -34,7 +71,7 @@
   paymentStep.querySelector('button').setAttribute('aria-current', 'step');
   document.title = 'Ringleader Payment';
   if (window.top !== window.self) {
-    message('notice', 'Open your private Ringleader payment link in its own tab.');
+    message('notice', 'Open Ringleader in its own tab to pay.');
     return;
   }
   try {
@@ -50,16 +87,7 @@
     updateStripePayButton();
   }
   function updateStripePayButton() { $('stripePayButton').disabled = busy || !stripeCanConfirm; }
-  async function api(route, body) {
-    const response = await fetch(apiOrigin + '/api/billing/' + route, {
-      method: body === undefined ? 'GET' : 'POST', credentials: 'omit', cache: 'no-store', redirect: 'error',
-      headers: { Authorization: `Bearer ${token}`, ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
-      ...(body === undefined ? {} : { body: JSON.stringify(body) }), signal: AbortSignal.timeout(25000),
-    });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || 'That request could not be completed. Please try again.');
-    return data;
-  }
+  const api = (route, body) => request(route, body, token);
   const scripts = new Map();
   function script(src) {
     if (!scripts.has(src)) scripts.set(src, new Promise((resolve, reject) => {
@@ -94,7 +122,9 @@
     $('billingBody').hidden = false; $('testBanner').hidden = data.mode !== 'test';
     $('paymentTitle').textContent = data.subscribed ? 'Manage your subscription' : embedded ? 'Payment details' : data.canCheckout ? 'Payment method' : 'Billing overview';
     $('shopName').textContent = data.business;
-    $('intro').textContent = `Monthly Text-Back billing for ${data.business}.`;
+    $('intro').textContent = data.onsite && data.canCheckout
+      ? `Start monthly Text-Back for ${data.business}. We’ll contact you to arrange setup after payment.`
+      : `Monthly Text-Back billing for ${data.business}.`;
     $('subtotal').textContent = money(data.subtotal) + ' / month';
     $('taxLabel').textContent = data.taxStatus === 'registered' ? 'Ontario HST (13%)' : 'Tax';
     $('tax').textContent = data.tax === null ? 'To be confirmed' : money(data.tax);
@@ -115,7 +145,9 @@
     $('paymentState').textContent = data.cancelAtPeriodEnd || data.state === 'cancelled' ? 'Your automatic renewal is cancelled. Your already paid service period is unchanged.' : paid ? 'Your subscription is set up. You can manage payment details or stop your next renewal here.' : 'Subscription approval is received. We are waiting for payment confirmation.';
     if (data.attention) message('notice', 'Your billing needs a quick review. Contact Ringleader if you need help.');
     else if (data.subscribed && !paid) message('notice', 'Waiting for your payment to be confirmed.');
-    else if (data.subscribed) message('notice', 'Payment confirmed. Your subscription is active.');
+    else if (data.subscribed) message('notice', data.onsite
+      ? 'Payment confirmed. We’ll contact you to arrange your Text-Back setup.'
+      : 'Payment confirmed. Your subscription is active.');
     else if (data.block) message('notice', data.block);
     else if (!data.methods.stripe && !data.methods.paypal) message('notice', 'Online payments are being prepared. Contact Ringleader for an invoice.');
     else message('notice', '');
@@ -231,7 +263,7 @@
       destroy() { wallet.destroy(); card.destroy(); },
     };
   }
-  $('cardButton').addEventListener('click', () => run(async () => {
+  async function openStripeCheckout() {
     const result = await api('checkout', { provider: 'stripe' });
     if (result.style === 'hosted') { location.assign(result.url); return; }
     $('abandonButton').hidden = false;
@@ -241,7 +273,8 @@
     $('methods').hidden = true;
     $('paymentTitle').textContent = 'Payment details';
     $('checkout').focus({ preventScroll: true });
-  }));
+  }
+  $('cardButton').addEventListener('click', () => run(openStripeCheckout));
   $('stripeElements').addEventListener('submit', event => {
     event.preventDefault();
     if (stripeActions && stripeCanConfirm) run(() => confirmStripe());
@@ -264,6 +297,17 @@
   $('manageButton').addEventListener('click', () => run(async () => { location.assign((await api('manage', {})).url); }));
   $('cancelButton').addEventListener('click', () => $('cancelDialog').showModal());
   $('cancelDialog').addEventListener('close', () => { if ($('cancelDialog').returnValue === 'cancel') run(async () => render(await api('cancel', {}))); });
-  if (!token) { message('notice', 'Open the private payment link in your setup email. If it has expired, ask Ringleader for a new one.'); return; }
-  run(async () => { await loadStatus(); if (returning || details.pending || details.subscribed) { await refresh(); if (!hasCurrentPayment(details)) startPolling(); } });
+  if (!token) {
+    message('notice', 'Start with your shop details to open checkout.');
+    $('restartSignup').hidden = false;
+    return;
+  }
+  run(async () => {
+    await loadStatus();
+    if (returning || details.pending || details.subscribed) {
+      await refresh();
+      if (details.subscribed && !hasCurrentPayment(details)) startPolling();
+    }
+    if (details.onsite && details.canCheckout) await openStripeCheckout();
+  });
 })();

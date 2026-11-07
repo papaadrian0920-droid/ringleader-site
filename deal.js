@@ -17,13 +17,12 @@ const SPOTS_TAKEN = 0;
   if (isOver()) return;
 
   // The live countdown to the real end date: days, hours, minutes, seconds.
-  const spots = DEAL_SPOTS - SPOTS_TAKEN;
   const clocks = [...document.querySelectorAll('[data-deal-left]')].map(el => {
     el.textContent = 'Ends January 31, 2027 · ';
     const clock = document.createElement('span');
     clock.className = 'deal-clock';
     clock.setAttribute('role', 'timer');
-    el.append(clock, ` · ${spots} of ${DEAL_SPOTS} spots open`);
+    el.append(clock, ` · Limited to ${DEAL_SPOTS} shops`);
     return clock;
   });
   const two = n => String(n).padStart(2, '0');

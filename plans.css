@@ -128,11 +128,6 @@
 .pay-left { display: grid; gap: 14px; }
 .pay-note { font-size: .98rem; line-height: 1.45; color: var(--soft); }
 .pay-note b { color: var(--ink); font-weight: 600; }
-.pay-how { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 22px; }
-.pay-how li { display: flex; align-items: flex-start; gap: 14px; }
-.pay-how li > span { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--su-line); border-radius: 50%; color: var(--hivis); font-size: .8rem; }
-.pay-how b { font-weight: 600; font-size: .98rem; }
-.pay-how p { margin-top: 4px; color: var(--su-soft); font-size: .9rem; line-height: 1.5; }
 .bill button:disabled { cursor: default; color: var(--su-soft); }
 .summary { display: grid; gap: 12px; padding: clamp(18px, 2.2vw, 24px); border: 1px solid var(--su-line); border-radius: 15px; }
 .sum-row { display: flex; justify-content: space-between; gap: 14px; font-size: .96rem; line-height: 1.4; }
