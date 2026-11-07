@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#0D0D0E">
+  <title>Your Ringleader subscription</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400..700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="billing.css">
+  <script src="billing.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to payment</a>
+  <header class="top"><div class="wrap">
+    <a class="logo" href="https://getringleader.ca/" aria-label="Ringleader home"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>Ringleader</a>
+    <a class="help-link" href="mailto:papaadrian.0920@gmail.com">Need a hand?</a>
+  </div></header>
+  <main id="main" class="billing wrap">
+    <p id="testBanner" class="test-banner" hidden>Test checkout · No real payment will be taken.</p>
+    <div class="billing-heading"><p class="eyebrow">YOUR RINGLEADER PLAN</p><h1 id="pageTitle">One last thing.<br><span class="hi">Make it monthly.</span></h1><p id="intro">Open the secure link we sent after your setup call to start or manage billing.</p></div>
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+    <p id="error" class="error" role="alert" hidden></p>
+    <div id="billingBody" class="billing-grid" hidden>
+      <section class="payment-panel" aria-labelledby="paymentTitle">
+        <div class="panel-heading"><span class="step-number" aria-hidden="true">01</span><h2 id="paymentTitle">Choose how to pay</h2></div>
+        <div id="methods" class="methods" hidden>
+          <button id="cardButton" class="payment-choice" type="button"><span><b>Card or Apple Pay</b><small>Apple Pay appears when available.</small></span><span class="card-brands" aria-label="Visa and Mastercard"><span class="visa">VISA</span><span class="mastercard" aria-hidden="true"><i></i><i></i></span></span><span aria-hidden="true">↗</span></button>
+          <div id="paypalWrap" class="paypal-choice" hidden><p>Or subscribe with PayPal</p><paypal-button id="paypalButton" type="subscribe" hidden></paypal-button><p id="paypalHint" class="fine">Loading PayPal…</p></div>
+        </div>
+        <div id="checkout" hidden></div>
+        <button id="abandonButton" class="text-button" type="button" hidden>Cancel this checkout to change payment method</button>
+        <div id="manage" class="manage" hidden><p id="paymentState"></p><button id="manageButton" class="action" type="button">Payment details &amp; invoices</button><button id="cancelButton" class="text-button" type="button">Cancel automatic renewal</button></div>
+        <button id="refreshButton" class="text-button" type="button">Check payment status</button>
+        <div class="payment-note"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><p>Your card details go directly to your payment provider. Ringleader never stores your card number or security code.</p></div>
+      </section>
+      <aside class="order-summary" aria-labelledby="summaryTitle"><div class="panel-heading"><span class="step-number" aria-hidden="true">02</span><h2 id="summaryTitle">Your plan</h2></div><p id="shopName" class="shop-name"></p><div class="summary-row"><span>Text-Back</span><span>Monthly</span></div><div class="summary-row"><span>Subscription</span><strong id="subtotal"></strong></div><div class="summary-row"><span id="taxLabel">Tax</span><span id="tax"></span></div><div class="summary-total"><span id="dueLabel">Due now</span><strong id="total"></strong></div><p id="renewal" class="renewal"></p><p id="dates" class="fine"></p><p id="taxNumber" class="fine" hidden></p><div class="summary-terms"><p id="billingTerms">Canadian dollars. Automatic monthly renewal until you cancel. Cancel before your next renewal to stop future charges.</p><p>By subscribing, you agree to the <a href="https://getringleader.ca/terms.html" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="https://getringleader.ca/privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p></div></aside>
+    </div>
+    <section id="receiptsSection" class="receipts" aria-labelledby="receiptsTitle" hidden><h2 id="receiptsTitle">Payment history</h2><ul id="receipts"></ul></section>
+    <noscript><p class="notice">This secure payment page needs JavaScript. Contact Ringleader for an invoice.</p></noscript>
+    <p class="billing-footer">Questions about billing? <a id="support" href="mailto:papaadrian.0920@gmail.com">Email Adrian</a>. You can also ask for a PayPal invoice or Interac payment instructions.</p>
+  </main>
+  <dialog id="cancelDialog"><form method="dialog"><h2>Stop monthly renewal?</h2><p>Your already paid service period stays available. You won’t be charged for the next month.</p><div><button value="keep" class="action">Keep my subscription</button><button id="confirmCancel" value="cancel" class="text-button">Cancel renewal</button></div></form></dialog>
+</body>
+</html>

@@ -46,7 +46,7 @@
    "@type": "Offer",
    "price": "99",
    "priceCurrency": "CAD",
-   "description": "Per month, no contract. Or $950 billed yearly. Founding shops on the monthly plan pay $69 a month for the first 3 months until January 31, 2027."
+   "description": "Per month, no contract. Founding shops on the monthly plan pay $69 a month for the first 3 months until January 31, 2027."
   }
  }
 ]
@@ -61,11 +61,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&display=swap">
 <link rel="stylesheet" href="style.css?v=16">
-<link rel="stylesheet" href="plans.css?v=7">
+<link rel="stylesheet" href="plans.css?v=8">
 <script src="deal.js?v=3" defer></script>
 <script src="leads.js?v=3" defer></script>
 <script src="signin.js?v=5" defer></script>
-<script src="plans.js?v=6" defer></script>
+<script src="plans.js?v=7" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -104,7 +104,7 @@
         <div class="bill" role="group" aria-label="How you pay" data-billing="monthly">
           <span class="bill-thumb" aria-hidden="true"></span>
           <button type="button" data-bill="monthly" aria-pressed="true">Monthly</button>
-          <button type="button" data-bill="yearly" aria-pressed="false">Yearly <em>Save 20%</em></button>
+          <button type="button" data-bill="yearly" aria-pressed="false" disabled title="Yearly billing will be available later">Yearly · later</button>
         </div>
 
         <div class="cards">
@@ -175,7 +175,7 @@
             <h2 id="sheetTitle" tabindex="-1">Setting you up.</h2>
             <ol class="stepper">
               <li data-step="0"><button type="button" disabled><span class="bar"><i></i></span><span class="lbl">Getting to know you <span class="done-tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span></span></button></li>
-              <li data-step="1"><button type="button" disabled><span class="bar"><i></i></span><span class="lbl">Payment <span class="done-tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span></span></button></li>
+              <li data-step="1"><button type="button" disabled><span class="bar"><i></i></span><span class="lbl">Billing details <span class="done-tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span></span></button></li>
               <li data-step="2"><button type="button" disabled><span class="bar"><i></i></span><span class="lbl">Anything else? <span class="done-tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span></span></button></li>
             </ol>
           </header>
@@ -212,31 +212,27 @@
               </div>
               <p class="err" id="fLine-err" hidden></p>
               <div class="heads-up" id="personalHint" hidden>
-                <p>Heads up: friends and family who miss you would get the text too. A <b>Work Line</b> gives you a separate business number that rings your cell, so only customers get texted.</p>
-                <label class="tickbox"><input type="checkbox" id="fWorkLine"> Add a Work Line (+$15 a month)</label>
+                <p>Friends and family who call this number could receive the same text. We’ll talk through your phone setup before turning anything on.</p>
               </div>
             </fieldset>
           </div>
 
           <div class="pane pay" data-panel="1" hidden>
             <div class="pay-left">
-              <h3>Payment</h3>
-              <p class="pay-note"><b>No payment today.</b> This site doesn't take cards yet. After your setup call, we'll send you a secure payment link.</p>
-              <!-- Picture only. These are plain boxes, not inputs, so card details can't be typed, read, stored or sent. -->
-              <div class="fake-card" aria-hidden="true">
-                <span class="fake-tag">Preview</span>
-                <div class="fake wide">Card number</div>
-                <div class="fake">Expiry date</div>
-                <div class="fake">CVV</div>
-                <div class="fake wide">Name on card</div>
-              </div>
+              <h3>Payment comes after setup.</h3>
+              <p class="pay-note">We’ll email your secure payment link after setup. <b>No payment is taken on this page.</b></p>
+              <ol class="pay-how">
+                <li><span>1</span><div><b>We set it up together.</b><p>We test a missed call, the text back, and your reply.</p></div></li>
+                <li><span>2</span><div><b>You get a secure payment link.</b><p>Choose card or Apple Pay when available. You can also ask for PayPal or Interac.</p></div></li>
+                <li><span>3</span><div><b>Your monthly billing starts.</b><p>Your price and renewal terms are shown before you pay.</p></div></li>
+              </ol>
             </div>
             <aside class="summary" aria-label="Summary">
               <h3>Summary</h3>
               <div id="sumRows"></div>
-              <div class="sum-total"><span>Total</span><b id="sumTotal"></b></div>
+              <div class="sum-total"><span>Due now</span><b id="sumTotal">C$0</b></div>
               <p class="sum-small" id="sumSmall"></p>
-              <button type="button" class="linkish" id="sumSwitch"></button>
+              <p class="sum-small">Monthly billing starts after your setup works. No card required to request setup.</p>
             </aside>
           </div>
 

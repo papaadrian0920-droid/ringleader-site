@@ -9,10 +9,10 @@
   const Details = window.RingleaderDetails;
   const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const PRICE = { monthly: 99, yearly: 79 };
-  const YEARLY_TOTAL = 950, YEARLY_FULL = 1188, WORK_LINE = 15, DEAL_PRICE = 69;
+  const PRICE = { monthly: 99 };
+  const DEAL_PRICE = 69; // Yearly C$950 and the Work Line are held outside launch billing.
   const dealOn = () => !document.documentElement.classList.contains('deal-over');
-  let billing = 'monthly';
+  const billing = 'monthly';
 
   /* ---------- The rolling price ---------- */
   const strips = [0, 1].map(() => {
@@ -32,17 +32,7 @@
   });
   showPrice();
 
-  function setBilling(next) {
-    if (next === billing) return;
-    billing = next;
-    $('.bill').dataset.billing = billing;
-    $$('[data-bill]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.bill === billing)));
-    $$('[data-when]').forEach(el => { el.hidden = el.dataset.when !== billing; });
-    $('#tbPrice').setAttribute('aria-label', `$${PRICE[billing]} a month`);
-    showPrice();
-    drawSummary();
-  }
-  $$('[data-bill]').forEach(b => b.addEventListener('click', () => setBilling(b.dataset.bill)));
+  // Monthly only until the yearly cancellation and refund policy is confirmed.
 
   /* ---------- Sending to Adrian's email ---------- */
   async function send(subject, fields) {
@@ -174,7 +164,6 @@
   sheet.addEventListener('input', () => { if (tried && step === 0) checkFirstStep(); });
   sheet.addEventListener('change', () => {
     $('#personalHint').hidden = line()?.value !== 'My personal cell';
-    if ($('#personalHint').hidden) $('#fWorkLine').checked = false;
     $('#invoiceWrap').hidden = sameInvoice();
     if (tried && step === 0) checkFirstStep();
     drawSummary();
@@ -186,31 +175,14 @@
   });
 
   function drawSummary() {
-    const money = n => '$' + n.toLocaleString('en-CA');
-    const work = $('#fWorkLine').checked;
-    const deal = billing === 'monthly' && dealOn();
-    const rows = [];
-    let total, small;
-    if (billing === 'yearly') {
-      rows.push(`<div class="sum-row"><span>Text-Back, yearly</span><span><s>${money(YEARLY_FULL)}</s> ${money(YEARLY_TOTAL)}</span></div><span class="sum-save">Save ${money(YEARLY_FULL - YEARLY_TOTAL)}</span>`);
-      total = money(YEARLY_TOTAL) + (work ? ` + ${money(WORK_LINE)} a month` : '');
-      small = `${money(YEARLY_TOTAL)} billed yearly. Canadian dollars, plus any tax.`;
-    } else if (deal) {
-      rows.push(`<div class="sum-row"><span>Text-Back, monthly</span><span><s>${money(PRICE.monthly)}</s> ${money(DEAL_PRICE)} a month</span></div>`);
-      total = `${money(DEAL_PRICE + (work ? WORK_LINE : 0))} a month`;
-      small = `Founding shop price for your first 3 months, then ${money(PRICE.monthly + (work ? WORK_LINE : 0))} a month. Cancel anytime. Canadian dollars, plus any tax.`;
-    } else {
-      rows.push(`<div class="sum-row"><span>Text-Back, monthly</span><span>${money(PRICE.monthly)} a month</span></div>`);
-      total = `${money(PRICE.monthly + (work ? WORK_LINE : 0))} a month`;
-      small = 'Cancel anytime. Canadian dollars, plus any tax.';
-    }
-    if (work) rows.push(`<div class="sum-row"><span>Work Line</span><span>+${money(WORK_LINE)} a month</span></div>`);
-    $('#sumRows').innerHTML = rows.join('');
-    $('#sumTotal').textContent = total;
-    $('#sumSmall').textContent = small;
-    $('#sumSwitch').textContent = billing === 'monthly' ? 'Switch to yearly and save 20%' : 'Switch to monthly';
+    const deal = dealOn();
+    const money = n => 'C$' + n.toLocaleString('en-CA');
+    $('#sumRows').innerHTML = `<div class="sum-row"><span>Text-Back, monthly</span><span>${deal ? `<s>${money(PRICE.monthly)}</s> ` : ''}${money(deal ? DEAL_PRICE : PRICE.monthly)} a month</span></div>`;
+    $('#sumTotal').textContent = 'C$0';
+    $('#sumSmall').textContent = deal
+      ? 'Founding shop price for your first 3 months, then C$99 a month. Cancel anytime. Canadian dollars, plus applicable tax.'
+      : 'C$99 a month after setup. Cancel anytime. Canadian dollars, plus applicable tax.';
   }
-  $('#sumSwitch').addEventListener('click', () => setBilling(billing === 'monthly' ? 'yearly' : 'monthly'));
 
   // Draws whichever step we're on. step === 'done' is the finished state.
   function draw() {
@@ -225,7 +197,7 @@
     });
     $$('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== String(step); });
     $('#sheetNav').hidden = done;
-    $('#navNext').textContent = step === STEPS - 1 ? 'Send' : 'Next';
+    $('#navNext').textContent = step === STEPS - 1 ? 'Request setup' : 'Next';
     drawSummary();
   }
 
@@ -264,7 +236,8 @@
     nextBtn.textContent = 'Sending...';
     const fields = {
       Plan: `Text-Back, ${billing}`,
-      Price: $('#sumTotal').textContent,
+      Price: dealOn() ? 'C$69 a month for 3 months, then C$99' : 'C$99 a month',
+      'Due now': 'C$0 — billing after setup works',
       'Founding deal': billing === 'monthly' && dealOn() ? 'Yes' : 'No',
       Name: val('fName'),
       Business: val('fBusiness'),
@@ -273,12 +246,11 @@
       email: val('fEmail'),
       'Invoice email': sameInvoice() ? val('fEmail') : val('fInvoice'),
       'Customers call': line().value,
-      'Work Line': $('#fWorkLine').checked ? 'Yes (+$15 a month)' : 'No',
       'Anything else': val('fMessage') || '-',
     };
     try {
       await send(`Ringleader sign-up: ${fields.Business}`, fields);
-      if (window.RingleaderLeads) RingleaderLeads.send('signup', { email: fields.email, name: fields.Name, business: fields.Business, plan: fields.Plan, trade: fields.Trade, phone: fields.Phone, invoiceEmail: fields['Invoice email'], customersCall: fields['Customers call'], workLine: fields['Work Line'], foundingDeal: fields['Founding deal'] });
+      if (window.RingleaderLeads) RingleaderLeads.send('signup', { email: fields.email, name: fields.Name, business: fields.Business, plan: fields.Plan, trade: fields.Trade, phone: fields.Phone, invoiceEmail: fields['Invoice email'], customersCall: fields['Customers call'], foundingDeal: fields['Founding deal'] });
       sent = true;
       $('#doneLine').textContent = `Thanks, ${fields.Name}. We'll get back to you within a day at ${fields.Phone} or ${fields.email}, and set it up with you in about 20 minutes.`;
       history.replaceState({ step: 'done' }, '', '#setup');
@@ -288,7 +260,7 @@
       fail.scrollIntoView({ block: 'nearest', behavior: calm() ? 'auto' : 'smooth' });
     } finally {
       nextBtn.disabled = false;
-      nextBtn.textContent = 'Send';
+      nextBtn.textContent = 'Request setup';
     }
   }
 
