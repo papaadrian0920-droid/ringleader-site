@@ -1,26 +1,48 @@
 // No card inputs or customer details are sent to the marketing form service.
 (() => {
+  const params = new URLSearchParams(location.search);
+  const tokenPattern = /^[A-Za-z0-9_-]{43}$/;
+  const fragment = location.hash.slice(1);
+  const returning = params.has('return');
+  if (document.body.hasAttribute('data-legacy-billing')) {
+    if (window.top !== window.self) return;
+    const target = new URL('/contact.html?step=payment', location.origin);
+    if (returning) target.searchParams.set('return', '1');
+    if (tokenPattern.test(fragment)) target.hash = fragment;
+    location.replace(target);
+    return;
+  }
+  if (params.get('step') !== 'payment') return;
+
   const $ = id => document.getElementById(id);
   const money = cents => new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(cents / 100).replace('$', 'C$');
   const date = value => value ? new Date(value).toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'America/Toronto' }) : '';
   const hasCurrentPayment = data => Date.parse(data?.paidThrough) > Date.now();
-  // GitHub Pages serves /pay/. On localhost the Node server serves both the page and API.
+  // The public website serves the wizard. On localhost the Node server serves both the page and API.
   const apiOrigin = location.origin === 'https://getringleader.ca' ? 'https://billing.getringleader.ca' : '';
-  const returning = new URLSearchParams(location.search).has('return');
   let token = '', details = null, embedded = null, stripeActions = null, stripeCanConfirm = false;
   let busy = false, paypalSession = null, paypalKey = '', pollTimer = null;
   function message(id, text) { $(id).textContent = text; $(id).hidden = !text; }
+  $('setupIntro').hidden = true;
+  $('plans').hidden = true;
+  $('setupForm').hidden = true;
+  $('stage').classList.add('is-billing');
+  $('sheet').hidden = false;
+  $('billingStep').hidden = false;
+  const paymentStep = document.querySelector('#sheet [data-step="1"]');
+  paymentStep.classList.add('is-on');
+  paymentStep.querySelector('button').setAttribute('aria-current', 'step');
+  document.title = 'Ringleader Payment';
   if (window.top !== window.self) {
     message('notice', 'Open your private Ringleader payment link in its own tab.');
     return;
   }
-  const fragment = location.hash.slice(1);
   try {
-    if (/^[A-Za-z0-9_-]{43}$/.test(fragment)) { sessionStorage.setItem('ringleader-billing-token', fragment); token = fragment; }
+    if (tokenPattern.test(fragment)) { sessionStorage.setItem('ringleader-billing-token', fragment); token = fragment; }
     else token = sessionStorage.getItem('ringleader-billing-token') || '';
-  } catch { token = /^[A-Za-z0-9_-]{43}$/.test(fragment) ? fragment : ''; }
+  } catch { token = tokenPattern.test(fragment) ? fragment : ''; }
   // Fragments do not reach the server; remove it from browser history before loading any provider script.
-  history.replaceState(null, '', location.pathname);
+  history.replaceState(null, '', location.pathname + '?step=payment');
   function setBusy(value) {
     busy = value;
     for (const id of ['cardButton','abandonButton','refreshButton','manageButton','cancelButton','confirmCancel']) $(id).disabled = value;
@@ -67,11 +89,12 @@
   function render(data) {
     details = data;
     const paid = hasCurrentPayment(data);
+    document.querySelector('#sheet [data-step="0"]').classList.toggle('is-done', Boolean(data.canCheckout || data.subscribed || data.paidThrough));
     if (embedded && (data.subscribed || data.pending?.provider !== 'stripe')) closeStripeCheckout();
     $('billingBody').hidden = false; $('testBanner').hidden = data.mode !== 'test';
     $('paymentTitle').textContent = data.subscribed ? 'Manage your subscription' : embedded ? 'Payment details' : data.canCheckout ? 'Payment method' : 'Billing overview';
     $('shopName').textContent = data.business;
-    $('intro').textContent = `Monthly billing for ${data.business}. Your setup is approved before your first payment.`;
+    $('intro').textContent = `Monthly Text-Back billing for ${data.business}.`;
     $('subtotal').textContent = money(data.subtotal) + ' / month';
     $('taxLabel').textContent = data.taxStatus === 'registered' ? 'Ontario HST (13%)' : 'Tax';
     $('tax').textContent = data.tax === null ? 'To be confirmed' : money(data.tax);

@@ -1,6 +1,7 @@
 // The plans page: the Monthly / Yearly switch, the rolling price, Sign up early,
 // and the sign-up sheet the Text-Back card grows into.
 (() => {
+  if (new URLSearchParams(location.search).get('step') === 'payment') return;
   // The Web3Forms key lives in leads.js. Without one nothing can send, so the page shows an honest "didn't send" message with Adrian's email and phone.
   const FORM_KEY = (window.RingleaderLeads && RingleaderLeads.formKey) || '';
 
@@ -169,7 +170,7 @@
     drawSummary();
   });
   $('#fPhone').addEventListener('blur', e => { if (okPhone(e.target.value)) e.target.value = prettyPhone(e.target.value); });
-  sheet.addEventListener('submit', e => e.preventDefault());
+  $('#setupForm').addEventListener('submit', e => e.preventDefault());
   sheet.addEventListener('keydown', e => {
     if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); next(); }
   });
