@@ -39,6 +39,7 @@ paypal-button { display: block; width: 100%; min-height: 48px; }
 .error { color: #ffc3ba; border: 1px solid rgba(255,122,107,.5); background: rgba(255,83,64,.06); }
 .test-banner { color: var(--hivis); border: 1px dashed rgba(200,255,46,.5); }
 #checkout { min-width: 0; }
+#paymentTitle:focus { outline: none; }
 .stripe-elements { display: grid; gap: 18px; }
 .wallet-divider { color: var(--soft); text-align: center; font-size: .8rem; margin-top: 14px; }
 .stripe-pay { background: var(--hivis); color: var(--on-hivis); border-color: var(--hivis); }

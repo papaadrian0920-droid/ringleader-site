@@ -233,7 +233,10 @@
     if (loaded.type !== 'success') throw new Error('Stripe could not open this checkout. Cancel it and try again.');
     const { actions } = loaded;
     const card = checkout.createPaymentElement({ layout: 'accordion', wallets: { applePay: 'never', googlePay: 'never' } });
-    const wallet = checkout.createExpressCheckoutElement({ buttonTheme: { applePay: 'white-outline' } });
+    const wallet = checkout.createExpressCheckoutElement({
+      buttonTheme: { applePay: 'white-outline' },
+      paymentMethods: { link: 'never' },
+    });
     checkout.on('change', session => {
       if (stripeActions !== actions) return;
       stripeCanConfirm = session.canConfirm;
@@ -272,7 +275,7 @@
     try { embedded.mount(); } catch (error) { closeStripeCheckout(); throw error; }
     $('methods').hidden = true;
     $('paymentTitle').textContent = 'Payment details';
-    $('checkout').focus({ preventScroll: true });
+    $('paymentTitle').focus({ preventScroll: true });
   }
   $('cardButton').addEventListener('click', () => run(openStripeCheckout));
   $('stripeElements').addEventListener('submit', event => {
