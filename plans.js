@@ -470,6 +470,7 @@
     draw();
     $('#doneTitle').textContent = "You're paid up. Thank you!";
     $('#doneLine').textContent = "Stripe emailed your receipt. Adrian will text you within a day to set up your number, which takes about 20 minutes.";
-    $('#doneSmall').textContent = 'Questions? Call or text 437-232-2281.';
+    $('#doneSmall').innerHTML = 'Questions? Call or text <a href="tel:+14372322281">437-232-2281</a>.' +
+      (Pay.portal ? ` Change your card or cancel anytime <a href="${Pay.portal}">here</a>.` : '');
   }
 })();
