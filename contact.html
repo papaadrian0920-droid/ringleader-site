@@ -73,11 +73,12 @@
 <link rel="stylesheet" href="style.css?v=16">
 <link rel="stylesheet" href="plans.css?v=9">
 <link rel="stylesheet" href="/billing.css?v=3">
-<script src="/billing.js?v=3" defer></script>
+<script src="/billing.js?v=4" defer></script>
 <script src="deal.js?v=4" defer></script>
 <script src="leads.js?v=3" defer></script>
+<script src="paylinks.js?v=1" defer></script>
 <script src="signin.js?v=5" defer></script>
-<script src="plans.js?v=9" defer></script>
+<script src="plans.js?v=10" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -187,8 +188,8 @@
             <h2 id="sheetTitle" tabindex="-1">Setting you up.</h2>
             <ol class="stepper">
               <li data-step="0"><button type="button" disabled><span class="bar"><i></i></span><span class="lbl">Getting to know you <span class="done-tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span></span></button></li>
-              <li data-step="1"><button type="button" disabled><span class="bar"><i></i></span><span class="lbl">Payment <span class="done-tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span></span></button></li>
-              <li data-step="2"><button type="button" disabled><span class="bar"><i></i></span><span class="lbl">Anything else? <span class="done-tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span></span></button></li>
+              <li data-step="1"><button type="button" disabled><span class="bar"><i></i></span><span class="lbl">Anything else? <span class="done-tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span></span></button></li>
+              <li data-step="2"><button type="button" disabled><span class="bar"><i></i></span><span class="lbl">Payment <span class="done-tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span></span></button></li>
             </ol>
           </header>
 
@@ -232,10 +233,19 @@
             <p id="checkoutError" class="err" role="alert" hidden></p>
           </div>
 
-          <div class="pane pay" data-panel="1" hidden>
+          <div class="pane" data-panel="1" hidden>
+            <div class="f"><label for="fMessage">Anything else we should know? <span class="opt">(optional)</span></label>
+              <textarea id="fMessage" name="message" rows="5" placeholder="Questions, how you handle calls now, anything."></textarea></div>
+            <label class="hp" aria-hidden="true">Leave this empty <input id="fWebsite" name="website" tabindex="-1" autocomplete="off"></label>
+            <p class="sum-small">We only use this to set you up. See our <a href="privacy.html">privacy policy</a>.</p>
+            <div class="send-fail" id="sendFail" role="alert" hidden><p><b>That didn't send.</b> Nothing went through, but your answers are still here. Try again, or reach Adrian at papaadrian.0920@gmail.com or <a href="tel:+14372322281">437-232-2281</a>.</p></div>
+          </div>
+
+          <div class="pane pay" data-panel="2" hidden>
             <div class="pay-left">
-              <h3>Online checkout is being connected.</h3>
-              <p class="pay-note">You can request setup now. We’ll contact you to arrange setup and billing.</p>
+              <p id="payTest" class="test-banner" hidden>Test checkout. No real payment will be taken.</p>
+              <h3 id="payTitle">Online checkout is being connected.</h3>
+              <p class="pay-note" id="payNote">You can request setup now. We’ll contact you to arrange setup and billing.</p>
             </div>
             <aside class="summary" aria-label="Summary">
               <h3>Summary</h3>
@@ -245,19 +255,11 @@
             </aside>
           </div>
 
-          <div class="pane" data-panel="2" hidden>
-            <div class="f"><label for="fMessage">Anything else we should know? <span class="opt">(optional)</span></label>
-              <textarea id="fMessage" name="message" rows="5" placeholder="Questions, how you handle calls now, anything."></textarea></div>
-            <label class="hp" aria-hidden="true">Leave this empty <input id="fWebsite" name="website" tabindex="-1" autocomplete="off"></label>
-            <p class="sum-small">We only use this to set you up. See our <a href="privacy.html">privacy policy</a>.</p>
-            <div class="send-fail" id="sendFail" role="alert" hidden><p><b>That didn't send.</b> Nothing went through, but your answers are still here. Try again, or reach Adrian at papaadrian.0920@gmail.com or <a href="tel:+14372322281">437-232-2281</a>.</p></div>
-          </div>
-
           <div class="pane finished" data-panel="done" hidden>
             <span class="finished-tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span>
-            <h3>Sent. We've got it.</h3>
+            <h3 id="doneTitle">Sent. We've got it.</h3>
             <p id="doneLine"></p>
-            <p class="sum-small">No payment has been taken.</p>
+            <p class="sum-small" id="doneSmall">No payment has been taken.</p>
             <a class="cta cta-inline cta-solid" href="setup.html">Tell us about your shop (about 10 minutes)</a>
             <a class="cta cta-ghost cta-inline" href="index.html">Back to the home page</a>
           </div>

@@ -9,8 +9,13 @@
   const $$ = (s, root = document) => [...root.querySelectorAll(s)];
   const Details = window.RingleaderDetails;
   const checkout = window.RingleaderCheckout;
+  // Paying on the website through a Stripe Payment Link (paylinks.js). ?testpay uses the sandbox link instead.
+  const Pay = window.RingleaderPay || {};
+  const testPay = new URLSearchParams(location.search).has('testpay');
+  const payLink = (testPay ? Pay.testLink : Pay.link) || '';
+  const payOnline = /^https:\/\/buy\.stripe\.com\//.test(payLink);
   const checkoutReady = checkout?.available().then(available => {
-    $('#checkoutProvince').hidden = !available;
+    $('#checkoutProvince').hidden = !(available || payOnline);
     return available;
   });
   const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -117,6 +122,7 @@
   /* ---------- The sheet: filling in, checking, moving between steps ---------- */
   const sheet = $('#sheet'), stage = $('#stage'), view = $('#plans'), card = $('#textBack');
   const STEPS = 3;
+  const lastLabel = payOnline ? 'Continue to payment' : 'Request setup';
   let step = 0, isOpen = false, moving = false, sent = false;
 
   const fill = () => {
@@ -184,7 +190,7 @@
     const deal = dealOn();
     const money = n => 'C$' + n.toLocaleString('en-CA');
     $('#sumRows').innerHTML = `<div class="sum-row"><span>Text-Back, monthly</span><span>${deal ? `<s>${money(PRICE.monthly)}</s> ` : ''}${money(deal ? DEAL_PRICE : PRICE.monthly)} a month</span></div>`;
-    $('#sumTotal').textContent = 'C$0';
+    $('#sumTotal').textContent = payOnline ? money(deal ? DEAL_PRICE : PRICE.monthly) : 'C$0';
     $('#sumSmall').textContent = deal
       ? 'Founding shop price for your first 3 months, then C$99 a month. Cancel anytime. Canadian dollars, plus applicable tax.'
       : 'C$99 a month. Cancel anytime. Canadian dollars, plus applicable tax.';
@@ -203,7 +209,7 @@
     });
     $$('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== String(step); });
     $('#sheetNav').hidden = done;
-    $('#navNext').textContent = step === STEPS - 1 ? 'Request setup' : 'Next';
+    $('#navNext').textContent = step === STEPS - 1 ? lastLabel : 'Next';
     drawSummary();
   }
 
@@ -228,6 +234,12 @@
       openingCheckout = true;
       button.disabled = true;
       try {
+        if (payOnline && !$('#fOntario').checked) {
+          error.textContent = 'Confirm your shop is based in Ontario to pay online.';
+          error.hidden = false;
+          $('#fOntario').focus();
+          return;
+        }
         if (await checkoutReady) {
           if (!$('#fOntario').checked) {
             error.textContent = 'Confirm your shop is based in Ontario to pay online.';
@@ -277,7 +289,7 @@
     const fields = {
       Plan: `Text-Back, ${billing}`,
       Price: dealOn() ? 'C$69 a month for 3 months, then C$99' : 'C$99 a month',
-      'Due now': 'C$0 — setup request',
+      'Due now': payOnline ? 'Paying now on Stripe' : 'C$0 — setup request',
       'Founding deal': billing === 'monthly' && dealOn() ? 'Yes' : 'No',
       Name: val('fName'),
       Business: val('fBusiness'),
@@ -288,6 +300,7 @@
       'Customers call': line().value,
       'Anything else': val('fMessage') || '-',
     };
+    if (payOnline) { await goPay(fields); return; }
     try {
       await send(`Ringleader sign-up: ${fields.Business}`, fields);
       if (window.RingleaderLeads) RingleaderLeads.send('signup', { email: fields.email, name: fields.Name, business: fields.Business, plan: fields.Plan, trade: fields.Trade, phone: fields.Phone, invoiceEmail: fields['Invoice email'], customersCall: fields['Customers call'], foundingDeal: fields['Founding deal'] });
@@ -300,8 +313,24 @@
       fail.scrollIntoView({ block: 'nearest', behavior: calm() ? 'auto' : 'smooth' });
     } finally {
       nextBtn.disabled = false;
-      nextBtn.textContent = 'Request setup';
+      nextBtn.textContent = lastLabel;
     }
+  }
+
+  // Tells Adrian who's on the way (email and Sheet), then opens Stripe's checkout with their email filled in.
+  // The reference goes to Stripe too, so the payment can be matched to this sign-up.
+  async function goPay(fields) {
+    const ref = 'rl-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
+    const founding = dealOn() && Pay.foundingCode;
+    const shop = { ...fields, 'Due now': `${founding ? 'C$69' : 'C$99'} on Stripe${testPay ? ' (TEST)' : ''}`, 'Stripe reference': ref };
+    if (window.RingleaderLeads) RingleaderLeads.send('signup', { email: shop.email, name: shop.Name, business: shop.Business, plan: shop.Plan, trade: shop.Trade, phone: shop.Phone, invoiceEmail: shop['Invoice email'], line: shop['Customers call'], message: shop['Anything else'], payment: 'Went to Stripe checkout', stripeReference: ref });
+    // Stripe has the payment either way, so a failed email doesn't stop them from paying.
+    try { await send(`Ringleader sign-up, paying now: ${shop.Business}${testPay ? ' (TEST)' : ''}`, shop); } catch { /* Stripe still emails Adrian about the payment */ }
+    const url = new URL(payLink);
+    url.searchParams.set('prefilled_email', shop['Invoice email']);
+    url.searchParams.set('client_reference_id', ref);
+    if (founding) url.searchParams.set('prefilled_promo_code', Pay.foundingCode);
+    location.assign(url.toString());
   }
 
   /* ---------- The move: Text-Back card <-> sheet. Only transform and opacity animate. ---------- */
@@ -422,4 +451,25 @@
   // A refresh in the middle starts back at the plans, with nothing half-shown.
   if (location.hash === '#setup') history.replaceState(null, '', location.pathname + location.search);
   draw();
+
+  // The payment step says what happens next when paying online.
+  if (payOnline) {
+    $('#payTest').hidden = !testPay;
+    $('#payTitle').textContent = 'Pay securely with Stripe.';
+    $('#payNote').textContent = "Next, Stripe's checkout opens so you can pay by card. Your plan starts today and renews monthly until you cancel. We'll text you within a day to set up your number.";
+  }
+
+  // Back from Stripe after paying (the Payment Link sends people to contact.html?paid=1).
+  if (new URLSearchParams(location.search).has('paid')) {
+    isOpen = true;
+    sent = true;
+    view.hidden = true;
+    sheet.hidden = false;
+    stage.classList.add('is-open');
+    step = 'done';
+    draw();
+    $('#doneTitle').textContent = "You're paid up. Thank you!";
+    $('#doneLine').textContent = "Stripe emailed your receipt. Adrian will text you within a day to set up your number, which takes about 20 minutes.";
+    $('#doneSmall').textContent = 'Questions? Call or text 437-232-2281.';
+  }
 })();

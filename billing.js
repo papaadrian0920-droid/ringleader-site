@@ -66,7 +66,7 @@
   $('stage').classList.add('is-billing');
   $('sheet').hidden = false;
   $('billingStep').hidden = false;
-  const paymentStep = document.querySelector('#sheet [data-step="1"]');
+  const paymentStep = document.querySelector('#sheet [data-step="2"]');
   paymentStep.classList.add('is-on');
   paymentStep.querySelector('button').setAttribute('aria-current', 'step');
   document.title = 'Ringleader Payment';
