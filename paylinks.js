@@ -6,10 +6,10 @@ window.RingleaderPay = {
   // Empty `link` = the form stays a setup request with nothing to pay, like before.
   link: 'https://buy.stripe.com/bJe3cu8moghI2MJ2qV9EI00',
   // Yearly: C$950 once a year, paid up front, not refundable. Empty = the Yearly button says "later".
-  yearlyLink: '',
+  yearlyLink: 'https://buy.stripe.com/00w4gy0TWghI2MJ6Hb9EI01',
   // The sandbox links. Only used when the page address ends in ?testpay, so real visitors never see them.
   testLink: 'https://buy.stripe.com/test_bJeaEX2tq3ZX3yP9Qn7AI01',
-  testYearlyLink: '',
+  testYearlyLink: 'https://buy.stripe.com/test_5kQ3cv2tq9khglBbYv7AI02',
   // The founding-shop promotion code in Stripe ($30 off for 3 months). Filled in for monthly shops while the deal is on.
   foundingCode: 'FOUNDING',
   // Our server. The sign-up form is saved here just before Stripe, and the after-payment steps (welcome.html) talk to it.

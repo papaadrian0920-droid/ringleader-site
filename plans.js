@@ -538,8 +538,14 @@
     start.after(line);
   }
 
-  // Old Payment Link address (contact.html?paid=1), from before Stripe sent people to welcome.html.
-  if (new URLSearchParams(location.search).has('paid')) {
+  // Back from Stripe on the plans page (contact.html?paid=1&session_id=...): straight on to the setup steps.
+  // (The monthly Payment Link uses this address, so it worked before and after welcome.html went live.)
+  const back = new URLSearchParams(location.search);
+  if (back.has('paid') && /^cs_(test|live)_\w+$/.test(back.get('session_id') || '')) {
+    location.replace('welcome.html?session_id=' + encodeURIComponent(back.get('session_id')));
+    return;
+  }
+  if (back.has('paid')) {
     if (Account && Account.get() && Account.get().session) { location.replace(Account.finishUrl(Account.get())); return; }
     isOpen = true;
     sent = true;
