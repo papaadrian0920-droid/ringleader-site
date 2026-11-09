@@ -8,13 +8,17 @@
   const get = () => {
     try { return JSON.parse(localStorage.getItem(KEY)) || memory; } catch { return memory; }
   };
+  // account.js redraws the circle in the top right when these change.
+  const changed = () => window.dispatchEvent(new Event('ringleader-details'));
   const save = details => {
     memory = details;
     try { localStorage.setItem(KEY, JSON.stringify(details)); } catch { /* memory still has it */ }
+    changed();
   };
   const clear = () => {
     memory = null;
     try { localStorage.removeItem(KEY); } catch { /* nothing saved */ }
+    changed();
   };
   const okEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 

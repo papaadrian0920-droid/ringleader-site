@@ -8,6 +8,9 @@
   const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   const Leads = window.RingleaderLeads || { send() {}, formKey: '' };
   const DRAFT = 'ringleader-setup-draft';
+  // On welcome.html (right after paying), welcome.js is in charge: the answers go to our server, then the password step.
+  const Paid = window.RingleaderWelcome || null;
+  const lastLabel = Paid ? 'Save and continue' : 'Send';
 
   const TRADE_LIST = [['plumbing', 'Plumbing'], ['hvac', 'Heating and cooling (HVAC)'], ['electrical', 'Electrical'], ['roofing', 'Roofing'], ['waterproofing', 'Waterproofing'], ['general', 'General contracting or renos']];
   // One tap to add a job. These are only suggestions: the owner can type anything.
@@ -248,7 +251,7 @@
     $('#doneBox').hidden = !finished;
     $('#nav').hidden = finished;
     $('#back').style.visibility = n === 0 ? 'hidden' : 'visible';
-    $('#next').textContent = n === STEPS.length - 1 ? 'Send' : 'Next';
+    $('#next').textContent = n === STEPS.length - 1 ? lastLabel : 'Next';
     $('#setupTitle').textContent = finished ? 'All done.' : STEPS[n].title;
     if (n === 2) drawSuggestions();
     if (focus) {
@@ -291,24 +294,52 @@
     };
     sending = true;
     btn.disabled = true;
-    btn.textContent = 'Sending...';
-    try {
+    btn.textContent = Paid ? 'Saving...' : 'Sending...';
+    // Emails Adrian a copy of the answers (Web3Forms).
+    const emailAdrian = async subject => {
       if (!Leads.formKey) throw new Error('No form key');
       const stop = new AbortController();
       const timer = setTimeout(() => stop.abort(), 15000);
-      let answer;
       try {
         const res = await fetch('https://api.web3forms.com/submit', {
           method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, signal: stop.signal,
-          body: JSON.stringify({ access_key: Leads.formKey, subject: `Ringleader shop setup: ${d.business}`, from_name: 'Ringleader website', ...fields })
+          body: JSON.stringify({ access_key: Leads.formKey, subject, from_name: 'Ringleader website', ...fields })
         });
-        answer = await res.json().catch(() => ({}));
+        const answer = await res.json().catch(() => ({}));
         if (!res.ok || !answer.success) throw new Error(answer.message || 'Send failed');
       } finally { clearTimeout(timer); }
-      Leads.send('setup', {
-        email: d.email, name: d.owner, business: d.business, trade, ownerPhone: pretty(d.ownerPhone), line: d.line,
-        hours: hoursText, website: d.website, googleLink: d.googleLink, licence: d.licence, wsib: d.wsib, profileJson: JSON.stringify(profile)
-      });
+    };
+    const toSheet = () => Leads.send('setup', {
+      email: d.email, name: d.owner, business: d.business, trade, ownerPhone: pretty(d.ownerPhone), line: d.line,
+      hours: hoursText, website: d.website, googleLink: d.googleLink, licence: d.licence, wsib: d.wsib, profileJson: JSON.stringify(profile)
+    });
+
+    // Paid: save on our server (that's what sets up their dashboard), then the password step. Adrian's copy is extra.
+    if (Paid) {
+      try {
+        await Paid.saveAnswers({ answers: d, profile }, text => { btn.textContent = text; });
+      } catch (err) {
+        fail.firstElementChild.innerHTML = `<b>That didn't save.</b> ${esc(err.message)} Your answers are still here. Questions? Text <a href="tel:+14372322281">437-232-2281</a>.`;
+        fail.hidden = false;
+        fail.scrollIntoView({ block: 'nearest', behavior: calm() ? 'auto' : 'smooth' });
+        sending = false;
+        btn.disabled = false;
+        btn.textContent = lastLabel;
+        return;
+      }
+      emailAdrian(`Ringleader shop setup (paid): ${d.business}`).catch(() => { /* the server already has the answers */ });
+      toSheet();
+      clearDraft();
+      sending = false;
+      btn.disabled = false;
+      btn.textContent = lastLabel;
+      Paid.answered(d);
+      return;
+    }
+
+    try {
+      await emailAdrian(`Ringleader shop setup: ${d.business}`);
+      toSheet();
       finished = true;
       $('#doneLine').textContent = `Thanks, ${d.owner}. We have everything we need to tailor the assistant for ${d.business}.`;
       clearDraft();
@@ -319,7 +350,7 @@
     } finally {
       sending = false;
       btn.disabled = false;
-      btn.textContent = 'Send';
+      btn.textContent = lastLabel;
     }
   }
 

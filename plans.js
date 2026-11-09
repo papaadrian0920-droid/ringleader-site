@@ -11,19 +11,27 @@
   const checkout = window.RingleaderCheckout;
   // Paying on the website through a Stripe Payment Link (paylinks.js). ?testpay uses the sandbox link instead.
   const Pay = window.RingleaderPay || {};
+  const Account = window.RingleaderAccount;
   const testPay = new URLSearchParams(location.search).has('testpay');
-  const payLink = (testPay ? Pay.testLink : Pay.link) || '';
-  const payOnline = /^https:\/\/buy\.stripe\.com\//.test(payLink);
+  const isStripe = link => /^https:\/\/buy\.stripe\.com\//.test(link || '');
+  const LINKS = {
+    monthly: (testPay ? Pay.testLink : Pay.link) || '',
+    yearly: (testPay ? Pay.testYearlyLink : Pay.yearlyLink) || '',
+  };
+  const payOnline = isStripe(LINKS.monthly);
+  // Yearly opens once its own Stripe link is in paylinks.js.
+  const yearlyOpen = payOnline && isStripe(LINKS.yearly);
   const checkoutReady = checkout?.available().then(available => {
     $('#checkoutProvince').hidden = !(available || payOnline);
     return available;
   });
   const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const PRICE = { monthly: 99 };
-  const DEAL_PRICE = 69; // Yearly C$950 and the Work Line are held outside launch billing.
+  const PRICE = { monthly: 99, yearly: 79 };
+  const DEAL_PRICE = 69; // founding shops, monthly only
+  const YEARLY_TOTAL = 950, YEARLY_FULL = 99 * 12;
   const dealOn = () => !document.documentElement.classList.contains('deal-over');
-  const billing = 'monthly';
+  let billing = 'monthly';
 
   /* ---------- The rolling price ---------- */
   const strips = [0, 1].map(() => {
@@ -43,7 +51,24 @@
   });
   showPrice();
 
-  // Monthly only until the yearly cancellation and refund policy is confirmed.
+  // Monthly / Yearly. Yearly: C$950 paid up front for 12 months, not refundable (see terms.html).
+  function setBilling(next) {
+    if (next === billing || (next === 'yearly' && !yearlyOpen)) return;
+    billing = next;
+    $('.bill').dataset.billing = billing;
+    $$('[data-bill]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.bill === billing)));
+    $$('[data-when]').forEach(el => { el.hidden = el.dataset.when !== billing; });
+    $('#tbPrice').setAttribute('aria-label', billing === 'yearly' ? '$79 a month, billed $950 yearly' : '$99 a month');
+    showPrice();
+    drawSummary();
+  }
+  const yearlyButton = $('[data-bill="yearly"]');
+  if (yearlyOpen) {
+    yearlyButton.disabled = false;
+    yearlyButton.removeAttribute('title');
+    yearlyButton.textContent = 'Yearly · save 20%';
+  }
+  $$('[data-bill]').forEach(b => b.addEventListener('click', () => setBilling(b.dataset.bill)));
 
   /* ---------- Sending to Adrian's email ---------- */
   async function send(subject, fields) {
@@ -187,13 +212,21 @@
   });
 
   function drawSummary() {
-    const deal = dealOn();
     const money = n => 'C$' + n.toLocaleString('en-CA');
+    if (billing === 'yearly') {
+      $('#sumRows').innerHTML = `<div class="sum-row"><span>Text-Back, yearly</span><span><s>${money(YEARLY_FULL)}</s> ${money(YEARLY_TOTAL)} a year</span></div>`;
+      $('#sumTotal').textContent = money(YEARLY_TOTAL);
+      $('#sumSmall').textContent = 'Paid up front for 12 months. Yearly plans are not refundable. It renews each year unless you turn renewal off. Canadian dollars, plus applicable tax.';
+      if (payOnline) $('#payNote').textContent = "Next, Stripe's secure checkout opens in this tab. You pay C$950 today for 12 months. Right after, you come back here to answer a few questions about your shop and make your password.";
+      return;
+    }
+    const deal = dealOn();
     $('#sumRows').innerHTML = `<div class="sum-row"><span>Text-Back, monthly</span><span>${deal ? `<s>${money(PRICE.monthly)}</s> ` : ''}${money(deal ? DEAL_PRICE : PRICE.monthly)} a month</span></div>`;
     $('#sumTotal').textContent = payOnline ? money(deal ? DEAL_PRICE : PRICE.monthly) : 'C$0';
     $('#sumSmall').textContent = deal
       ? 'Founding shop price for your first 3 months, then C$99 a month. Cancel anytime. Canadian dollars, plus applicable tax.'
       : 'C$99 a month. Cancel anytime. Canadian dollars, plus applicable tax.';
+    if (payOnline) $('#payNote').textContent = "Next, Stripe's secure checkout opens in this tab. Your plan starts today and renews monthly until you cancel. Right after you pay, you come back here to answer a few questions about your shop and make your password.";
   }
 
   // Draws whichever step we're on. step === 'done' is the finished state.
@@ -288,7 +321,7 @@
     nextBtn.textContent = 'Sending...';
     const fields = {
       Plan: `Text-Back, ${billing}`,
-      Price: dealOn() ? 'C$69 a month for 3 months, then C$99' : 'C$99 a month',
+      Price: billing === 'yearly' ? 'C$950 a year' : dealOn() ? 'C$69 a month for 3 months, then C$99' : 'C$99 a month',
       'Due now': payOnline ? 'Paying now on Stripe' : 'C$0 — setup request',
       'Founding deal': billing === 'monthly' && dealOn() ? 'Yes' : 'No',
       Name: val('fName'),
@@ -320,26 +353,44 @@
   // Tells Adrian who's on the way (email and Sheet), then opens Stripe's checkout with their email filled in.
   // The reference goes to Stripe too, so the payment can be matched to this sign-up.
   async function goPay(fields) {
+    const nextBtn = $('#navNext');
+    // Already paid (in this browser)? Never a second payment: finish setup or open the dashboard instead.
+    if (Account && Account.stage() === 'setup') { location.assign(Account.finishUrl(Account.get())); return; }
     const ref = 'rl-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
-    const founding = dealOn() && Pay.foundingCode;
-    const shop = { ...fields, 'Due now': `${founding ? 'C$69' : 'C$99'} on Stripe${testPay ? ' (TEST)' : ''}`, 'Stripe reference': ref };
-    if (window.RingleaderLeads) RingleaderLeads.send('signup', { email: shop.email, name: shop.Name, business: shop.Business, plan: shop.Plan, trade: shop.Trade, phone: shop.Phone, invoiceEmail: shop['Invoice email'], line: shop['Customers call'], message: shop['Anything else'], payment: 'Went to Stripe checkout', stripeReference: ref });
-    // Stripe has the payment either way, so a failed email doesn't stop them from paying.
-    try { await send(`Ringleader sign-up, paying now: ${shop.Business}${testPay ? ' (TEST)' : ''}`, shop); } catch { /* Stripe still emails Adrian about the payment */ }
-    // Save the form on our server under the same reference, so the new shop gets this name and email.
-    // Waits at most 3 seconds: paying never depends on it.
+    const founding = billing === 'monthly' && dealOn() && Pay.foundingCode;
+    const due = billing === 'yearly' ? 'C$950' : founding ? 'C$69' : 'C$99';
+    const shop = { ...fields, 'Due now': `${due} on Stripe${testPay ? ' (TEST)' : ''}`, 'Stripe reference': ref };
+    nextBtn.disabled = true;
+    nextBtn.textContent = 'Opening secure checkout...';
+    // Our server checks this email doesn't already have a paying shop, and saves the form under the same reference,
+    // so the new shop gets this name and email. Waits at most 4 seconds: if the server is down, they still go to Stripe.
     if (Pay.signupApi) {
+      let answer = null;
       try {
-        await Promise.race([
+        const res = await Promise.race([
           fetch(Pay.signupApi, {
             method: 'POST', headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({ ref, email: shop.email, business: shop.Business, owner: shop.Name, phone: shop.Phone }),
           }),
-          new Promise(done => setTimeout(done, 3000)),
+          new Promise(done => setTimeout(done, 4000)),
         ]);
+        answer = res && res.ok ? await res.json() : null;
       } catch { /* they still pay; Adrian can fix the name with shop-admin.js */ }
+      if (answer && answer.alreadyPaid) {
+        nextBtn.disabled = false;
+        nextBtn.textContent = lastLabel;
+        // Shown right on the payment step, where they are.
+        $('#payTitle').textContent = 'This email already has Ringleader.';
+        $('#payNote').innerHTML = `No need to pay again. <a href="${Account ? Account.dashboardUrl() : 'https://api.getringleader.ca/new/'}login.html">Sign in to your dashboard</a>, or text <a href="tel:+14372322281">437-232-2281</a> if something looks wrong.`;
+        nextBtn.hidden = true;
+        $('#payTitle').scrollIntoView({ block: 'center', behavior: calm() ? 'auto' : 'smooth' });
+        return;
+      }
     }
-    const url = new URL(payLink);
+    if (window.RingleaderLeads) RingleaderLeads.send('signup', { email: shop.email, name: shop.Name, business: shop.Business, plan: shop.Plan, trade: shop.Trade, phone: shop.Phone, invoiceEmail: shop['Invoice email'], line: shop['Customers call'], message: shop['Anything else'], payment: 'Went to Stripe checkout', stripeReference: ref });
+    // Stripe has the payment either way, so a failed email doesn't stop them from paying.
+    try { await send(`Ringleader sign-up, paying now: ${shop.Business}${testPay ? ' (TEST)' : ''}`, shop); } catch { /* Stripe still emails Adrian about the payment */ }
+    const url = new URL(LINKS[billing]);
     url.searchParams.set('prefilled_email', shop['Invoice email']);
     url.searchParams.set('client_reference_id', ref);
     if (founding) url.searchParams.set('prefilled_promo_code', Pay.foundingCode);
@@ -469,11 +520,27 @@
   if (payOnline) {
     $('#payTest').hidden = !testPay;
     $('#payTitle').textContent = 'Pay securely with Stripe.';
-    $('#payNote').textContent = "Next, Stripe's checkout opens so you can pay by card. Your plan starts today and renews monthly until you cancel. We'll text you within a day to set up your number.";
+    drawSummary();
   }
 
-  // Back from Stripe after paying (the Payment Link sends people to contact.html?paid=1).
+  // Already paid in this browser: they can't pay twice. Not finished = back to finish (it's not optional).
+  if (Account && Account.stage() === 'setup' && !new URLSearchParams(location.search).has('paid')) {
+    location.replace(Account.finishUrl(Account.get()));
+    return;
+  }
+  if (Account && Account.stage() === 'done') {
+    const start = $('#getStarted');
+    start.textContent = 'Open my dashboard';
+    start.addEventListener('click', e => { e.stopImmediatePropagation(); location.assign(Account.dashboardUrl()); }, true);
+    const line = document.createElement('p');
+    line.className = 'early-msg';
+    line.textContent = "You're already a Ringleader shop. Nothing more to pay.";
+    start.after(line);
+  }
+
+  // Old Payment Link address (contact.html?paid=1), from before Stripe sent people to welcome.html.
   if (new URLSearchParams(location.search).has('paid')) {
+    if (Account && Account.get() && Account.get().session) { location.replace(Account.finishUrl(Account.get())); return; }
     isOpen = true;
     sent = true;
     view.hidden = true;
@@ -482,7 +549,7 @@
     step = 'done';
     draw();
     $('#doneTitle').textContent = "You're paid up. Thank you!";
-    $('#doneLine').textContent = "Stripe emailed your receipt. Adrian will text you within a day to set up your number, which takes about 20 minutes.";
+    $('#doneLine').textContent = "Two steps are left: a few questions about your shop, then your password. We just emailed you the link to finish (check spam too).";
     $('#doneSmall').innerHTML = 'Questions? Call or text <a href="tel:+14372322281">437-232-2281</a>.' +
       (Pay.portal ? ` Change your card or cancel anytime <a href="${Pay.portal}">here</a>.` : '');
   }

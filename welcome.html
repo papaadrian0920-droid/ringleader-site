@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finish setting up - Ringleader</title>
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0D0D0E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23C8FF2E'/%3E%3Cpath d='M10 8h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 17l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 8 10a2 2 0 0 1 2-2' fill='none' stroke='%230D0D0E' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="style.css?v=16">
+<link rel="stylesheet" href="plans.css?v=9">
+<link rel="stylesheet" href="setup.css?v=3">
+<link rel="stylesheet" href="account.css?v=1">
+<script src="paylinks.js?v=4" defer></script>
+<script src="leads.js?v=3" defer></script>
+<script src="signin.js?v=6" defer></script>
+<script src="account.js?v=1" defer></script>
+<script src="welcome.js?v=1" defer></script>
+<script src="setup.js?v=4" defer></script>
+</head>
+<!-- data-no-account: no account circle or "finish" bar here. This page is the finish. -->
+<body data-no-account>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <span class="logo" aria-label="Ringleader">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+      </span>
+      Ringleader
+    </span>
+    <p class="wl-help">Stuck? Text <a href="tel:+14372322281">437-232-2281</a></p>
+  </div>
+</header>
+
+<main id="main" class="su wl">
+  <div class="wrap">
+    <ol class="wl-track" id="track" aria-label="Your setup">
+      <li class="is-done" data-track="paid"><span class="wl-n" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 8.5 6.5 12 13 4.5"/></svg></span><span>Paid</span></li>
+      <li data-track="questions"><span class="wl-n" aria-hidden="true">2</span><span>Your shop</span></li>
+      <li data-track="password"><span class="wl-n" aria-hidden="true">3</span><span>Password</span></li>
+      <li data-track="dashboard"><span class="wl-n" aria-hidden="true">4</span><span>Dashboard</span></li>
+    </ol>
+
+    <section class="su-head wl-head">
+      <p class="wl-paid" id="wlPaid"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg> <span id="wlPaidText">Payment received. Thank you!</span></p>
+      <h1 id="wlTitle" tabindex="-1">Now, tell us about <span class="hi">your shop.</span></h1>
+      <p id="wlLead">About 10 minutes. This teaches your texting assistant what you do and how you talk. Your dashboard opens right after.</p>
+      <p class="wl-wait" id="wlWait" role="status" hidden></p>
+    </section>
+
+    <noscript><p class="su-noscript">This page needs JavaScript. Text <a href="tel:+14372322281">437-232-2281</a> and we'll finish it together.</p></noscript>
+
+    <!-- Step 2: the shop questions. setup.js draws them; welcome.js saves them to our server. -->
+    <form class="sheet setup" id="setup" novalidate>
+      <div class="sheet-surface" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <header class="sheet-head">
+          <h2 id="setupTitle" tabindex="-1">The shop</h2>
+          <ol class="stepper" id="setupSteps"></ol>
+        </header>
+        <div id="panes"></div>
+        <div class="pane finished" id="doneBox" hidden><p id="doneLine"></p></div>
+        <div class="send-fail" id="sendFail" role="alert" hidden><p><b>That didn't save.</b></p></div>
+        <label class="hp" aria-hidden="true">Leave this empty <input id="fWebsiteTrap" tabindex="-1" autocomplete="off"></label>
+        <div class="sheet-nav" id="nav">
+          <button type="button" class="cta cta-ghost nav-back" id="back">Back</button>
+          <button type="button" class="cta nav-next" id="next">Next</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Step 3: the password. -->
+    <section class="sheet wl-box" id="passBox" aria-labelledby="wlTitle" hidden>
+      <div class="sheet-surface" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <form id="passForm" class="wl-form" novalidate>
+          <div class="f">
+            <label for="wlEmail">You'll sign in with</label>
+            <input id="wlEmail" type="email" autocomplete="username" readonly>
+          </div>
+          <div class="f">
+            <label for="wlPass">Make a password <span class="hint">At least 8 characters.</span></label>
+            <div class="wl-passrow">
+              <input id="wlPass" type="password" autocomplete="new-password" minlength="8" aria-describedby="wlPass-err">
+              <button type="button" class="wl-show" id="wlShow" aria-pressed="false">Show</button>
+            </div>
+            <p class="err" id="wlPass-err" role="alert" hidden></p>
+          </div>
+          <button type="submit" class="cta cta-solid wl-go" id="wlGo">Create password and open my dashboard</button>
+          <p class="wl-next">After this: we text you within one business day to turn on your Ringleader number. Nothing changes on your phone until then.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- When there's nothing to fill in: no payment code, or already finished. -->
+    <section class="sheet wl-box" id="stopBox" hidden>
+      <div class="sheet-surface" aria-hidden="true"></div>
+      <div class="sheet-body wl-stop">
+        <p id="stopText"></p>
+        <a class="cta cta-solid cta-inline" id="stopGo" hidden></a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Ringleader · Made in Canada</span>
+    <span>Questions? Call or text <a href="tel:+14372322281">437-232-2281</a></span>
+  </div>
+</footer>
+</body>
+</html>
