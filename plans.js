@@ -326,6 +326,19 @@
     if (window.RingleaderLeads) RingleaderLeads.send('signup', { email: shop.email, name: shop.Name, business: shop.Business, plan: shop.Plan, trade: shop.Trade, phone: shop.Phone, invoiceEmail: shop['Invoice email'], line: shop['Customers call'], message: shop['Anything else'], payment: 'Went to Stripe checkout', stripeReference: ref });
     // Stripe has the payment either way, so a failed email doesn't stop them from paying.
     try { await send(`Ringleader sign-up, paying now: ${shop.Business}${testPay ? ' (TEST)' : ''}`, shop); } catch { /* Stripe still emails Adrian about the payment */ }
+    // Save the form on our server under the same reference, so the new shop gets this name and email.
+    // Waits at most 3 seconds: paying never depends on it.
+    if (Pay.signupApi) {
+      try {
+        await Promise.race([
+          fetch(Pay.signupApi, {
+            method: 'POST', headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ ref, email: shop.email, business: shop.Business, owner: shop.Name, phone: shop.Phone }),
+          }),
+          new Promise(done => setTimeout(done, 3000)),
+        ]);
+      } catch { /* they still pay; Adrian can fix the name with shop-admin.js */ }
+    }
     const url = new URL(payLink);
     url.searchParams.set('prefilled_email', shop['Invoice email']);
     url.searchParams.set('client_reference_id', ref);

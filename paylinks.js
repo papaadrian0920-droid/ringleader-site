@@ -8,6 +8,9 @@ window.RingleaderPay = {
   testLink: 'https://buy.stripe.com/test_bJeaEX2tq3ZX3yP9Qn7AI01',
   // The founding-shop promotion code in Stripe ($30 off for 3 months). Filled in for shops while the deal is on.
   foundingCode: 'FOUNDING',
+  // Our server. Just before Stripe, the sign-up form is saved here, so the new shop gets the business name and email
+  // the shop typed (not the name on the card). If the server can't be reached, they still go to Stripe.
+  signupApi: 'https://api.getringleader.ca/api/signup',
   // Where shops manage their card or cancel (Stripe's customer portal). Shown after they pay.
   portal: 'https://billing.stripe.com/p/login/bJe3cu8moghI2MJ2qV9EI00',
 };
