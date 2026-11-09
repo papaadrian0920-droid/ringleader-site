@@ -319,6 +319,15 @@
       try {
         await Paid.saveAnswers({ answers: d, profile }, text => { btn.textContent = text; });
       } catch (err) {
+        if (err.handOff) {
+          // Our server couldn't confirm the payment: Adrian gets the answers and texts them their sign-in.
+          btn.textContent = 'Sending...';
+          let mailed = false;
+          try { await emailAdrian(`Ringleader PAID shop, finish by hand: ${d.business}`); mailed = true; } catch { /* below */ }
+          toSheet();
+          if (mailed) { clearDraft(); sending = false; Paid.handedOff(d); return; }
+          err = new Error("We couldn't save your answers right now. They're still here: tap Save and continue again in a minute.");
+        }
         fail.firstElementChild.innerHTML = `<b>That didn't save.</b> ${esc(err.message)} Your answers are still here. Questions? Text <a href="tel:+14372322281">437-232-2281</a>.`;
         fail.hidden = false;
         fail.scrollIntoView({ block: 'nearest', behavior: calm() ? 'auto' : 'smooth' });

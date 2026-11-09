@@ -21,6 +21,7 @@
   let who = null;        // what our server knows: email, business, owner, phone, step
   let step = 'questions';
   let finished = false;  // once the dashboard is opening, closing the tab is fine
+  let stopped = false;   // stop asking our server (after the hand-off to Adrian)
 
   async function post(name, body = {}) {
     const res = await fetch(`${API}/api/onboarding/${name}`, {
@@ -114,9 +115,10 @@
   let ready = null; // resolves with the server's answer once the payment is in
   async function checkPayment() {
     const started = Date.now();
-    for (let tries = 0; ; tries++) {
+    for (let tries = 0; !stopped; tries++) {
       let answer;
       try { answer = await post('status'); } catch { answer = { state: 'offline' }; }
+      if (stopped) break;
       if (answer.state === 'ready') {
         note('');
         who = answer;
@@ -134,18 +136,40 @@
   }
 
   /* ---------- 2. Save the answers (setup.js calls this when they tap Save and continue) ---------- */
+  // If our server can't confirm the payment (Stripe is slow, or our server is down), the answers go to Adrian
+  // instead and the shop is told he'll text them their sign-in. They never get stuck on an error after paying.
+  const handOff = message => Object.assign(new Error(message), { handOff: true });
   async function saveAnswers(body, say) {
-    for (let tries = 0; tries < 20; tries++) {
+    let trouble = 0;
+    for (let tries = 0; tries < 15; tries++) {
       let answer;
-      try { answer = await post('answers', body); } catch {
-        throw new Error("We couldn't reach Ringleader. Check your connection, then tap Save and continue again.");
-      }
-      if (answer.ok) { if (who) who.step = 'password'; return; }
-      if (answer.done) { showDone(); throw new Error('Your account is already set up.'); }
-      if (answer.waiting) { say('Waiting for Stripe...'); await wait(3000); continue; }
-      throw new Error(answer.error || "Something went wrong on our side.");
+      try { answer = await post('answers', body); } catch { answer = null; }
+      if (answer && answer.ok) { if (who) who.step = 'password'; return; }
+      if (answer && answer.done) { showDone(); throw new Error('Your account is already set up.'); }
+      if (answer && answer.status === 400) throw new Error(answer.error || 'Check your answers.');
+      if (answer && answer.waiting) { say('Waiting for Stripe...'); await wait(3000); continue; }
+      // Can't reach our server, or it answered something unexpected: try a few times, then hand off to Adrian.
+      if (++trouble >= 3) break;
+      say('Saving...');
+      await wait(2000);
     }
-    throw new Error("Stripe hasn't confirmed your payment yet. Wait a minute, then tap Save and continue again.");
+    throw handOff('Our server could not confirm your payment yet.');
+  }
+
+  // The hand-off: Adrian has the answers (setup.js emailed them). Shown instead of the password step.
+  function handedOff(d) {
+    finished = true;
+    step = 'done';
+    stopped = true;
+    note('');
+    // Nothing more to do on this device: the site stops asking them to finish.
+    Account.save({ step: 'done' });
+    track('password');
+    $('#wlPaid').hidden = true;
+    head(`Got it${d.owner ? ', ' + d.owner.split(' ')[0].replace(/[<>&]/g, '') : ''}. <span class="hi">You're all set on our side.</span>`, '');
+    showStop("Your payment and your answers are in. We're finishing your account by hand: Adrian will text you at " +
+      `${(d.ownerPhone || 'your phone').replace(/[<>&]/g, '')} within the hour with your dashboard sign-in. You can close this page.`);
+    top();
   }
 
   function answered() {
@@ -153,7 +177,7 @@
     showPassword();
   }
 
-  window.RingleaderWelcome = { saveAnswers, answered };
+  window.RingleaderWelcome = { saveAnswers, answered, handedOff };
 
   /* ---------- 3. The password, then the dashboard ---------- */
   const passErr = text => {
@@ -226,6 +250,7 @@
   if (saved.step === 'done') showDone();
 
   ready = checkPayment().then(answer => {
+    if (!answer) return;
     if (answer.status === 400) {
       finished = true;
       Account.clear();
