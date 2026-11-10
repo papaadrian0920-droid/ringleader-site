@@ -32,24 +32,24 @@
 /* Light mode: white, black and green. theme.js sets data-theme="light" on <html> when the sun button is on.
    Lime stays for fills (buttons, the highlight, chat bubbles); text and lines use a darker green so they read on white. */
 :root[data-theme="light"] {
-  --bg: #FFFFFF;
-  --bg-2: #F3F4EF;
+  --bg: #F3F2ED;          /* warm off-white, softer than pure white */
+  --bg-2: #EAE9E2;
   --ink: #0D0D0E;
   --soft: #46463F;
-  --line: #E2E2DC;
+  --line: #D9D8CF;
   --hivis-ink: #3D7A00;
   --red: #E5341F;
   --red-ink: #C02A17;
-  --bubble-in: #ECECE7;
-  --panel: #FFFFFF;
-  --panel-2: #EFEFEA;
-  --field: #FAFAF7;
+  --bubble-in: #E4E3DC;
+  --panel: #FAF9F6;
+  --panel-2: #E6E5DE;
+  --field: #FBFAF8;
   --muted: #5E5E57;
   --cta-hover: #C8FF2E;
   --on-ink: #FFFFFF;
   --fg-rgb: 0 0 0;
   --ink-rgb: 13 13 14;
-  --bg-rgb: 255 255 255;
+  --bg-rgb: 243 242 237;
   --grain: .035;
   color-scheme: light;
 }
