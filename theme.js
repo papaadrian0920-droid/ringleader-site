@@ -1,13 +1,15 @@
 // Light or dark. The sun / moon button in the top right switches it, and this browser remembers the choice.
 // Loaded in <head> (not deferred) so the page never flashes the wrong colours.
+// The same file is in site/ and dashboard/new/. Change both together.
 (() => {
   const KEY = 'ringleader-theme';
   const root = document.documentElement;
   const read = () => { try { return localStorage.getItem(KEY); } catch { return null; } };
+  const meta = document.querySelector('meta[name="theme-color"]');
+  const darkBar = meta ? meta.content : '#0D0D0E';   // the page's own dark colour for the phone's top bar
   const set = theme => {
     root.dataset.theme = theme;
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = theme === 'light' ? '#FFFFFF' : '#0D0D0E';
+    if (meta) meta.content = theme === 'light' ? '#FFFFFF' : darkBar;
     document.dispatchEvent(new CustomEvent('themechange', { detail: theme }));
   };
   set(read() === 'light' ? 'light' : 'dark');
@@ -22,7 +24,7 @@
   };
 
   const add = () => {
-    const head = document.querySelector('header.top .wrap, .theme-slot');
+    const head = document.querySelector('header.top .wrap, header.bar, .signin-box');
     if (!head || head.querySelector('.theme-btn')) return;
     const btn = document.createElement('button');
     btn.type = 'button';

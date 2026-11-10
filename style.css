@@ -16,6 +16,7 @@
   --field: #0A0A0B;          /* text boxes */
   --muted: #A8A8A2;
   --cta-hover: #fff;
+  --on-ink: #0D0D0E;         /* text on an ink-coloured (white on dark, black on light) button */
   --fg-rgb: 255 255 255;     /* see-through lines and fills: white on dark, black on light */
   --ink-rgb: 244 244 241;
   --bg-rgb: 13 13 14;
@@ -44,7 +45,8 @@
   --panel-2: #EFEFEA;
   --field: #FAFAF7;
   --muted: #5E5E57;
-  --cta-hover: #B6EE14;
+  --cta-hover: #C8FF2E;
+  --on-ink: #FFFFFF;
   --fg-rgb: 0 0 0;
   --ink-rgb: 13 13 14;
   --bg-rgb: 255 255 255;
@@ -331,8 +333,8 @@ footer nav { display: flex; gap: 22px; font-weight: 600; }
 .hello-f input:focus { outline: none; border-color: var(--ink); }
 .hello-f input[aria-invalid="true"] { border-color: var(--red); }
 .hello-f .hello-err { color: var(--red-ink); font-size: .88rem; }
-.hello-go { min-height: 50px; margin-top: 4px; border: 0; border-radius: 12px; background: var(--ink); color: var(--bg); font: inherit; font-weight: 600; cursor: pointer; }
-.hello-go:hover { background: var(--cta-hover); }
+.hello-go { min-height: 50px; margin-top: 4px; border: 0; border-radius: 12px; background: var(--ink); color: var(--on-ink); font: inherit; font-weight: 600; cursor: pointer; }
+.hello-go:hover { background: var(--cta-hover); color: var(--on-hivis); }
 .hello-skip { justify-self: center; color: var(--ink); font-size: .92rem; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .hello[open] { animation: hello-in .28s cubic-bezier(.32, .72, 0, 1); }
 .hello[open]::backdrop { animation: hello-fade .28s ease; }
@@ -370,3 +372,13 @@ footer nav { display: flex; gap: 22px; font-weight: 600; }
 /* Phones inside the steps keep phone-sized text (the steps' own paragraph size is too big for them). */
 .step .screen .bubble, .step .screen .notif p { font-size: .86rem; }
 .step .screen .stamp, .step .screen .note { font-size: .72rem; }
+
+/* Phones: tighter header so the logo, switch and sign-in fit on one line.
+   On the narrowest phones the header's "Get set up" hides; the same button is right below in the hero. */
+@media (max-width: 520px) {
+  .top .wrap { gap: 12px; }
+  .top nav { gap: 12px; }
+  .top .btn { padding: 9px 14px; white-space: nowrap; }
+  .theme-btn { width: 36px; height: 36px; }
+}
+@media (max-width: 440px) { .top nav .btn { display: none; } }
