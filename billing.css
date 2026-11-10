@@ -28,8 +28,8 @@ paypal-button { display: block; width: 100%; min-height: 48px; }
 .summary-total strong { font-family: var(--f-display); font-size: 2.1rem; letter-spacing: -.04em; font-weight: 800; white-space: nowrap; }
 .renewal { font-size: .95rem; line-height: 1.5; }
 .summary-terms { display: grid; gap: 12px; border-top: 1px solid var(--billing-line); padding-top: 20px; color: var(--soft); font-size: .78rem; line-height: 1.6; }
-.action { padding: 13px 20px; min-height: 48px; border: 1px solid var(--ink); border-radius: 10px; font: inherit; font-size: .95rem; font-weight: 650; background: var(--ink); color: var(--bg); cursor: pointer; }
-.action:hover { background: var(--cta-hover); }
+.action { padding: 13px 20px; min-height: 48px; border: 1px solid var(--ink); border-radius: 10px; font: inherit; font-size: .95rem; font-weight: 650; background: var(--ink); color: var(--on-ink); cursor: pointer; }
+.action:hover { background: var(--cta-hover); color: var(--on-hivis); }
 .text-button { justify-self: start; border: 0; padding: 8px 0; color: var(--soft); background: transparent; font: inherit; font-size: .85rem; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; text-align: left; }
 .text-button:hover { color: var(--ink); }
 .billing button:disabled, #cancelDialog button:disabled { opacity: .55; cursor: wait; }

@@ -22,7 +22,7 @@
 .hours-row .tickbox { margin: 0; white-space: nowrap; }
 .setup .agree { align-items: flex-start; line-height: 1.4; }
 .setup .agree input { margin-top: 2px; }
-.cta-solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.cta-solid { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
 @media (max-width: 760px) {
   .setup .stepper { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; }
   .setup .stepper button { font-size: .68rem; }
@@ -74,7 +74,7 @@
 .ac-status.bad { color: var(--red-ink); }
 .chipbox { display: flex; flex-wrap: wrap; gap: 8px; }
 .chipbox:empty { display: none; }
-.chip { display: inline-flex; align-items: center; gap: 4px; padding: 5px 6px 5px 13px; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: .92rem; font-weight: 600; }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 5px 6px 5px 13px; border-radius: 999px; background: var(--ink); color: var(--on-ink); font-size: .92rem; font-weight: 600; }
 .chip button { display: grid; place-items: center; width: 24px; height: 24px; border: 0; border-radius: 50%; background: rgba(0, 0, 0, .12); color: var(--bg); font: inherit; font-size: 1.05rem; line-height: 1; cursor: pointer; }
 .addr-parts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; padding: 16px; border: 1px solid var(--su-line); border-radius: 13px; }
 .addr-parts .f:first-child { grid-column: 1 / -1; }

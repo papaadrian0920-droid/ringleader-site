@@ -29,7 +29,7 @@
 .card-main { margin-block: -22px; padding-top: 40px; padding-bottom: 30px; border: 1.5px solid var(--su-edge); border-radius: 22px; z-index: 1; }
 .card h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.015em; line-height: 1.15; }
 .card-desc { margin-top: 8px; min-height: 3em; color: var(--soft); font-size: .98rem; line-height: 1.5; }
-.pill { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); padding: 5px 14px; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: .82rem; font-weight: 600; white-space: nowrap; }
+.pill { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); padding: 5px 14px; border-radius: 999px; background: var(--ink); color: var(--on-ink); font-size: .82rem; font-weight: 600; white-space: nowrap; }
 .pill-quiet { background: var(--panel-2); color: var(--soft); border: 1px solid var(--su-line); }
 .price { display: flex; align-items: baseline; gap: 8px; margin-top: 22px; }
 .price-num { display: inline-flex; font-family: var(--f-display); font-weight: 800; font-size: clamp(2.8rem, 4.4vw, 3.5rem); line-height: 1.1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
@@ -45,8 +45,8 @@
 .early-note { color: var(--su-soft); font-size: .9rem; line-height: 1.4; }
 .early-msg { font-size: .9rem; line-height: 1.4; }
 .early-msg.bad { color: var(--red); }
-.cta { width: 100%; min-height: 50px; padding: 0 20px; border: 1px solid var(--ink); border-radius: 12px; background: var(--ink); color: var(--bg); font: inherit; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background-color .15s ease, color .15s ease, border-color .15s ease, transform .12s ease; }
-.cta:hover { background: var(--cta-hover); }
+.cta { width: 100%; min-height: 50px; padding: 0 20px; border: 1px solid var(--ink); border-radius: 12px; background: var(--ink); color: var(--on-ink); font: inherit; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background-color .15s ease, color .15s ease, border-color .15s ease, transform .12s ease; }
+.cta:hover { background: var(--cta-hover); color: var(--on-hivis); }
 .cta:active { transform: scale(.985); }
 .cta[disabled] { cursor: default; }
 .cta-ghost { background: transparent; color: var(--ink); border-color: var(--su-line); }
@@ -116,7 +116,7 @@
 .pick-row input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
 .pick-row span { display: grid; place-items: center; height: 100%; min-height: 50px; padding: 8px 10px; border: 1px solid rgb(var(--fg-rgb) / .2); border-radius: 11px; font-size: .95rem; font-weight: 500; line-height: 1.2; text-align: center; transition: background-color .15s ease, color .15s ease, border-color .15s ease; }
 .pick-row label:hover span { border-color: var(--su-edge); }
-.pick-row input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--bg); font-weight: 600; }
+.pick-row input:checked + span { background: var(--ink); border-color: var(--ink); color: var(--on-ink); font-weight: 600; }
 .pick-row input:focus-visible + span { outline: 3px solid var(--hivis-ink); outline-offset: 2px; }
 .pick.bad .pick-row span { border-color: var(--red); }
 .heads-up { display: grid; gap: 8px; margin-top: 12px; padding: 14px 16px; border-radius: 11px; background: rgb(var(--fg-rgb) / .05); font-size: .95rem; line-height: 1.45; }
