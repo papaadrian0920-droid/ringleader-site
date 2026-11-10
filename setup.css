@@ -62,3 +62,20 @@
   .wl-track { gap: 5px; }
   .wl-track li { flex-direction: column; gap: 6px; padding: 9px 4px; font-size: .74rem; text-align: center; }
 }
+
+/* Cities and address search */
+.ac { position: relative; }
+.ac input { width: 100%; }
+.ac-list { position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 20; margin: 0; padding: 4px; list-style: none; max-height: 290px; overflow: auto; border: 1px solid var(--su-edge); border-radius: 12px; background: #101012; box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .8); }
+.ac-list li { padding: 11px 12px; border-radius: 8px; font-size: .96rem; line-height: 1.3; cursor: pointer; }
+.ac-list li:hover, .ac-list li[aria-selected="true"] { background: rgba(255, 255, 255, .09); }
+.ac-status { min-height: 1.3em; color: var(--su-soft); font-size: .88rem; line-height: 1.35; }
+.ac-status.good { color: var(--hivis); }
+.ac-status.bad { color: #FF7A6B; }
+.chipbox { display: flex; flex-wrap: wrap; gap: 8px; }
+.chipbox:empty { display: none; }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 5px 6px 5px 13px; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: .92rem; font-weight: 600; }
+.chip button { display: grid; place-items: center; width: 24px; height: 24px; border: 0; border-radius: 50%; background: rgba(0, 0, 0, .12); color: var(--bg); font: inherit; font-size: 1.05rem; line-height: 1; cursor: pointer; }
+.addr-parts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; padding: 16px; border: 1px solid var(--su-line); border-radius: 13px; }
+.addr-parts .f:first-child { grid-column: 1 / -1; }
+@media (max-width: 760px) { .addr-parts { grid-template-columns: minmax(0, 1fr); padding: 14px; } .ac-list { max-height: 240px; } }

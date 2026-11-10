@@ -46,8 +46,8 @@
     { name: 'The shop', title: 'About your shop', fields: [
       { id: 'business', label: 'Business name', hint: 'The name customers know.', type: 'text', req: 'your business name', auto: 'organization' },
       { id: 'trades', label: 'Your trade', hint: 'Pick all that fit (up to 3).', type: 'checks', req: 'your trade', options: TRADE_LIST, max: 3 },
-      { id: 'area', label: 'Cities or areas you serve', type: 'text', req: 'where you work', placeholder: 'e.g. Toronto, North York, Vaughan', wide: true },
-      { id: 'address', label: 'Shop address', hint: 'Our texts have to say who they are from, so Canada\'s anti-spam law needs a mailing address.', type: 'text', req: 'your shop address', auto: 'street-address', wide: true },
+      { id: 'area', type: 'places', req: 'where you work' },
+      { id: 'address', type: 'address', req: 'your shop address' },
       { id: 'website', label: 'Website', hint: 'Optional.', type: 'text', placeholder: 'e.g. wizardswaterproofing.ca', auto: 'url' }
     ] },
     { name: 'People', title: 'Who is who', fields: [
@@ -118,6 +118,7 @@
       const opts = TIMES.map(t => `<option>${t}</option>`).join('');
       return `<div class="f${wide}"><label>${f.label}${hint(f)}</label><div class="hours" id="f-hours">${DAYS.map(d => `<div class="hours-row" data-day="${d}"><b>${d}</b><select aria-label="${d} opens">${opts}</select><select aria-label="${d} closes">${opts}</select><label class="tickbox"><input type="checkbox" aria-label="${d} closed"> Closed</label></div>`).join('')}</div>${errP('f-hours')}</div>`;
     }
+    if (f.type === 'places' || f.type === 'address') return `<div class="f wide" id="f-${f.id}" data-kind="${f.id}"></div>`;
     if (f.type === 'agree') return `<div class="f wide"><label class="tickbox agree"><input type="checkbox" id="f-${f.id}"><span>${f.label}</span></label>${errP('f-' + f.id)}</div>`;
     return '';
   }
@@ -128,6 +129,9 @@
   }
 
   /* ---------- reading and saving the answers ---------- */
+  // places.js does the strict city and address questions. If it didn't load, they become plain boxes.
+  const Pl = window.RingleaderPlaces || null;
+  if (!Pl) STEPS.forEach(s => s.fields.forEach(f => { if (f.type === 'places' || f.type === 'address') { f.type = 'text'; f.label = f.id === 'area' ? 'Cities or areas you serve' : 'Shop address'; } }));
   const allFields = STEPS.flatMap(s => s.fields);
   const val = id => ($('#f-' + id)?.value || '').trim();
   const checked = id => $$(`#f-${id} input:checked`).map(i => i.value);
@@ -144,8 +148,10 @@
         const [open, close] = $$('select', r);
         return { day: r.dataset.day, open: $('input', r).checked ? null : open.value, close: $('input', r).checked ? null : close.value };
       });
+      else if (f.type === 'places' || f.type === 'address') data[f.id] = Pl.get(f.id) ? Pl.get(f.id).value() : '';
       else data[f.id] = val(f.id);
     }
+    if (Pl && Pl.get('address')) { data.addrParts = Pl.get('address').parts(); data.areaList = Pl.get('area').list(); }
     return data;
   }
 
@@ -157,6 +163,8 @@
       if (f.type === 'checks') $$(`#f-${f.id} input`).forEach(i => { i.checked = v.includes(i.value); });
       else if (f.type === 'radio') $$(`#f-${f.id} input`).forEach(i => { i.checked = i.value === v; });
       else if (f.type === 'agree') $('#f-' + f.id).checked = !!v;
+      else if (f.type === 'places') Pl.get('area') && Pl.get('area').set(data.areaList || list(v));
+      else if (f.type === 'address') Pl.get('address') && Pl.get('address').set(v, data.addrParts);
       else if (f.type !== 'hours') $('#f-' + f.id).value = v;
     }
     (data.hours || DEFAULT_HOURS).forEach(h => {
@@ -192,6 +200,7 @@
     if (f.type === 'checks') return f.req && !checked(f.id).length ? `Pick ${f.req}.` : '';
     if (f.type === 'radio') return f.req && !radio(f.id) ? `Pick ${f.req}.` : '';
     if (f.type === 'agree') return f.req && !$('#f-' + f.id).checked ? `Please tick the box to confirm ${f.req}.` : '';
+    if (f.type === 'places' || f.type === 'address') return Pl.get(f.id).problem();
     if (f.type === 'hours' || f.type === 'select') return f.req && !val(f.id) ? `Pick ${f.req}.` : '';
     const v = val(f.id);
     if (!v) return f.req ? `Add ${f.req}.` : '';
@@ -280,7 +289,7 @@
     const trade = d.trades.map(t => (TRADE_LIST.find(x => x[0] === t) || [, t])[1]).join(', ');
     const fields = {
       'Shop setup': d.business,
-      Trade: trade, 'Areas served': d.area, Address: d.address, Website: d.website || '-', 'Legal name': d.legalName || '-',
+      Trade: trade, 'Areas served': d.area, Address: d.address, 'Address check': d.addrParts ? (d.addrParts.source === 'map' ? 'Found on the map' : 'Typed by hand, check it') : '-', Website: d.website || '-', 'Legal name': d.legalName || '-',
       Owner: d.owner, 'Answers texts': d.replier, 'Job alerts go to': pretty(d.ownerPhone), 'Backup phone': d.backupPhone ? pretty(d.backupPhone) : '-', email: d.email,
       Languages: d.languages.join(', ') || '-',
       Services: list(d.services).join(', '), 'Does NOT do': list(d.notServices).join(', ') || '-', Customers: d.customers,
@@ -311,7 +320,7 @@
     };
     const toSheet = () => Leads.send('setup', {
       email: d.email, name: d.owner, business: d.business, trade, ownerPhone: pretty(d.ownerPhone), line: d.line,
-      hours: hoursText, website: d.website, googleLink: d.googleLink, licence: d.licence, wsib: d.wsib, profileJson: JSON.stringify(profile)
+      hours: hoursText, addressSource: d.addrParts ? d.addrParts.source : '', website: d.website, googleLink: d.googleLink, licence: d.licence, wsib: d.wsib, profileJson: JSON.stringify(profile)
     });
 
     // Paid: save on our server (that's what sets up their dashboard), then the password step. Adrian's copy is extra.
@@ -371,6 +380,7 @@
 
   /* ---------- go ---------- */
   build();
+  if (Pl) $$('[data-kind]').forEach(el => Pl.mount(el.dataset.kind, el, () => saveDraft()));
   restore(null);
   const draft = loadDraft();
   if (draft) restore(draft.data);
