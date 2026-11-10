@@ -4,8 +4,8 @@
 .payment-panel,.order-summary { min-width: 0; }
 .payment-panel { gap: 20px; }
 .methods { display: grid; gap: 22px; }
-.payment-choice { width: 100%; display: flex; gap: 12px; align-items: center; text-align: left; border: 1px solid var(--billing-line); border-radius: 12px; padding: 20px 16px; color: var(--ink); background: #171719; font: inherit; cursor: pointer; }
-.payment-choice:hover { border-color: var(--hivis); }
+.payment-choice { width: 100%; display: flex; gap: 12px; align-items: center; text-align: left; border: 1px solid var(--billing-line); border-radius: 12px; padding: 20px 16px; color: var(--ink); background: var(--panel); font: inherit; cursor: pointer; }
+.payment-choice:hover { border-color: var(--hivis-ink); }
 .payment-choice > span:first-child { flex: 1; }
 .payment-choice b { display: block; font-size: 1rem; font-weight: 650; }
 .payment-choice small { display: block; font-size: .8rem; color: var(--soft); margin-top: 3px; }
@@ -29,22 +29,22 @@ paypal-button { display: block; width: 100%; min-height: 48px; }
 .renewal { font-size: .95rem; line-height: 1.5; }
 .summary-terms { display: grid; gap: 12px; border-top: 1px solid var(--billing-line); padding-top: 20px; color: var(--soft); font-size: .78rem; line-height: 1.6; }
 .action { padding: 13px 20px; min-height: 48px; border: 1px solid var(--ink); border-radius: 10px; font: inherit; font-size: .95rem; font-weight: 650; background: var(--ink); color: var(--bg); cursor: pointer; }
-.action:hover { background: #fff; }
+.action:hover { background: var(--cta-hover); }
 .text-button { justify-self: start; border: 0; padding: 8px 0; color: var(--soft); background: transparent; font: inherit; font-size: .85rem; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; text-align: left; }
 .text-button:hover { color: var(--ink); }
 .billing button:disabled, #cancelDialog button:disabled { opacity: .55; cursor: wait; }
 .manage { display: grid; gap: 18px; font-size: .98rem; }
 .notice,.error,.test-banner { padding: 16px 20px; border-radius: 12px; font-size: .95rem; line-height: 1.5; }
 .notice { background: rgba(200,255,46,.06); border: 1px solid rgba(200,255,46,.3); }
-.error { color: #ffc3ba; border: 1px solid rgba(255,122,107,.5); background: rgba(255,83,64,.06); }
-.test-banner { color: var(--hivis); border: 1px dashed rgba(200,255,46,.5); }
+.error { color: var(--red-ink); border: 1px solid rgba(255,122,107,.5); background: rgba(255,83,64,.06); }
+.test-banner { color: var(--hivis-ink); border: 1px dashed rgba(200,255,46,.5); }
 #checkout { min-width: 0; }
 #paymentTitle:focus { outline: none; }
 .stripe-elements { display: grid; gap: 18px; }
 .wallet-divider { color: var(--soft); text-align: center; font-size: .8rem; margin-top: 14px; }
 .stripe-pay { background: var(--hivis); color: var(--on-hivis); border-color: var(--hivis); }
 .stripe-pay:hover:not(:disabled) { background: #DBFF74; }
-.stripe-error { color: #ffc3ba; font-size: .9rem; }
+.stripe-error { color: var(--red-ink); font-size: .9rem; }
 .receipts { padding-top: 24px; border-top: 1px solid var(--billing-line); }
 .receipts h2 { font-size: 1.15rem; line-height: 1.3; }
 .receipts ul { padding: 0; list-style: none; }

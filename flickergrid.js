@@ -7,7 +7,9 @@
   const SIZE = 3, GAP = 9, PITCH = SIZE + GAP;
   const MAX = 0.2;          // brightest a square can get (kept low on purpose: this is only depth)
   const CHANCE = 0.12;      // share of squares that change per second
-  const RGB = '200, 255, 46'; // Ringleader lime
+  // Ringleader lime on dark; a darker green on the light (white) version.
+  const pick = () => document.documentElement.dataset.theme === 'light' ? '61, 122, 0' : '200, 255, 46';
+  let RGB = pick();
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const canvas = document.createElement('canvas');
   canvas.style.cssText = 'display:block;width:100%;height:100%';
@@ -21,6 +23,7 @@
     ctx.fillStyle = `rgba(${RGB}, ${cells[i].toFixed(3)})`;
     ctx.fillRect(x, y, s, s);
   };
+  document.addEventListener('themechange', () => { RGB = pick(); for (let i = 0; i < cells.length; i++) paint(i); });
   const build = () => {
     const w = box.clientWidth, h = box.clientHeight;
     if (!w || !h) return;
