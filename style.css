@@ -32,25 +32,25 @@
 /* Light mode: white, black and green. theme.js sets data-theme="light" on <html> when the sun button is on.
    Lime stays for fills (buttons, the highlight, chat bubbles); text and lines use a darker green so they read on white. */
 :root[data-theme="light"] {
-  --bg: #F3F2ED;          /* warm off-white, softer than pure white */
-  --bg-2: #EAE9E2;
+  --bg: #E8E6DE;          /* soft paper grey, so it doesn't glare like plain white */
+  --bg-2: #E0DED5;
   --ink: #0D0D0E;
   --soft: #46463F;
-  --line: #D9D8CF;
+  --line: #CFCDC3;
   --hivis-ink: #3D7A00;
   --red: #E5341F;
   --red-ink: #C02A17;
-  --bubble-in: #E4E3DC;
-  --panel: #FAF9F6;
-  --panel-2: #E6E5DE;
-  --field: #FBFAF8;
+  --bubble-in: #DAD8CF;
+  --panel: #EFEDE6;
+  --panel-2: #DEDCD3;
+  --field: #F1EFE9;
   --muted: #5E5E57;
   --cta-hover: #C8FF2E;
   --on-ink: #FFFFFF;
   --fg-rgb: 0 0 0;
   --ink-rgb: 13 13 14;
-  --bg-rgb: 243 242 237;
-  --grain: .035;
+  --bg-rgb: 232 230 222;
+  --grain: .09;
   color-scheme: light;
 }
 /* The phone pictures stay a dark phone screen in both modes. */
@@ -59,6 +59,20 @@
   color: var(--ink);
 }
 :root[data-theme="light"] .paths { color: #3D7A00; opacity: .55; }
+/* Light mode glow: the same corner glows as dark mode, but green (no grey smudge), strong enough to see on paper. */
+:root[data-theme="light"] .aurora i:nth-child(1) { background: radial-gradient(closest-side, rgba(140, 210, 0, .20), transparent); }
+:root[data-theme="light"] .aurora i:nth-child(2) { background: radial-gradient(closest-side, rgba(160, 230, 20, .24), transparent); }
+:root[data-theme="light"] .aurora i:nth-child(3) { background: radial-gradient(closest-side, rgba(140, 210, 0, .16), transparent); }
+:root[data-theme="light"] .aurora.dim i:nth-child(1) { background: radial-gradient(closest-side, rgba(140, 210, 0, .10), transparent); }
+:root[data-theme="light"] .aurora.dim i:nth-child(2) { background: radial-gradient(closest-side, rgba(160, 230, 20, .12), transparent); }
+:root[data-theme="light"] .aurora.dim i:nth-child(3) { background: radial-gradient(closest-side, rgba(140, 210, 0, .08), transparent); }
+/* Paper grain: darken-only, so it reads like rough paper instead of coloured static. */
+:root[data-theme="light"] body::after { mix-blend-mode: multiply; filter: grayscale(1); }
+/* Light mode: soft green glow in the top corners and bottom left, on every page. Multiply keeps black text black. */
+:root[data-theme="light"] body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 49; mix-blend-mode: multiply; background:
+  radial-gradient(60vmax 45vmax at 0% 0%, rgba(170, 235, 40, .26), transparent 70%),
+  radial-gradient(55vmax 45vmax at 100% 6%, rgba(185, 245, 60, .22), transparent 70%),
+  radial-gradient(55vmax 40vmax at 0% 100%, rgba(170, 235, 40, .16), transparent 70%); }
 :root[data-theme="light"] .paths-b { color: #9BC53D; }
 
 /* The sun / moon switch in the top right (theme.js). */

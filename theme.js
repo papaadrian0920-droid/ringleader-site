@@ -9,7 +9,7 @@
   const darkBar = meta ? meta.content : '#0D0D0E';   // the page's own dark colour for the phone's top bar
   const set = theme => {
     root.dataset.theme = theme;
-    if (meta) meta.content = theme === 'light' ? '#F3F2ED' : darkBar;
+    if (meta) meta.content = theme === 'light' ? '#E8E6DE' : darkBar;
     document.dispatchEvent(new CustomEvent('themechange', { detail: theme }));
   };
   set(read() === 'light' ? 'light' : 'dark');
