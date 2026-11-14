@@ -4,9 +4,13 @@
   const tokenPattern = /^[A-Za-z0-9_-]{43}$/;
   const fragment = location.hash.slice(1);
   const returning = params.has('return');
-  const apiOrigin = location.origin === 'https://getringleader.ca' ? 'https://billing.getringleader.ca' : '';
+  // The on-site checkout server. It isn't running yet: shops pay through the Stripe links in paylinks.js.
+  // When it exists, put its address in paylinks.js as `billingApi`. Until then the public site never calls it.
+  const onPublicSite = location.origin === 'https://getringleader.ca';
+  const billingApi = () => ((window.RingleaderPay || {}).billingApi || '').replace(/\/+$/, '');
+  const apiOrigin = () => (onPublicSite ? billingApi() : '');
   async function request(route, body, proof = '', timeout = 25000) {
-    const response = await fetch(apiOrigin + '/api/billing/' + route, {
+    const response = await fetch(apiOrigin() + '/api/billing/' + route, {
       method: body === undefined ? 'GET' : 'POST', credentials: 'omit', cache: 'no-store', redirect: 'error',
       headers: { ...(proof ? { Authorization: `Bearer ${proof}` } : {}), ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }), signal: AbortSignal.timeout(timeout),
@@ -27,6 +31,7 @@
     window.RingleaderCheckout = {
       async available() {
         if (window.top !== window.self) return false;
+        if (onPublicSite && !billingApi()) return false; // no checkout server yet: don't ask for one
         try { return (await request('availability', undefined, '', 3000)).onsite === true; }
         catch { return false; }
       },
