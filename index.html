@@ -116,12 +116,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=Instrument+Sans:wght@400..700&display=swap">
 <link rel="stylesheet" href="style.css?v=19">
 <link rel="stylesheet" href="account.css?v=2">
+<link rel="stylesheet" href="tryit.css?v=1">
 <script src="deal.js?v=4" defer></script>
 <script src="leads.js?v=3" defer></script>
 <script src="paylinks.js?v=5" defer></script>
 <script src="signin.js?v=6" defer></script>
 <script src="account.js?v=1" defer></script>
 <script src="main.js" defer></script>
+<script src="tryit.js?v=1" defer></script>
 <script src="paths.js?v=4" defer></script>
 <script src="flickergrid.js?v=2" defer></script>
 <script src="glowscroll.js?v=1" defer></script>
@@ -140,6 +142,7 @@
     </a>
     <nav aria-label="Main">
       <a href="#how">How it works</a>
+      <a href="#try">Try it</a>
       <a href="#cost">What it costs you</a>
       <a href="#pricing">Pricing</a>
       <a class="btn" href="contact.html" data-get-started>Get set up</a>
@@ -294,6 +297,51 @@
         </div>
         <div class="story-phone" aria-hidden="true"><div class="phone"></div></div>
       </div>
+    </div>
+  </section>
+
+  <!-- Try it: the visitor plays the customer. tryit.js runs a fixed script in the browser: no AI key, nothing sent anywhere.
+       The texts are the server's real ones, including "Reply STOP to opt out". -->
+  <section class="section try" id="try">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>Try it. <span class="hi">Be the customer.</span></h2>
+        <p>You just called a local shop after hours and nobody picked up. Seconds later, this text arrives. Reply however you like, or tap a suggestion. Then look at what the owner gets.</p>
+      </div>
+      <noscript><p>The demo needs JavaScript. The six steps above show the same thing.</p></noscript>
+      <div class="try-pick" role="group" aria-label="Pick what went wrong">
+        <button type="button" data-try="plumbing" aria-pressed="true">Water heater leak</button>
+        <button type="button" data-try="hvac" aria-pressed="false">AC died in a heat wave</button>
+        <button type="button" data-try="roofing" aria-pressed="false">Roof leak after a storm</button>
+        <button type="button" class="try-again" id="tryAgain">Start over</button>
+      </div>
+      <div class="try-grid">
+        <div>
+          <p class="try-label">Your phone <small>the customer</small></p>
+          <div class="try-device">
+            <div class="try-bar"><i class="ios-ava" id="tryAva" aria-hidden="true">D</i><div><b id="tryBiz">Delgado Plumbing &amp; Heat</b><span>Text message</span></div></div>
+            <div class="try-chat" id="tryChat" role="log" aria-live="polite" aria-label="Your texts with the shop" tabindex="0"></div>
+            <div class="try-chips" id="tryChips" role="group" aria-label="Suggested replies" hidden></div>
+            <form class="try-send" id="tryForm" autocomplete="off">
+              <label class="try-sr" for="tryMsg">Your reply, as the customer</label>
+              <input id="tryMsg" name="msg" maxlength="300" placeholder="Reply as the customer" enterkeyhint="send">
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+        <div>
+          <p class="try-label"><span><span data-try-owner>Marco</span>'s phone</span> <small>the owner · <time id="tryClock">8:47 PM</time></small></p>
+          <div class="try-device try-own">
+            <div class="try-notifs" id="tryNotifs" role="log" aria-live="polite" aria-label="Texts the owner gets"></div>
+          </div>
+          <div class="try-job">
+            <div class="try-job-head"><h3>Job details</h3><span class="try-state" id="tryState">Texted back</span></div>
+            <dl id="tryJob"></dl>
+            <p class="try-job-foot">The same details are waiting on <span data-try-owner>Marco</span>'s dashboard.</p>
+          </div>
+        </div>
+      </div>
+      <p class="try-fine">Made-up shops and customers. The texts are word for word what Ringleader sends. It never quotes a price or promises a time: booking is you. This demo runs in your browser, and nothing you type is sent anywhere.</p>
     </div>
   </section>
 

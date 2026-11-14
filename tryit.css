@@ -1,0 +1,77 @@
+/* "Try it": be the customer after a missed call (index.html #try, tryit.js). */
+.try { position: relative; }
+.try::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 16px; background: var(--stripes); }
+.try-pick { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: clamp(24px, 4vw, 40px); }
+.try-pick button { min-height: 46px; padding: 10px 20px; border-radius: 999px; border: 1.5px solid rgb(var(--fg-rgb) / .28); background: transparent; color: var(--ink); font: 600 1rem var(--f-body); cursor: pointer; transition: background .15s ease, color .15s ease, border-color .15s ease; }
+.try-pick button:hover { border-color: var(--ink); }
+.try-pick button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+.try-pick .try-again { margin-left: auto; border-style: dashed; }
+
+.try-grid { display: grid; grid-template-columns: minmax(0, 410px) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+.try-label { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 12px; font-family: var(--f-mono); font-size: .85rem; letter-spacing: .08em; text-transform: uppercase; color: var(--hivis-ink); }
+.try-label small { font-size: inherit; color: var(--muted); }
+
+/* The two phones stay dark phone screens in light mode too, like the other phone pictures. */
+.try-device {
+  --ink: #F4F4F1; --soft: #CFCFC9; --muted: #A8A8A2; --line: #2C2C30; --hivis-ink: #C8FF2E; --red: #FF5340; --bubble-in: #2A2A2F; --fg-rgb: 255 255 255;
+  display: flex; flex-direction: column; overflow: hidden; color: var(--ink); background: #111113; border: 2px solid #3A3A3F; border-radius: 30px;
+  box-shadow: 0 40px 90px -40px rgba(200, 255, 46, .3);
+}
+.try-bar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.try-bar .ios-ava { flex: none; width: 34px; height: 34px; font-size: .85rem; }
+.try-bar b { display: block; font-size: 1rem; line-height: 1.2; }
+.try-bar span { font-size: .8rem; color: var(--soft); }
+.try-chat { height: 400px; overflow-y: auto; overscroll-behavior: contain; padding: 16px 14px; display: flex; flex-direction: column; gap: 8px; font-size: .95rem; line-height: 1.4; }
+.try-chat .bubble { white-space: pre-line; overflow-wrap: anywhere; }
+.try-chat .stamp { font-size: .78rem; padding-block: 2px; }
+.try-chat .try-ping { color: var(--hivis-ink); font-weight: 600; }
+.try-chat .try-end { color: var(--soft); padding-block: 8px; }
+.try-typing { display: inline-flex; gap: 5px; padding: 13px 14px; }
+.try-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--soft); animation: try-dot 1s ease-in-out infinite; }
+.try-typing i:nth-child(2) { animation-delay: .15s; }
+.try-typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes try-dot { 0%, 60%, 100% { opacity: .3; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
+.try-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 14px 2px; border-top: 1px solid var(--line); }
+.try-chips[hidden] { display: none; }
+.try-chips button { min-height: 44px; padding: 8px 14px; border-radius: 16px; border: 1px solid rgb(255 255 255 / .24); background: transparent; color: var(--ink); font: 500 .92rem/1.3 var(--f-body); text-align: left; cursor: pointer; transition: border-color .15s ease, background .15s ease; }
+.try-chips button:hover { border-color: var(--hivis-ink); background: rgb(200 255 46 / .08); }
+.try-send { display: flex; gap: 8px; padding: 10px 14px 14px; }
+.try-send input { flex: 1; min-width: 0; height: 46px; padding: 0 16px; border-radius: 999px; border: 1px solid rgb(255 255 255 / .24); background: #0A0A0B; color: var(--ink); font: 16px var(--f-body); }
+.try-send input::placeholder { color: #8A8A8E; }
+.try-send button { flex: none; height: 46px; padding: 0 20px; border: 0; border-radius: 999px; background: var(--hivis); color: var(--on-hivis); font: 700 1rem var(--f-body); cursor: pointer; }
+.try-send.is-busy button { opacity: .5; }
+.try-device :focus-visible { outline: 2px solid #C8FF2E; outline-offset: 2px; }
+.try-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.try-own { border-radius: 26px; }
+.try-notifs { display: grid; align-content: start; gap: 10px; min-height: 96px; max-height: 320px; overflow-y: auto; overscroll-behavior: contain; padding: 14px; background: radial-gradient(130% 70% at 50% 0%, #2B2E26, #111113 72%); }
+.try-notifs .notif p { white-space: pre-line; overflow-wrap: anywhere; font-size: .92rem; line-height: 1.4; }
+.try-notifs .try-loud { box-shadow: inset 4px 0 0 var(--red); }
+.try-quiet { padding-block: 22px; text-align: center; font-size: .92rem; color: var(--soft); }
+
+.try-job { margin-top: 18px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 22px; background: var(--panel); }
+.try-job-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+.try-job h3 { font-size: 1.25rem; }
+.try-state { font-family: var(--f-mono); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--line); white-space: nowrap; }
+.try-state[data-state="go"] { background: var(--hivis); color: var(--on-hivis); border-color: transparent; }
+.try-state[data-state="red"] { background: var(--red); color: #0D0D0E; border-color: transparent; }
+.try-job dl { display: grid; grid-template-columns: minmax(0, 12.5em) minmax(0, 1fr); gap: 10px 16px; margin: 0; }
+.try-job dt { color: var(--muted); font-size: .95rem; }
+.try-job dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.try-job dd.try-empty { color: var(--muted); font-weight: 400; }
+.try-job-foot { margin-top: 14px; font-size: .92rem; color: var(--muted); }
+.try-fine { margin-top: 28px; max-width: 46em; font-size: .95rem; color: var(--muted); }
+
+/* Phones: flat and app-like. One column, no glow. */
+@media (max-width: 900px) {
+  .try-grid { grid-template-columns: 1fr; }
+  .try-device { box-shadow: none; border-radius: 22px; }
+  .try-chat { height: 360px; }
+  .try-pick .try-again { margin-left: 0; }
+}
+@media (max-width: 560px) {
+  .try-pick button { flex: 1 1 auto; padding-inline: 14px; font-size: .95rem; }
+  .try-job dl { grid-template-columns: 1fr; gap: 2px; }
+  .try-job dd { margin-bottom: 10px; }
+}
+@media (prefers-reduced-motion: reduce) { .try-typing i { animation: none; opacity: .7; } }
