@@ -37,7 +37,7 @@
   --ink: #0D0D0E;
   --soft: #46463F;
   --line: #CFCDC3;
-  --hivis-ink: #3D7A00;
+  --hivis-ink: #356B00;   /* 5:1 on the paper grey, so green words pass the contrast check */
   --red: #E5341F;
   --red-ink: #C02A17;
   --bubble-in: #DAD8CF;
@@ -285,7 +285,7 @@ a:hover { color: var(--hivis-ink); }
 .contact .wrap { display: grid; gap: 26px; padding-block: clamp(72px, 10vw, 130px); }
 .contact h2 { font-size: clamp(2.6rem, 7vw, 5.6rem); text-transform: uppercase; font-stretch: 118%; }
 .contact p { font-size: 1.25rem; max-width: 34em; }
-.contact .email { font-family: var(--f-display); font-weight: 900; font-size: clamp(1.4rem, 4.6vw, 3.2rem); color: var(--hivis-ink); overflow-wrap: anywhere; letter-spacing: -0.02em; text-decoration-color: var(--hivis-ink); justify-self: start; }
+.contact .email { font-family: var(--f-display); font-weight: 900; font-size: clamp(1.05rem, 5.4vw, 3.2rem); color: var(--hivis-ink); overflow-wrap: anywhere; letter-spacing: -0.02em; text-decoration-color: var(--hivis-ink); justify-self: start; }
 .contact .email:hover { color: var(--ink); }
 .contact .btn { justify-self: start; }
 
@@ -293,6 +293,7 @@ a:hover { color: var(--hivis-ink); }
 footer { border-top: 1px solid var(--line); padding-block: 28px 44px; font-size: .95rem; }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
 footer nav { display: flex; gap: 22px; font-weight: 600; }
+footer nav a { padding-block: 10px; margin-block: -10px; }   /* a taller place to tap, same look */
 
 /* Privacy page */
 .legal { max-width: 760px; display: grid; gap: 16px; padding-block: 48px 100px; font-size: 1.05rem; }
@@ -300,6 +301,9 @@ footer nav { display: flex; gap: 22px; font-weight: 600; }
 .legal h2 { font-size: 1.6rem; font-stretch: 105%; letter-spacing: -0.01em; margin-top: 26px; }
 .legal h3 { font-size: 1.15rem; font-stretch: 105%; letter-spacing: -0.01em; margin-top: 6px; }
 .legal ul { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+/* The page-not-found page (404.html). */
+.lost { min-height: 62vh; align-content: center; }
+.lost-go { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 28px; margin-block: 10px; }
 .legal .updated { color: var(--hivis-ink); font-weight: 600; }
 
 /* Founding deal: a caution-tape banner on the pricing and contact pages. deal.js hides it once it's over. */
