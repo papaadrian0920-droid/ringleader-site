@@ -235,6 +235,7 @@
   if (!session) {
     finished = true;
     track('paid');
+    $('#track').style.display = 'none'; // nobody has paid here, so don't show a ticked "Paid" step
     $('#wlPaid').hidden = true;
     head('Finish setting up', '');
     showStop('This page opens right after you pay. Your setup link is also in the welcome email from Ringleader. Lost it? Text <a href="tel:+14372322281">437-232-2281</a>.', ['See the plans', 'contact.html']);
